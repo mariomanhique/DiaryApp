@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">DiaryApp</string>
+    <string name="auth_title">Welcome</string>
+    <string name="auth_subtitle">1012873078451-i1t8k39qmmb0dushs5l7n2ijmqsu3kqt.apps.googleusercontent.com</string>
+    <string name="client_id"></string>
+</resources>
