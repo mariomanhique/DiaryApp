@@ -26,7 +26,7 @@ import androidx.compose.material3.Surface
 fun GoogleButton(
     modifier: Modifier = Modifier,
     loadingState: Boolean = false,
-    primaryText: String = "Sign in with Google",
+    primaryText: String = "Sign In",
     secondaryText: String = "Please wait...",
     icon: Int = R.drawable.google_logo,
     shape: Shape = Shapes().extraSmall,
@@ -50,8 +50,8 @@ fun GoogleButton(
         color = backgroundColor
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier =Modifier
+                .fillMaxWidth(0.8f)
                 .padding(12.dp)
                 .animateContentSize(
                     animationSpec = tween(
@@ -80,6 +80,8 @@ fun GoogleButton(
                     strokeWidth = 2.dp,
                     color = progressIndicatorColor
                 )
+            }else{
+
             }
         }
     }

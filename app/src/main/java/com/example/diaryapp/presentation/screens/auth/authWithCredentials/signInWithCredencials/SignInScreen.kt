@@ -2,7 +2,9 @@ package com.example.diaryapp.presentation.screens.auth.authWithCredentials.signI
 
 
 
+import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,12 +14,19 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,20 +46,30 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.diaryapp.R
 import com.example.diaryapp.navigation.Screen
+import com.example.diaryapp.presentation.components.GoogleButton
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWithCredentialsViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
-    navController: NavController,
-    viewModel: AuthWithCredentialsViewModel = hiltViewModel()
+    viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
+    navigateToSignUp:()->Unit,
+    onSuccessSignIn: () -> Unit,
+    onFailedSignIn: (Exception) -> Unit,
+    navigateToHome: ()->Unit
 ) {
 
     val state = viewModel.state.collectAsStateWithLifecycle().value
-    val context = LocalContext.current
+    var loadingState by viewModel.loadingState
+    val snackbarHostState = remember { SnackbarHostState() }
 
-//    val image = imageResource(id = R.drawable.login_image)
+
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val emailValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
@@ -58,14 +77,20 @@ fun SignInScreen(
     val passwordVisibility = remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
+    Scaffold (modifier = Modifier
+        .background(MaterialTheme.colorScheme.surface)
+        .imePadding()
+        .navigationBarsPadding()
+        .statusBarsPadding()){
+
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White), contentAlignment = Alignment.TopCenter
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
         ) {
 
-//            Image(image)
+           Image(painter = painterResource(id = R.drawable.logo), contentDescription = "")
         }
 
         Column(
@@ -110,7 +135,6 @@ fun SignInScreen(
                             IconButton(onClick = {
                                 passwordVisibility.value = !passwordVisibility.value
                             }) {
-
                                 Icon(
                                     painter = painterResource(id = R.drawable.password_eye),
                                     contentDescription = "",
@@ -134,47 +158,66 @@ fun SignInScreen(
 
                     LaunchedEffect(key1 = state.isSignInSuccessful) {
                         if(state.isSignInSuccessful) {
-                            Toast.makeText(
-                                context,
-                            "Sign in successful",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            navController.navigate(Screen.Home.route)
-                            viewModel.resetState()
+                            viewModel.signInWithMongoAtlas(
+                                emailValue.value,
+                                passwordValue.value,
+                                onSuccess = {
+                                    navigateToHome()
+                                    viewModel.setLoading(false)
+
+                                },
+                                onError = {
+                                    viewModel.setLoading(false)
+                                    scope.launch {
+                                        withContext(Dispatchers.Main){
+                                            snackbarHostState.showSnackbar(
+                                                message = it.message.toString(),
+                                                duration = SnackbarDuration.Short
+                                            )
+                                        }
+                                    }
+
+                                }
+                            )
+                        }else{
+                            scope.launch {
+                                withContext(Dispatchers.Main){
+                                    snackbarHostState.showSnackbar(
+                                        message = "Unable to sign in",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                            }
                         }
+
+                        viewModel.resetState()
                     }
 
+
+
                     Spacer(modifier = Modifier.padding(10.dp))
-                    Button(
-                        onClick = {
-                            if(emailValue.value.isNullOrEmpty() && passwordValue.value.isNullOrEmpty()){
 
-                            }else{
-                                viewModel.signIn(
-                                    email = emailValue.value,
-                                    password = passwordValue.value
-                                )
-                            }
-
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .height(50.dp)
-                    ) {
-                        Text(text = "Sign In", fontSize = 20.sp)
+                    GoogleButton(loadingState = loadingState) {
+                        if(emailValue.value.isEmpty() && passwordValue.value.isEmpty()){
+                            Toast.makeText(context,"Fields can't be blank", Toast.LENGTH_SHORT).show()
+                        }else{
+                            viewModel.signIn(
+                                email = emailValue.value,
+                                password = passwordValue.value,
+                                onSuccess = onSuccessSignIn,
+                                onError = {
+                                    viewModel.setLoading(false)
+                                }
+                            )
+                            viewModel.setLoading(true)
+                        }
                     }
 
                     Spacer(modifier = Modifier.padding(20.dp))
                     Text(
                         text = "Create An Account",
                         modifier = Modifier.clickable(onClick = {
-                            navController.navigate(Screen.SignUp.route){
-
-                                launchSingleTop = true
-
-                                restoreState=true
-
-                            }
+                            navigateToSignUp()
                         })
                     )
                     Spacer(modifier = Modifier.padding(20.dp))
@@ -185,4 +228,7 @@ fun SignInScreen(
         }
 
     }
+    }
+
+
 }
