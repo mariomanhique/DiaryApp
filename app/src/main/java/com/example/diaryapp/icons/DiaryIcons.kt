@@ -19,15 +19,10 @@ import com.example.diaryapp.R
 object DiaryIcons {
     val appLogo = R.drawable.logo
     val googleLogo = R.drawable.google_logo
-    val Add = Icons.Rounded.Add
-    val ArrowBack = Icons.Rounded.ArrowBack
-    val Check = Icons.Rounded.Check
-    val Close = Icons.Rounded.Close
     val Home = Icons.Rounded.Home
     val HomeBorder = Icons.Outlined.Home
     val memories = Icons.Rounded.Favorite
     val memoriesBorder = Icons.Rounded.FavoriteBorder
-    val Search = Icons.Rounded.Search
     val SettingsBorder = Icons.Outlined.Settings
     val Settings = Icons.Rounded.Settings
 

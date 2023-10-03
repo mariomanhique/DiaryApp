@@ -1,5 +1,6 @@
 package com.example.diaryapp.presentation.screens.home
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -24,6 +27,7 @@ import com.example.diaryapp.model.Diary
 import com.example.diaryapp.presentation.components.DateHeader
 import com.example.diaryapp.presentation.components.DiaryHolder
 import java.time.LocalDate
+import kotlin.random.Random
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -54,7 +58,17 @@ fun HomeContent(
                         it.id
                     }
                 ) {
-                    DiaryHolder(diary = it, onClick = onClick)
+
+                    val rememberedValue = rememberSaveable() {
+                        Random.nextInt()
+                    }
+                    DiaryHolder(
+                        modifier = Modifier.animateItemPlacement(
+                            tween(durationMillis = 250)
+                        ),
+                        diary = it,
+                        onClick = onClick
+                    )
                 }
             }
         }

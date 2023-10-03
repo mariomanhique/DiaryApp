@@ -125,6 +125,7 @@ fun DateHeader(
 
 @Composable
 fun DiaryHolder(
+    modifier: Modifier = Modifier,
     diary: Diary,
     onClick: (String) -> Unit){
 
@@ -161,7 +162,7 @@ fun DiaryHolder(
         }
     }
 
-    Row(modifier = Modifier
+    Row(modifier = modifier
         .clickable(
             indication = null,
             interactionSource = remember {

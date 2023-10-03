@@ -9,6 +9,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
+import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
+import java.time.Instant
 import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.Date
 import javax.inject.Inject
 
 class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore): FirestoreRepository {
@@ -84,8 +88,6 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
                     } catch (e: Exception) {
                         this.trySend(RequestState.Error(error = e)).isSuccess
                         Log.d("Exception Handle", "getAllDiaries:$e ")
-
-
                     }
                 }
             }
@@ -120,22 +122,24 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
         }
     }
 
-    override fun deleteDiary(diaryId: String): RequestState<String> {
-        if(user != null){
+    override fun deleteDiary(diaryId: String): RequestState<String>? {
+        var deleted: RequestState<String>? = null
+        return if(user != null){
             try {
-               ref.document(diaryId)
+                ref.document(diaryId)
                     .delete().addOnSuccessListener {
-                        updatedDiary = RequestState.Success("Success")
+                        deleted = RequestState.Success("Success")
+                    }.addOnFailureListener {
+                        deleted = RequestState.Error(it)
 
-                    }.addOnFailureListener{exception->
-                        updatedDiary = RequestState.Error(Exception("Failure"))
                     }
-                return updatedDiary
+                deleted
+
             }catch (e:Exception){
-                return RequestState.Error(error = e)
+                RequestState.Error(error = e)
             }
         }else{
-            return RequestState.Error(error = UserNotAuthenticatedException())
+            RequestState.Error(error = UserNotAuthenticatedException())
         }
     }
 
@@ -150,6 +154,7 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
                     if (error != null) {
                         // Handle the error here
                         result = RequestState.Error(error)
+                        Log.d("Test: 1", "deleteAllDiary: ${error.message}")
                         return@addSnapshotListener
                     }
 
@@ -157,20 +162,64 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
                     if (snapshot != null) {
                         for (document in snapshot.documents) {
                             // Delete the document
-                            document.reference.delete()
+                          document.reference.delete().addOnSuccessListener {
+                              result = RequestState.Success(true)
+                          }
                         }
-                        result = RequestState.Success(true)
+
                     }
                 }
 
             }catch (e: Exception){
+                Log.d("Test: 2", "deleteAllDiary: ${e.message}")
                result = RequestState.Error(e)
             }
         }else{
             result = RequestState.Error(UserNotAuthenticatedException())
+             Log.d("Test: 2", "deleteAllDiary: Anything")
+
         }
 
        return result
+    }
+
+    override fun getFilteredDiaries(zonedDateTime: ZonedDateTime): Flow<Diaries> {
+        return callbackFlow {
+            val query = ref
+                .whereEqualTo("ownerId", user?.uid)
+                .whereGreaterThan("date", Date.from(zonedDateTime.minusDays(1).toInstant()))
+                .whereLessThan("date", Date.from(zonedDateTime.plusDays(1).toInstant()))
+                .orderBy("date", Query.Direction.DESCENDING)
+
+            val listener = query.addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    Log.d("Exception Handle", "getAllDiaries:$exception ")
+                    // Handle the error
+                    this.trySend(RequestState.Error(error = exception)).isSuccess
+                    return@addSnapshotListener
+                }
+
+                if (querySnapshot != null) {
+                    try {
+                        val diaries = querySnapshot.toObjects<Diary>()
+                        val groupedDiaries = diaries.groupBy {
+                            it.date.toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate()
+                        }
+                        this.trySend(RequestState.Success(data = groupedDiaries)).isSuccess
+                    } catch (e: Exception) {
+                        this.trySend(RequestState.Error(error = e)).isSuccess
+                        Log.d("Exception Handle", "getAllDiaries:$e ")
+                    }
+                }
+            }
+
+            // Cancel the listener when the Flow is closed
+            awaitClose {
+                listener.remove()
+            }
+        }.flowOn(Dispatchers.IO)
     }
 
     override suspend fun updateDiary(diary: Diary): RequestState<String>{

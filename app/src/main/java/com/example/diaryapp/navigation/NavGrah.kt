@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +40,7 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.ZonedDateTime
 
 @Composable
 fun NavigationGraph(
@@ -181,7 +183,7 @@ fun NavGraphBuilder.homeRoute(
         val viewModel: HomeViewModel = hiltViewModel()
         val auth: AuthWithCredentialsViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
-        val diaries by viewModel._diaries.collectAsStateWithLifecycle()
+        val diaries by viewModel.diaries.collectAsStateWithLifecycle()
 
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         var dialogState by remember { mutableStateOf(false) }
@@ -208,7 +210,14 @@ fun NavGraphBuilder.homeRoute(
             onDeleteDiariesClicked = {
                 deleteAllDialogOpened = true
             },
-            navigateToWriteWithArgs = navigateToWriteWithArgs
+            navigateToWriteWithArgs = navigateToWriteWithArgs,
+            dateIsSelected= viewModel.dateIsSelected,
+            onDateSelected = {
+                 viewModel.getDiaries(it)
+            },
+            onDateReset = {
+                  viewModel.getDiaries()
+            },
 
         )
 
@@ -243,10 +252,25 @@ fun NavGraphBuilder.homeRoute(
                     withContext(Dispatchers.Main){
                         viewModel.deleteAllDiaries(
                             onSuccess = {
-                                Toast.makeText(context,"Diaries Deleted",Toast.LENGTH_SHORT).show()
-                            },
-                            onError = {
+                                if(it){
+                                    scope.launch {
+                                        Toast.makeText(context,"Diaries Deleted",Toast.LENGTH_SHORT).show()
+                                        drawerState.close()
+                                    }
+                                }
 
+                            },
+                            onError = {error->
+
+                                scope.launch {
+                                    if (error.message == "No internet connection."){
+                                        Toast.makeText(context,"You need internet connection " +
+                                                "to perform this action",Toast.LENGTH_SHORT).show()
+                                    }else{
+                                        Toast.makeText(context,"${error.message}",Toast.LENGTH_SHORT).show()
+                                    }
+                                    drawerState.close()
+                                }
                             }
                         )
                     }
@@ -310,7 +334,7 @@ fun NavGraphBuilder.writeRoute(
                    onSuccess = onBackPressed,
                    onError = {
                        onBackPressed()
-                       Toast.makeText(context,"Failed to update diary",Toast.LENGTH_SHORT).show()
+//                       Toast.makeText(context,"Failed to update diary",Toast.LENGTH_SHORT).show()
                    }
                )
             },
@@ -319,10 +343,13 @@ fun NavGraphBuilder.writeRoute(
                     writeViewModel.updateDateTime(zonedDateTime = it)
             },
             onDeleteConfirmed = {
+                onBackPressed()
                 writeViewModel.deleteDiary(
-                    onSuccess = onBackPressed,
+                    onSuccess = {
+                        Toast.makeText(context,"Deleted",Toast.LENGTH_SHORT).show()
+                    },
                     onError = {
-                        Toast.makeText(context,"Failed to delete diary",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,it,Toast.LENGTH_SHORT).show()
                     }
                 )
             },

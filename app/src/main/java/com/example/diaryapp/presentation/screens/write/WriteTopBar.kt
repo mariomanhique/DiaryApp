@@ -184,7 +184,10 @@ fun DeleteDiaryAction(
         message = "Are you sure you want to permanently delete this diary note '${selectedDiary?.title}'?",
         dialogOpened = openDialog,
         onCloseDialog = { openDialog = false },
-        onYesClicked = onDeleteConfirmed
+        onYesClicked = {
+            onDeleteConfirmed()
+            openDialog = false
+        }
     )
     IconButton(onClick = { expanded = !expanded }) {
         Icon(

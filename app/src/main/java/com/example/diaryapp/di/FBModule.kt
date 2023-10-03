@@ -1,4 +1,4 @@
-package com.example.diaryapp.data.di
+package com.example.diaryapp.di
 
 import android.content.Context
 import androidx.room.Room

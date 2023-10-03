@@ -86,7 +86,7 @@ class WriteViewModel @Inject constructor (
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (user != null){
                 if (uiState.selectedDiaryId !=null){
                     val result = firestoreRepository.deleteDiary(
@@ -94,12 +94,13 @@ class WriteViewModel @Inject constructor (
                     )
                     when(result){
                         is RequestState.Success -> {
+                            deleteImagesFromFirebase(
+                                uiState.selectedDiary?.imagesList
+                            )
                             withContext(Dispatchers.Main){
-                                deleteImagesFromFirebase(
-                                    uiState.selectedDiary?.imagesList
-                                )
                                 onSuccess()
                             }
+
                         }
                         is RequestState.Error -> {
                             withContext(Dispatchers.Main){

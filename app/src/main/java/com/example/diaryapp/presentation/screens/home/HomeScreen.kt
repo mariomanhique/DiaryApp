@@ -39,6 +39,7 @@ import com.example.diaryapp.model.RequestState
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWithCredentialsViewModel
 import com.example.diaryapp.widgets.DiaryAppBar
 import com.example.diaryapp.widgets.NavigationDrawer
+import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -51,6 +52,9 @@ fun HomeScreen(
     onNavigateToWrite: ()-> Unit,
     onDeleteDiariesClicked: () -> Unit,
     navigateToWriteWithArgs: (String)-> Unit,
+    dateIsSelected: Boolean,
+    onDateSelected: (ZonedDateTime) -> Unit,
+    onDateReset: () -> Unit,
     viewModel: AuthWithCredentialsViewModel = hiltViewModel()
 ){
 
@@ -75,11 +79,13 @@ fun HomeScreen(
                     title = "My Diary",
                     navigationIcon = Icons.Default.Menu,
                     actionIcon = Icons.Default.DateRange,
-                    scrollBehavior = scrollBehavior
-
-                ) {
-                    onMenuClicked()
-                }
+                    scrollBehavior = scrollBehavior,
+                    dateIsSelected = dateIsSelected,
+                    onDateSelected = onDateSelected,
+                    onDateReset = onDateReset,
+                    onMenuClicked = {
+                        onMenuClicked()
+                    })
             },
             floatingActionButton = {
                 FloatingActionButton(
