@@ -8,21 +8,21 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.diaryapp.data.database.entity.ImageToDelete
-import com.example.diaryapp.data.database.entity.ImageToUpload
-import com.example.diaryapp.data.repository.firebaseDB.FirestoreDB
-import com.example.diaryapp.model.Diary
-import com.example.diaryapp.model.GalleryImage
-import com.example.diaryapp.model.GalleryState
-import com.example.diaryapp.model.Mood
-import com.example.diaryapp.model.RequestState
-import com.example.diaryapp.util.Constants.WRITE_SCREEN_ARG_KEY
-import com.example.diaryapp.util.fetchImagesFromFirebase
+import com.mariomanhique.util.model.Diary
+import com.mariomanhique.util.model.Mood
+import com.mariomanhique.util.model.RequestState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.example.diaryapp.data.repository.imageRepo.ImageRepository
+import com.mariomanhique.database.entity.ImageToDelete
+import com.mariomanhique.database.entity.ImageToUpload
+import com.mariomanhique.firestore.repository.firebaseDB.FirestoreDB
+import com.mariomanhique.firestore.repository.imageRepo.ImageRepository
+import com.mariomanhique.ui.GalleryImage
+import com.mariomanhique.ui.GalleryState
+import com.mariomanhique.util.Constants.WRITE_SCREEN_ARG_KEY
+import com.mariomanhique.util.fetchImagesFromFirebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -58,9 +58,9 @@ class WriteViewModel @Inject constructor (
     }
 
      private suspend fun insertDiary(
-        diary: Diary,
-        onSuccess: () -> Unit,
-        onError: (String) -> Unit
+         diary: Diary,
+         onSuccess: () -> Unit,
+         onError: (String) -> Unit
     ){
             if(user != null){
                 val result = firestoreRepository.insertDiary(diary = diary.apply {

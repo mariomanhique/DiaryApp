@@ -36,13 +36,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.diaryapp.model.Diary
-import com.example.diaryapp.model.GalleryImage
-import com.example.diaryapp.model.GalleryState
-import com.example.diaryapp.model.Mood
+import com.mariomanhique.util.model.Diary
+import com.mariomanhique.util.model.Mood
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
-import com.stevdzasan.diaryapp.presentation.screens.write.WriteTopBar
+import com.mariomanhique.ui.GalleryImage
+import com.mariomanhique.ui.GalleryState
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,

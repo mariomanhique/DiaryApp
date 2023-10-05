@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,23 +23,23 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.diaryapp.model.Mood
-import com.example.diaryapp.model.RequestState
-import com.example.diaryapp.presentation.components.DisplayAlertDialog
-import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWithCredentialsViewModel
-import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.SignInScreen
-import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signUpWithCredentials.SignUpWithCredentials
+import com.mariomanhique.util.model.Mood
+import com.mariomanhique.util.model.RequestState
 import com.example.diaryapp.presentation.screens.home.HomeScreen
 import com.example.diaryapp.presentation.screens.home.HomeViewModel
 import com.example.diaryapp.presentation.screens.write.WriteScreen
 import com.example.diaryapp.presentation.screens.write.WriteViewModel
-import com.example.diaryapp.util.Constants
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
+import com.mariomanhique.auth.authWithCredentials.AuthWithCredentialsViewModel
+import com.mariomanhique.auth.navigation.signIn
+import com.mariomanhique.auth.navigation.signUp
+import com.mariomanhique.ui.components.DisplayAlertDialog
+import com.mariomanhique.util.Constants
+import com.mariomanhique.util.Screen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.ZonedDateTime
 
 @Composable
 fun NavigationGraph(
@@ -118,56 +117,6 @@ fun NavigationGraph(
 }
 
 
-fun NavGraphBuilder.signIn(
-    navigateToHome:()->Unit,
-    navigateToSignUp:()->Unit,
-    onDataLoaded: () ->Unit
-){
-
-    composable(
-        route= Screen.SignIn.route
-    ){
-
-        val context = LocalContext.current
-        LaunchedEffect(Unit){
-            onDataLoaded()
-        }
-
-        SignInScreen(
-            navigateToHome = navigateToHome,
-            navigateToSignUp = navigateToSignUp,
-            onSuccessSignIn = {
-
-            },
-            onFailedSignIn = {
-                Toast.makeText(context,"SignIn Failed, check",Toast.LENGTH_SHORT).show()
-            }
-
-        )
-
-    }
-}
-
-fun NavGraphBuilder.signUp(
-    navigateToHome:()->Unit,
-    navigateToSignIn:()->Unit,
-    onDataLoaded: () ->Unit
-){
-
-    composable(
-        route = Screen.SignUp.route
-    ){
-
-        LaunchedEffect(Unit){
-                onDataLoaded()
-        }
-        SignUpWithCredentials(
-            navigateToHome = navigateToHome,
-            navigateToSignIn = navigateToSignIn
-        )
-
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.homeRoute(
@@ -338,7 +287,7 @@ fun NavGraphBuilder.writeRoute(
                    }
                )
             },
-            moodName = {Mood.values()[pageNumber].name},
+            moodName = { Mood.values()[pageNumber].name},
             onDateTimeUpdated = {
                     writeViewModel.updateDateTime(zonedDateTime = it)
             },

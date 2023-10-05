@@ -12,13 +12,13 @@ plugins {
 
 android {
     namespace = "com.example.diaryapp"
-    compileSdk = 33
+    compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
         applicationId = "com.example.diaryapp"
-        minSdk = 26
-        targetSdk = 33
-        versionCode = 1
+        minSdk = ProjectConfig.minSdk
+        targetSdk = ProjectConfig.targetSdk
+        versionCode = ProjectConfig.versionCode
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -50,7 +50,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.0"
+        kotlinCompilerExtensionVersion = ProjectConfig.extensionVersion
     }
     packaging {
         resources {
@@ -65,59 +65,53 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime)
+    implementation(libs.activity.compose)
+    implementation(platform("androidx.compose:compose-bom:2023.09.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.1.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation(libs.material3.compose)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.09.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //Hilt-Dagger
-    implementation("com.google.dagger:hilt-android:2.47")
-    annotationProcessor("com.google.dagger:hilt-compiler:2.47")
-    kapt("com.google.dagger:hilt-android-compiler:2.47")
-//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-    kapt("com.google.dagger:hilt-compiler:2.47")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation(libs.hilt.android)
+    annotationProcessor(libs.hilt.compiler)
+//    kapt("com.google.dagger:hilt-android-compiler:2.47")
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
 
-    implementation("androidx.room:room-runtime:2.5.2")
-    annotationProcessor("androidx.room:room-compiler:2.5.2")
-    kapt("androidx.room:room-compiler:2.5.2")
-    implementation("androidx.room:room-ktx:2.5.2")
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
 
-    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
+    implementation(platform(libs.firebase))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.firestore)
 
-    implementation("com.google.firebase:firebase-analytics-ktx")
-
-    implementation("com.google.firebase:firebase-storage")
-    implementation("com.google.firebase:firebase-database-ktx")
-    implementation ("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")
 
 
     //Message Bar Compose
-    implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
+    implementation(libs.message.bar.compose)
 
     //One Tap Compose
-    implementation("com.github.stevdza-san:OneTapCompose:1.0.7")
 
     // Pager - Accompanist
-    implementation("com.google.accompanist:accompanist-pager:0.27.0")
-
+    implementation(libs.accompanist.pager)
     //Coil
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation(libs.coil)
 
     //Google Auth
-    implementation("com.google.android.gms:play-services-auth:20.6.0")
+    implementation(libs.play.services.auth)
 
     //Mongo DB Realm
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt"){
@@ -125,45 +119,34 @@ dependencies {
             strictly("1.6.0-native-mt")
         }
     }
-
-    implementation("io.realm.kotlin:library-base:1.10.0")
-
-    implementation("io.realm.kotlin:library-sync:1.10.0")
-
+    implementation(libs.realm.sync)
     //Splash API
-    implementation("androidx.core:core-splashscreen:1.0.1")
-
+    implementation(libs.splash.api)
     //Compose Navigation
-    implementation("androidx.navigation:navigation-compose:2.5.0")
-
+    implementation(libs.navigation.compose)
     //Desugar JDK
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
-
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
-
+    coreLibraryDesugaring(libs.desugar.jdk)
     //Coroutine lifecycle scope
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
-
+    implementation (libs.lifecycle.viewmodel)
+    implementation (libs.lifecycle.runtime)
+    implementation (libs.lifecycle.runtime.compose)
     //Fonts
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.4.3")
-
-
+    implementation(libs.google.fonts)
     // Date-Time Picker
-    implementation ("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
-
+    implementation (libs.date.time.picker)
     // CALENDAR
-    implementation ("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
-
+    implementation (libs.date.dialog)
     // CLOCK
-    implementation ("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
-    
-
+    implementation (libs.time.dialog)
     //Corotuines
 //    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 //    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 //    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
 
+    implementation(project(":core:ui"))
+    implementation(project(":core:util"))
+    implementation(project(":data:database"))
+    implementation(project(":data:firestore"))
+    implementation(project(":feature:auth"))
 
 }
