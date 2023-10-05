@@ -16,4 +16,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "DiaryApp"
 include(":app")
- 
+include(":core:ui")
+include(":core:util")
+include(":data:firestore")
+include(":data:database")
+include(":feature:auth")

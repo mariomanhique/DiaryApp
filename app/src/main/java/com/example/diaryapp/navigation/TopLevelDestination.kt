@@ -1,7 +1,7 @@
 package com.example.diaryapp.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.diaryapp.icons.DiaryIcons
+import com.mariomanhique.util.icons.DiaryIcons
 import com.example.diaryapp.R
 
 enum class TopLevelDestination(

@@ -2,18 +2,18 @@ package com.example.diaryapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.diaryapp.data.repository.authWithCredentials.AuthRepository
-import com.example.diaryapp.data.repository.authWithCredentials.AuthRepositoryImpl
-import com.example.diaryapp.data.repository.firebaseDB.FirestoreDB
-import com.example.diaryapp.data.repository.firebaseDB.FirestoreRepository
+import com.mariomanhique.firestore.repository.authWithCredentials.AuthRepository
+import com.mariomanhique.firestore.repository.authWithCredentials.AuthRepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.example.diaryapp.data.database.ImagesDatabase
-import com.example.diaryapp.util.Constants
+import com.mariomanhique.database.ImagesDatabase
+import com.mariomanhique.firestore.repository.firebaseDB.FirestoreDB
+import com.mariomanhique.firestore.repository.firebaseDB.FirestoreRepository
+import com.mariomanhique.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,15 +25,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object FBModule {
-
-//
-//
-//    @Singleton
-//    @Provides
-//    fun provideFirebaseDatabase(): DatabaseReference
-//            = FirebaseDatabase.getInstance().reference
-
-
 
     @Singleton
     @Provides
@@ -57,7 +48,7 @@ object FBModule {
 
     @Singleton
     @Provides
-    fun provideFBRepository(firestore: FirestoreDB):FirestoreRepository
+    fun provideFBRepository(firestore: FirestoreDB): FirestoreRepository
     = firestore
 
     @Singleton

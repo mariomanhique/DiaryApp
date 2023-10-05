@@ -1,4 +1,4 @@
-package com.stevdzasan.diaryapp.presentation.screens.write
+package com.example.diaryapp.presentation.screens.write
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,9 +14,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.diaryapp.model.Diary
-import com.example.diaryapp.presentation.components.DisplayAlertDialog
-import com.example.diaryapp.ui.theme.DiaryAppTheme
+import com.mariomanhique.ui.components.DisplayAlertDialog
+import com.mariomanhique.util.model.Diary
+import com.mariomanhique.ui.theme.DiaryAppTheme
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig

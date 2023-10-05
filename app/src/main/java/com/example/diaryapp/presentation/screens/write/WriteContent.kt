@@ -1,7 +1,6 @@
 package com.example.diaryapp.presentation.screens.write
 
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
@@ -41,15 +41,15 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.diaryapp.R
-import com.example.diaryapp.model.Diary
-import com.example.diaryapp.model.GalleryImage
-import com.example.diaryapp.model.GalleryState
-import com.example.diaryapp.model.Mood
-import com.example.diaryapp.presentation.components.GalleryUploader
-import com.example.diaryapp.ui.theme.DiaryAppTheme
+import com.mariomanhique.util.model.Diary
+import com.mariomanhique.util.model.Mood
+import com.mariomanhique.ui.theme.DiaryAppTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
+import com.mariomanhique.ui.GalleryImage
+import com.mariomanhique.ui.GalleryState
+import com.mariomanhique.util.GalleryUploader
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
@@ -206,6 +206,7 @@ fun WriteScreenBottomContentPreview(){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputDiaryFields(
     modifier: Modifier = Modifier,
@@ -223,7 +224,6 @@ fun InputDiaryFields(
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-
 
         TextField(
             modifier = Modifier.fillMaxWidth(),

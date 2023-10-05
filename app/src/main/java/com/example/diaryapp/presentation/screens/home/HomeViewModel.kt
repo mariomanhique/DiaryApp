@@ -5,25 +5,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.diaryapp.connectivity.ConnectivityObserver
-import com.example.diaryapp.connectivity.NetworkConnectivityObserver
-import com.example.diaryapp.data.database.ImageToDeleteDao
-import com.example.diaryapp.data.database.entity.ImageToDelete
-import com.example.diaryapp.data.repository.firebaseDB.Diaries
-import com.example.diaryapp.data.repository.firebaseDB.FirestoreRepository
-import com.example.diaryapp.model.RequestState
+import com.mariomanhique.util.connectivity.ConnectivityObserver
+import com.mariomanhique.util.connectivity.NetworkConnectivityObserver
+import com.mariomanhique.util.model.RequestState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
+import com.mariomanhique.database.ImageToDeleteDao
+import com.mariomanhique.database.entity.ImageToDelete
+import com.mariomanhique.firestore.repository.firebaseDB.Diaries
+import com.mariomanhique.firestore.repository.firebaseDB.FirestoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import java.lang.Error
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -71,7 +69,8 @@ class HomeViewModel @Inject constructor(
            if(::allDiariesJob.isInitialized){
                allDiariesJob.cancelAndJoin()
            }
-            firestoreRepository.getFilteredDiaries(zonedDateTime).collect{
+            firestoreRepository.getFilteredDiaries(zonedDateTime).distinctUntilChanged()
+                .collect{
                 _diaries.value = it
             }
         }
@@ -82,7 +81,8 @@ class HomeViewModel @Inject constructor(
                 allFilteredDiariesJob.cancelAndJoin()
             }
             if(user != null){
-                firestoreRepository.getAllDiaries().distinctUntilChanged().collect{
+                firestoreRepository.getAllDiaries().distinctUntilChanged()
+                    .collect{
                     _diaries.value = it
                 }
             }

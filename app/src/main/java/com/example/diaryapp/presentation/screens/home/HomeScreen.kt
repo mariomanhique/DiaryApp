@@ -33,12 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.diaryapp.data.repository.firebaseDB.Diaries
-import com.example.diaryapp.model.RequestState
-import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWithCredentialsViewModel
+import com.mariomanhique.util.model.RequestState
 import com.example.diaryapp.widgets.DiaryAppBar
 import com.example.diaryapp.widgets.NavigationDrawer
+import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,7 +53,6 @@ fun HomeScreen(
     dateIsSelected: Boolean,
     onDateSelected: (ZonedDateTime) -> Unit,
     onDateReset: () -> Unit,
-    viewModel: AuthWithCredentialsViewModel = hiltViewModel()
 ){
 
     val scope = rememberCoroutineScope()
