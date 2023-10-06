@@ -2,12 +2,12 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+//    id("kotlin-kapt")
+//    id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "com.mariomanhique.auth"
+    namespace = "com.mariomanhique.home"
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
@@ -33,6 +33,7 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
     }
@@ -64,11 +65,13 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.google.fonts)
 
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.firestore)
     implementation(libs.coroutines.core)
 
     implementation(libs.hilt.android)
     annotationProcessor(libs.hilt.compiler)
-    kapt(libs.hilt.compiler)
+//    kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.lifecycle.runtime.compose)
@@ -78,6 +81,6 @@ dependencies {
 
     implementation(project(":core:ui"))
     implementation(project(":core:util"))
+    implementation(project(":data:database"))
     implementation(project(":data:firestore"))
-
 }
