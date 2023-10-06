@@ -1,4 +1,4 @@
-package com.example.diaryapp.presentation.screens.write
+package com.mariomanhique.write
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +32,7 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WriteTopBar(
+internal fun WriteTopBar(
     selectedDiary: Diary?,
     moodName: () -> String,
     onDateTimeUpdated: (ZonedDateTime) -> Unit,
@@ -160,7 +160,7 @@ fun WriteTopBar(
 }
 
 @Composable
-fun DeleteDiaryAction(
+internal fun DeleteDiaryAction(
     selectedDiary: Diary?,
     onDeleteConfirmed: () -> Unit
 ) {

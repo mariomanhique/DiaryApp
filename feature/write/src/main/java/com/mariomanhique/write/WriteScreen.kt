@@ -1,4 +1,4 @@
-package com.example.diaryapp.presentation.screens.write
+package com.mariomanhique.write
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -49,7 +49,7 @@ import java.time.ZonedDateTime
 )
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun WriteScreen(
+internal fun WriteScreen(
     uiState: UiState,
     onDiarySaved: (Diary) -> Unit,
     galleryState: GalleryState,
@@ -64,7 +64,6 @@ fun WriteScreen(
     onImageDeleteClicked: (GalleryImage) -> Unit
 
     ){
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     var selectedGalleryImage by remember {
         mutableStateOf<GalleryImage?>(null)
@@ -124,7 +123,7 @@ fun WriteScreen(
 
 
 @Composable
-fun ZoomableImage(
+internal fun ZoomableImage(
     selectedGalleryImage: GalleryImage,
     onCloseClicked: () -> Unit,
     onDeleteClicked: () -> Unit

@@ -66,6 +66,7 @@ dependencies {
 
     implementation(libs.firebase.storage)
     implementation(libs.firebase.firestore)
+
 //    implementation(libs.desugar.jdk) //when min required sdk is lower than 26
 
     //Our util contains :core:ui because of the theme colors that it uses in Mood model class

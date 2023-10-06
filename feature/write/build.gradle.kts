@@ -72,13 +72,18 @@ dependencies {
 
     implementation(libs.hilt.android)
     annotationProcessor(libs.hilt.compiler)
-//    kapt(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.lifecycle.runtime.compose)
 
     implementation(libs.firebase.auth)
     implementation(libs.realm.sync)
+    implementation(libs.accompanist.pager)
+
+    implementation(libs.date.time.picker)
+    implementation(libs.date.dialog)
+    implementation(libs.time.dialog)
 
     implementation(project(":core:ui"))
     implementation(project(":core:util"))

@@ -1,4 +1,4 @@
-package com.example.diaryapp.presentation.screens.write
+package com.mariomanhique.write
 
 import android.net.Uri
 import android.util.Log
@@ -34,7 +34,7 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class WriteViewModel @Inject constructor (
+internal class WriteViewModel @Inject constructor (
     private val savedStateHandle: SavedStateHandle,
     private val firestoreRepository: FirestoreDB,
     private val imageRepository: ImageRepository
@@ -65,7 +65,7 @@ class WriteViewModel @Inject constructor (
             if(user != null){
                 val result = firestoreRepository.insertDiary(diary = diary.apply {
                     if (uiState.updatedDateTime != null){
-                        date = Date.from(uiState?.updatedDateTime!!)
+                        date = Date.from(uiState.updatedDateTime!!)
                     }
                 })
 
@@ -288,15 +288,9 @@ class WriteViewModel @Inject constructor (
     }
 
     fun updateDateTime(zonedDateTime: ZonedDateTime){
-        uiState = if (zonedDateTime != null){
-            uiState.copy(
-                updatedDateTime = zonedDateTime.toInstant()
-            )
-        } else {
-            uiState.copy(
-                updatedDateTime = null
-            )
-        }
+        uiState = uiState.copy(
+            updatedDateTime = zonedDateTime.toInstant()
+        )
     }
 
     fun addImage(

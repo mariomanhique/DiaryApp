@@ -72,7 +72,7 @@ class AuthWithCredentialsViewModel @Inject constructor(
             if ( user!= null){
                 onSuccess()
                 SignInResult(
-                    data = user?.run {
+                    data = user.run {
                         UserData(
                             userId = uid,
                             username = displayName,

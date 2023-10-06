@@ -26,15 +26,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
-import com.example.diaryapp.widgets.DiaryAppBar
-import com.example.diaryapp.widgets.NavigationDrawer
 import com.mariomanhique.util.model.RequestState
 import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 import java.time.ZonedDateTime
@@ -42,7 +39,7 @@ import java.time.ZonedDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(
+internal fun HomeScreen(
     diaries: Diaries,
     drawerState: DrawerState,
     onSignOutClicked: ()-> Unit,
@@ -55,7 +52,6 @@ fun HomeScreen(
     onDateReset: () -> Unit,
 ){
 
-    val scope = rememberCoroutineScope()
 
     var padding by remember { mutableStateOf(PaddingValues()) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -75,7 +71,6 @@ fun HomeScreen(
                 DiaryAppBar(
                     title = "My Diary",
                     navigationIcon = Icons.Default.Menu,
-                    actionIcon = Icons.Default.DateRange,
                     scrollBehavior = scrollBehavior,
                     dateIsSelected = dateIsSelected,
                     onDateSelected = onDateSelected,

@@ -16,7 +16,10 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.Date
 import javax.inject.Inject
@@ -185,8 +188,16 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
         return callbackFlow {
             val query = ref
                 .whereEqualTo("ownerId", user?.uid)
-                .whereGreaterThan("date", Date.from(zonedDateTime.minusDays(1).toInstant()))
-                .whereLessThan("date", Date.from(zonedDateTime.plusDays(1).toInstant()))
+                .whereGreaterThan("date", Date.from(
+                   LocalDateTime.of(
+                       zonedDateTime.toLocalDate().plusDays(1),
+                       LocalTime.MIDNIGHT
+                   ).toInstant(zonedDateTime.offset)))
+                .whereLessThan("date", Date.from(
+                    LocalDateTime.of(
+                        zonedDateTime.toLocalDate(),
+                        LocalTime.MIDNIGHT
+                    ).toInstant(zonedDateTime.offset)))
                 .orderBy("date", Query.Direction.DESCENDING)
 
             val listener = query.addSnapshotListener { querySnapshot, exception ->
@@ -233,7 +244,7 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
                     )).addOnSuccessListener {
                         updatedDiary = RequestState.Success("Success")
 
-                    }.addOnFailureListener{exception->
+                    }.addOnFailureListener{
                         updatedDiary = RequestState.Error(Exception("Failure"))
                     }
              return updatedDiary
@@ -255,8 +266,8 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
                        it.toObjects<Diary>()
                    }
 
-                diary.map {diary->
-                    RequestState.Success(data = diary.first())
+                diary.map {mapDiary->
+                    RequestState.Success(data = mapDiary.first())
                 }
 
 

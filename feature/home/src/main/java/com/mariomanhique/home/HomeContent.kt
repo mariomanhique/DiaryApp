@@ -31,7 +31,7 @@ import kotlin.random.Random
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeContent(
+internal fun HomeContent(
     paddingValues: PaddingValues,
     diaryNotes: Map<LocalDate, List<Diary>>,
     onClick: (String) -> Unit,

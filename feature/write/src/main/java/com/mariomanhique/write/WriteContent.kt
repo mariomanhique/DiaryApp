@@ -1,7 +1,8 @@
-package com.example.diaryapp.presentation.screens.write
+package com.mariomanhique.write
 
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,7 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.diaryapp.R
 import com.mariomanhique.util.model.Diary
 import com.mariomanhique.util.model.Mood
 import com.mariomanhique.ui.theme.DiaryAppTheme
@@ -51,10 +51,11 @@ import com.mariomanhique.ui.GalleryImage
 import com.mariomanhique.ui.GalleryState
 import com.mariomanhique.util.GalleryUploader
 import kotlinx.coroutines.launch
+import com.mariomanhique.write.R
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
 @Composable
-fun WriteContent(
+internal fun WriteContent(
     modifier: Modifier = Modifier,
     galleryState: GalleryState,
     uiState: UiState,
@@ -148,7 +149,7 @@ fun WriteContent(
 }
 
 @Composable
-fun WriteScreenBottomContent(
+internal fun WriteScreenBottomContent(
     modifier: Modifier = Modifier,
     galleryState: GalleryState,
     uiState: UiState,
@@ -208,7 +209,7 @@ fun WriteScreenBottomContentPreview(){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputDiaryFields(
+internal fun InputDiaryFields(
     modifier: Modifier = Modifier,
     value: String,
     focusDirection: FocusDirection?=null,

@@ -149,5 +149,6 @@ dependencies {
     implementation(project(":data:firestore"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:write"))
 
 }

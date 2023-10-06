@@ -52,7 +52,7 @@ import com.mariomanhique.auth.R
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen(
+internal fun SignInScreen(
     viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
     navigateToSignUp:()->Unit,
     onSuccessSignIn: () -> Unit,
@@ -87,7 +87,7 @@ fun SignInScreen(
             contentAlignment = Alignment.TopCenter
         ) {
 
-           Image(painter = painterResource(id = R.drawable.logo), contentDescription = "")
+           Image(painter = painterResource(id = com.mariomanhique.ui.R.drawable.logo), contentDescription = "")
         }
 
         Column(
@@ -133,7 +133,7 @@ fun SignInScreen(
                                 passwordVisibility.value = !passwordVisibility.value
                             }) {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.password_eye),
+                                    painter = painterResource(id = com.mariomanhique.ui.R.drawable.password_eye),
                                     contentDescription = "",
                                     tint = if (passwordVisibility.value) Color.White else Color.Gray
                                 )
