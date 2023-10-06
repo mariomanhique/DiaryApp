@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mariomanhique.util.connectivity.ConnectivityObserver
 import com.mariomanhique.util.connectivity.NetworkConnectivityObserver
 import com.mariomanhique.util.model.RequestState
 import com.google.firebase.auth.FirebaseAuth
@@ -14,6 +13,7 @@ import com.mariomanhique.database.ImageToDeleteDao
 import com.mariomanhique.database.entity.ImageToDelete
 import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 import com.mariomanhique.firestore.repository.firebaseDB.FirestoreRepository
+import com.stevdzasan.diaryapp.connectivity.ConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

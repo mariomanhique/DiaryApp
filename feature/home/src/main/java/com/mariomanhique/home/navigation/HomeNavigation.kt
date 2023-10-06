@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.mariomanhique.auth.authWithCredentials.AuthWithCredentialsViewModel
 import com.mariomanhique.home.HomeScreen
 import com.mariomanhique.home.HomeViewModel
 import com.mariomanhique.ui.components.DisplayAlertDialog
@@ -134,4 +135,4 @@ fun NavGraphBuilder.homeRoute(
         )
     }
 
-}}
+}
