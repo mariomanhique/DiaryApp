@@ -188,12 +188,12 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
         return callbackFlow {
             val query = ref
                 .whereEqualTo("ownerId", user?.uid)
-                .whereGreaterThan("date", Date.from(
+                .whereLessThan("date", Date.from(
                    LocalDateTime.of(
                        zonedDateTime.toLocalDate().plusDays(1),
                        LocalTime.MIDNIGHT
                    ).toInstant(zonedDateTime.offset)))
-                .whereLessThan("date", Date.from(
+                .whereGreaterThan("date", Date.from(
                     LocalDateTime.of(
                         zonedDateTime.toLocalDate(),
                         LocalTime.MIDNIGHT
