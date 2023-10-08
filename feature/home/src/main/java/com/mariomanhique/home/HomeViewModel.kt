@@ -16,10 +16,12 @@ import com.mariomanhique.firestore.repository.firebaseDB.FirestoreRepository
 import com.stevdzasan.diaryapp.connectivity.ConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
@@ -75,13 +77,14 @@ internal class HomeViewModel @Inject constructor(
             }
         }
     }
+    @OptIn(FlowPreview::class)
     private fun observeAllDiaries(){
         allDiariesJob = viewModelScope.launch {
             if(::allFilteredDiariesJob.isInitialized){
                 allFilteredDiariesJob.cancelAndJoin()
             }
             if(user != null){
-                firestoreRepository.getAllDiaries().distinctUntilChanged()
+                firestoreRepository.getAllDiaries().distinctUntilChanged().debounce(2000)
                     .collect{
                     _diaries.value = it
                 }
