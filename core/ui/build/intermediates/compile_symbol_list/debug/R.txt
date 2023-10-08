@@ -1,0 +1,3 @@
+int drawable google_logo 0x0
+int drawable logo 0x0
+int drawable password_eye 0x0

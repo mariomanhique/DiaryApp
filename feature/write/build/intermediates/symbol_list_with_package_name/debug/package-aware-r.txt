@@ -1,0 +1,22 @@
+com.mariomanhique.write
+array com_google_android_gms_fonts_certs
+array com_google_android_gms_fonts_certs_dev
+array com_google_android_gms_fonts_certs_prod
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+string app_name
+string auth_subtitle
+string auth_title
+string client_id
+string description
+string home
+string memories
+string settings
+string title
+style Theme_DiaryApp
+style Theme_DiaryApp_MySplash
