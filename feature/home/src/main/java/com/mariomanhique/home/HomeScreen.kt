@@ -34,6 +34,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
 import com.mariomanhique.util.model.RequestState
 import com.mariomanhique.firestore.repository.firebaseDB.Diaries
+import com.mariomanhique.ui.components.DiaryNavigation
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,15 +97,14 @@ internal fun HomeScreen(
                     }
                 }
             },
-//            bottomBar = {
-//                BottomAppBar(
-//                    modifier = Modifier.background(Color.Transparent),
-//                    containerColor = MaterialTheme.colorScheme.surface,
-//                    contentColor = MaterialTheme.colorScheme.surface,
-//                ) {
-//                   // Display()
-//                }
-//            },
+            bottomBar = {
+              DiaryNavigation(
+                  onHomeClicked = {},
+                  onAccountClicked = {},
+                  onDiariesClicked = {},
+                  onGroupClicked = {}
+                  )
+            },
 
             ){
 
