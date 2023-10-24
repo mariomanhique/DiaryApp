@@ -14,9 +14,7 @@ import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 import com.mariomanhique.home.navigation.diariesDestinationRoute
 import com.mariomanhique.home.navigation.diariesRoute
 import com.mariomanhique.profile.navigation.profileRoute
-import com.mariomanhique.util.Screen
 import writeRoute
-import write_navigation_route
 
 @Composable
 fun NavigationHost(

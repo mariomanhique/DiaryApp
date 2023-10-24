@@ -190,6 +190,7 @@ internal fun SignUpWithCredentials(
                             viewModel.resetState()
                         }
                         GoogleButton(
+                            primaryText = "Sign Up",
                             loadingState = loadingState
                         ) {
                             if (emailValue.value.isNotEmpty() && passwordValue.value.isNotEmpty()) {

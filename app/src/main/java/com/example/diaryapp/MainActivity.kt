@@ -12,14 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.compose.rememberNavController
 import com.example.diaryapp.ui.DiaryApp
 import com.mariomanhique.ui.theme.DiaryAppTheme
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 import com.mariomanhique.firestore.repository.imageRepo.ImageRepository
-import com.mariomanhique.home.navigation.diariesDestinationRoute
-import com.mariomanhique.util.Screen
 import com.mariomanhique.util.retryDeletingImageFromFirebase
 import com.mariomanhique.util.retryUploadingImageToFirebase
 import dagger.hilt.android.AndroidEntryPoint

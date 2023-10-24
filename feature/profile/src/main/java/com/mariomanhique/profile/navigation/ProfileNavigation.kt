@@ -15,9 +15,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.mariomanhique.profile.ProfileScreen
-import com.mariomanhique.profile.ProfileViewModel
-import com.mariomanhique.ui.components.DisplayAlertDialog
-import com.mariomanhique.util.Screen
 
 
 const val profile_route = "profile_route"

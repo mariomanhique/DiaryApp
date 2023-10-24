@@ -17,7 +17,6 @@ import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.mariomanhique.util.Constants
-import com.mariomanhique.util.Screen
 import com.mariomanhique.util.model.Mood
 import com.mariomanhique.write.WriteScreen
 import com.mariomanhique.write.WriteViewModel
@@ -27,6 +26,17 @@ const val write_navigation_route = "write_navigation_route"
 fun NavController.navigateToWrite(navOptions: NavOptions?= null){
     this.navigate(write_navigation_route)
 }
+
+sealed class Screen(val route: String){
+    data object Write:Screen(route = "write_navigation_route?${Constants.WRITE_SCREEN_ARG_KEY}=" +
+            "{${Constants.WRITE_SCREEN_ARG_KEY}}") {//The argument that we will define is optional.
+    fun passDiaryId(diaryId:String)=
+        "write_navigation_route?${Constants.WRITE_SCREEN_ARG_KEY}=$diaryId"
+
+
+    }
+}
+
 @OptIn(ExperimentalPagerApi::class)
 fun NavGraphBuilder.writeRoute(
     onBackPressed: () -> Unit,
