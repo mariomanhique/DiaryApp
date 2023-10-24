@@ -1,5 +1,6 @@
 package com.mariomanhique.home
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,16 +9,24 @@ import androidx.lifecycle.viewModelScope
 import com.mariomanhique.util.connectivity.NetworkConnectivityObserver
 import com.mariomanhique.util.model.RequestState
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.mariomanhique.database.ImageToDeleteDao
 import com.mariomanhique.database.entity.ImageToDelete
 import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 import com.mariomanhique.firestore.repository.firebaseDB.FirestoreRepository
+import com.mariomanhique.firestore.repository.profileRepository.ProfileRepository
+import com.mariomanhique.ui.GalleryImage
+import com.mariomanhique.ui.GalleryState
+import com.mariomanhique.util.fetchImageFromFirebase
+import com.mariomanhique.util.model.UserData
 import com.stevdzasan.diaryapp.connectivity.ConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,17 +37,18 @@ import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-internal class HomeViewModel @Inject constructor(
+class DiariesViewModel @Inject constructor(
     private val firestoreRepository: FirestoreRepository,
     private val connectivity: NetworkConnectivityObserver,
-    private val imageToDeleteDao: ImageToDeleteDao
+    private val imageToDeleteDao: ImageToDeleteDao,
 ) :ViewModel() {
 
     private lateinit var allDiariesJob: Job
     private lateinit var allFilteredDiariesJob: Job
 
     private var network by mutableStateOf(ConnectivityObserver.Status.Unavailable)
-    val user = FirebaseAuth.getInstance().currentUser
+    val galleryState = GalleryState()
+    private val user = FirebaseAuth.getInstance().currentUser
     private var _diaries: MutableStateFlow<Diaries> = MutableStateFlow(RequestState.Idle)
     val diaries = _diaries.asStateFlow()
 
@@ -47,6 +57,7 @@ internal class HomeViewModel @Inject constructor(
 
 
     init{
+        getCurrentUser()
         getDiaries()
         viewModelScope.launch {
             connectivity.observe().collect{
@@ -55,7 +66,35 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getDiaries(zonedDateTime: ZonedDateTime?=null){
+
+
+    private fun getCurrentUser() = user?.run {
+        fetchImageFromFirebase(
+            remoteImagePath = photoUrl.toString(),
+            onImageDownload = {
+                Log.d("Image", "getCurrentUser: $it")
+
+                galleryState.addImage(
+                    GalleryImage(
+                        image = it,
+                        remoteImagePath = extractImagePath(
+                            fullImageUrl = it.toString()
+                        )
+                    )
+                )
+            },
+            onImageDownloadFailed = {},
+            onReadyToDisplay = {}
+        )
+        Log.d("Image", "getCurrentUser: ${this.photoUrl}")
+        UserData(
+            userId = uid,
+            username = displayName.toString(),
+            profilePictureUrl = photoUrl.toString()
+        )
+    }
+
+    fun getDiaries(zonedDateTime: ZonedDateTime? = null){
         dateIsSelected = zonedDateTime != null
         _diaries.value = RequestState.Loading
         if(dateIsSelected && zonedDateTime != null){
@@ -63,7 +102,6 @@ internal class HomeViewModel @Inject constructor(
         } else{
             observeAllDiaries()
         }
-
     }
 
     private fun observeFilteredDiaries(zonedDateTime: ZonedDateTime){
@@ -145,4 +183,10 @@ internal class HomeViewModel @Inject constructor(
 
 
 
+}
+
+fun extractImagePath(fullImageUrl: String): String {
+    val chunks = fullImageUrl.split("%2F")
+    val imageName = chunks[2].split("?").first()
+    return "images/${Firebase.auth.currentUser?.uid}/$imageName"
 }

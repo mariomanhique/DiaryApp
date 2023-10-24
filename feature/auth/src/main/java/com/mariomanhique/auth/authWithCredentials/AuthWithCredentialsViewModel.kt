@@ -1,13 +1,16 @@
 package com.mariomanhique.auth.authWithCredentials
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mariomanhique.firestore.repository.authWithCredentials.AuthRepository
 import com.google.firebase.auth.FirebaseAuthException
-import com.mariomanhique.auth.SignInResult
+import com.google.firebase.auth.FirebaseUser
 import com.mariomanhique.auth.SignInState
-import com.mariomanhique.auth.UserData
+import com.mariomanhique.firestore.repository.profileRepository.ProfileRepository
+import com.mariomanhique.util.model.SignInResult
+import com.mariomanhique.util.model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.mongodb.User
 import kotlinx.coroutines.Dispatchers
@@ -21,9 +24,11 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthWithCredentialsViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository
 ):ViewModel() {
 
     private val _state = MutableStateFlow(SignInState())
+     val user = authRepository.currentUser
     var loadingState = mutableStateOf(false)
         private set
 
@@ -36,14 +41,19 @@ class AuthWithCredentialsViewModel @Inject constructor(
     fun getMongoUser(): User {
         return authRepository.mongoCurrentUser!!
     }
-    fun getCurrentUser() = authRepository.currentUser?.run {
-        UserData(
-            userId = uid,
-            username = displayName,
-            profilePictureUrl = null
-        )
-    }
 
+    private fun saveProfile(
+        name:String,
+        profile:String
+    ){
+//        viewModelScope.launch {
+           profileRepository.saveProfile(
+               name = name,
+               profile = profile
+           )
+
+//        }
+    }
 
     private fun onSignInResult(result: SignInResult){
         _state.update { it.copy(
@@ -75,7 +85,7 @@ class AuthWithCredentialsViewModel @Inject constructor(
                     data = user.run {
                         UserData(
                             userId = uid,
-                            username = displayName,
+                            username = displayName.toString(),
                             profilePictureUrl = photoUrl.toString()
                         )
                     },
@@ -109,17 +119,22 @@ class AuthWithCredentialsViewModel @Inject constructor(
         val result = try {
 
             val user = authRepository.signUp(email=email, password = password,name=name)
+            run {
+                saveProfile(name = name, user?.photoUrl.toString())
+                        Log.d("SignUp", "signUp: ${user?.displayName} ")
+                SignInResult(
+                    data = user?.run {
+                        UserData(
+                            userId = uid,
+                            username = displayName.toString(),
+                            profilePictureUrl = photoUrl.toString()
+                        )
+                    },
+                    errorMessage = null
+                )
+            }
 
-            SignInResult(
-                data = user?.run {
-                    UserData(
-                        userId = uid,
-                        username = displayName,
-                        profilePictureUrl = photoUrl.toString()
-                    )
-                },
-                errorMessage = null
-            )
+
         }catch (e: FirebaseAuthException){
             e.printStackTrace()
 //            if(e is CancellationException) throw e
@@ -184,7 +199,10 @@ class AuthWithCredentialsViewModel @Inject constructor(
     }
 
     fun signOut(){
-        authRepository.logout()
+        viewModelScope.launch {
+            authRepository.logout()
+            authRepository.logoutFromMongo()
+        }
     }
 
     private fun signOutFromMongo(){

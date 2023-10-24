@@ -1,5 +1,6 @@
 [versions]
 core-ktx = "1.10.1"
+androidxTracing = "1.1.0"
 kotlin = "1.9.0"
 lifecycle-runtime = "2.6.1"
 compose = "1.5.1"
@@ -49,11 +50,14 @@ compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose"}
 compose-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose"}
 material3-compose = { module = "androidx.compose.material3:material3", version.ref = "material3-compose"}
 junit = { module = "junit:junit", version.ref = "junit"}
+androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
 junit-ext = { module = "androidx.test.ext:junit", version.ref = "junit-ext"}
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core"}
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose"}
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose"}
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose"}
+androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+
 
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth"}
 

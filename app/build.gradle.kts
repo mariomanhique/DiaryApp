@@ -78,6 +78,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(libs.androidx.tracing.ktx)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    
 
 
     //Hilt-Dagger
@@ -148,5 +151,8 @@ dependencies {
     implementation(project(":feature:auth"))
     implementation(project(":feature:home"))
     implementation(project(":feature:write"))
+    implementation(project(":feature:profile"))
+    implementation(project(":feature:feed"))
+    implementation(project(":feature:connect"))
 
 }

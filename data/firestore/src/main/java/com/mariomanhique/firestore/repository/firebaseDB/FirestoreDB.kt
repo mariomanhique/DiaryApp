@@ -30,6 +30,7 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
     private lateinit var updatedDiary: RequestState<String>
     val user = FirebaseAuth.getInstance().currentUser
     private val ref = firestore.collection("diary")
+    private val refRoom = firestore.collection("diary")
 
     override fun getDiaries(): Flow<Diaries>{
        return if(user != null){
@@ -107,6 +108,7 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
         if(user != null){
             try {
                 val result = ref.document(diary.id)
+
                 result.set(diary.apply {
                     ownerId = user.uid
                 }).addOnFailureListener {
@@ -143,7 +145,6 @@ class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore):
             RequestState.Error(error = UserNotAuthenticatedException())
         }
     }
-
 
     override suspend fun deleteAllDiary(): RequestState<Boolean>?{
         var result: RequestState<Boolean>?=null

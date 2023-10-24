@@ -56,6 +56,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    
 
     implementation(libs.material3.compose)
     implementation(libs.activity.compose)

@@ -1,5 +1,6 @@
 package com.mariomanhique.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,12 +38,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.mariomanhique.ui.R
 import com.mariomanhique.util.fontFamily
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
+import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
@@ -51,8 +54,9 @@ import java.time.ZonedDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryAppBar(
-    title: String,
     modifier: Modifier=Modifier,
+    title: String,
+    isProfileDestination: Boolean = true,
     navigationIcon: ImageVector,
     scrollBehavior: TopAppBarScrollBehavior,
     onMenuClicked: ()->Unit,
@@ -69,7 +73,6 @@ fun DiaryAppBar(
         scrollBehavior = scrollBehavior,
         title = {
             Column(modifier =  modifier.fillMaxWidth()) {
-
                 Text(
                     text = title,
                     fontFamily = fontFamily(
@@ -79,7 +82,6 @@ fun DiaryAppBar(
                     )
                 )
             }
-
         },
         navigationIcon = {
             IconButton(
@@ -91,37 +93,36 @@ fun DiaryAppBar(
                     tint = MaterialTheme.colorScheme.onSurface
 
                     )
-
             }
         },
         actions = {
-
-            if(dateIsSelected){
-                IconButton(onClick = onDateReset) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close Icon",
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
+            if(isProfileDestination){
+                if(dateIsSelected){
+                    IconButton(onClick = onDateReset) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Close Icon",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }else{
+                    IconButton(onClick = {
+                        dialogState.show()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Date Icon",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }
-            }else{
-                IconButton(onClick = {
-                    dialogState.show()
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Date Icon",
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
+            }else{}
         }
-
     )
 
     CalendarDialog(
         state = dialogState,
-        selection =CalendarSelection.Date{localDate->
+        selection = CalendarSelection.Date{localDate->
         pickedDate = localDate
         onDateSelected(
             ZonedDateTime.of(
@@ -131,11 +132,10 @@ fun DiaryAppBar(
             )
         )
     },
-        config = CalendarConfig(monthSelection = true, yearSelection = true)
+        config = CalendarConfig(monthSelection = true, yearSelection = true),
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationDrawer(
     drawerState: DrawerState,
@@ -188,7 +188,7 @@ fun NavigationDrawer(
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
-                                text = "SignOut",
+                                text = "Sign Out",
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         }
@@ -202,7 +202,7 @@ fun NavigationDrawer(
 
         },
         content = {
-            content()
+                content()
         }
     )
 }

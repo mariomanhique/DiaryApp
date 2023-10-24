@@ -154,7 +154,6 @@ internal fun SignUpWithCredentials(
 
                         LaunchedEffect(key1 = state.isSignInSuccessful) {
                             if (state.isSignInSuccessful) {
-
                                 viewModel.signUpWithMongoAtlas(
                                     email = emailValue.value,
                                     password = passwordValue.value,
@@ -166,7 +165,6 @@ internal fun SignUpWithCredentials(
                                                 onSuccess = {
                                                     navigateToHome()
                                                     viewModel.setLoading(false)
-
                                                 },
                                                 onError = {
                                                     viewModel.setLoading(false)
@@ -181,22 +179,16 @@ internal fun SignUpWithCredentials(
                                                     //SnackBarHost
                                                 }
                                             )
-
                                         }
                                     },
                                     onError = {
                                         viewModel.setLoading(false)
                                         //SnackBarHost
-
-
                                     }
                                 )
-
                             }
-
                             viewModel.resetState()
                         }
-
                         GoogleButton(
                             loadingState = loadingState
                         ) {
@@ -206,22 +198,10 @@ internal fun SignUpWithCredentials(
                                     email = emailValue.value,
                                     password = passwordValue.value
                                 )
-//
                                 viewModel.setLoading(true)
                                 viewModel.resetState()
                             }
-
                         }
-//                    Button(onClick = {
-//
-//
-//
-//                    }, modifier = Modifier
-//                        .fillMaxWidth(0.8f)
-//                        .height(50.dp)) {
-//                        Text(text = "Sign Up", fontSize = 20.sp)
-//                    }
-
                         Spacer(modifier = Modifier.padding(20.dp))
                         Text(
                             text = "Login Instead",
@@ -230,9 +210,7 @@ internal fun SignUpWithCredentials(
                             })
                         )
                         Spacer(modifier = Modifier.padding(20.dp))
-
                     }
-
                 }
             }
         }

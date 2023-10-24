@@ -82,7 +82,7 @@ internal fun WriteContent(
             .imePadding()
             .navigationBarsPadding()
             .padding(top = paddingValues.calculateTopPadding())
-            .padding(bottom = 24.dp)
+//            .padding(bottom = paddingValues.calculateBottomPadding())
             .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {

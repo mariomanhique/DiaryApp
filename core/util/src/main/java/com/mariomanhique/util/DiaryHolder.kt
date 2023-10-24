@@ -166,7 +166,7 @@ fun DiaryHolder(
                 MutableInteractionSource()
             }
         ) {
-        onClick(diary.id.toString())
+        onClick(diary.id)
     }){
         
         Spacer(modifier = Modifier.width(14.dp))

@@ -7,6 +7,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,6 +46,9 @@ import com.mariomanhique.ui.GalleryImage
 import com.mariomanhique.ui.GalleryState
 import java.time.ZonedDateTime
 
+
+
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
     ExperimentalPagerApi::class
 )
@@ -61,8 +66,8 @@ internal fun WriteScreen(
     onDeleteConfirmed: () ->Unit,
     onBackPressed: () ->Unit,
     onImageSelect: (Uri) -> Unit,
-    onImageDeleteClicked: (GalleryImage) -> Unit
-
+    onImageDeleteClicked: (GalleryImage) -> Unit,
+    paddingValues: PaddingValues
     ){
 
     var selectedGalleryImage by remember {
@@ -72,18 +77,17 @@ internal fun WriteScreen(
     LaunchedEffect(key1 =uiState.mood){
         pagerState.scrollToPage(Mood.valueOf(uiState.mood.name).ordinal)
     }
-    Scaffold(
-        topBar = {
-            WriteTopBar(
-                selectedDiary = uiState.selectedDiary,
-                moodName = moodName,
-                onDateTimeUpdated = onDateTimeUpdated,
-                onDeleteConfirmed = onDeleteConfirmed,
-            ) {
-                onBackPressed()
-            }
+    Column {
+
+         WriteTopBar(
+            selectedDiary = uiState.selectedDiary,
+            moodName = moodName,
+            onDateTimeUpdated = onDateTimeUpdated,
+            onDeleteConfirmed = onDeleteConfirmed,
+        ) {
+            onBackPressed()
         }
-    ) {paddingValues->
+
         WriteContent(
             uiState = uiState,
             title = uiState.title,

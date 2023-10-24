@@ -23,18 +23,35 @@ fun fetchImagesFromFirebase(
     if (remoteImagePaths.isNotEmpty()) {
         remoteImagePaths.forEachIndexed { index, remoteImagePath ->
             if (remoteImagePath.trim().isNotEmpty()) {
+                Log.d("from db", "fetchImagesFromFirebase: $remoteImagePath")
                 FirebaseStorage.getInstance().reference.child(remoteImagePath.trim()).downloadUrl
                     .addOnSuccessListener {
-                        Log.d("DownloadURL", "$it")
+                        Log.d("DownloadURL2", "$it")
                         onImageDownload(it)
                         if (remoteImagePaths.lastIndexOf(remoteImagePaths.last()) == index) {
-                            onReadyToDisplay()
+                        onReadyToDisplay()
                         }
                     }.addOnFailureListener {
                         onImageDownloadFailed(it)
-                    }
+                }
             }
         }
+    }
+}
+
+fun fetchImageFromFirebase(
+    remoteImagePath: String,
+    onImageDownload: (Uri) -> Unit,
+    onImageDownloadFailed:(Exception) -> Unit,
+    onReadyToDisplay: () -> Unit
+){
+    if(remoteImagePath.trim().isNotEmpty()){
+        FirebaseStorage.getInstance().reference.child(remoteImagePath.trim()).downloadUrl
+            .addOnSuccessListener{
+                onImageDownload(it)
+            }.addOnFailureListener{
+                onImageDownloadFailed(it)
+            }
     }
 }
 

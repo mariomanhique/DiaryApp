@@ -22,6 +22,7 @@ import com.mariomanhique.firestore.repository.imageRepo.ImageRepository
 import com.mariomanhique.ui.GalleryImage
 import com.mariomanhique.ui.GalleryState
 import com.mariomanhique.util.Constants.WRITE_SCREEN_ARG_KEY
+import com.mariomanhique.util.fetchImageFromFirebase
 import com.mariomanhique.util.fetchImagesFromFirebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +50,8 @@ internal class WriteViewModel @Inject constructor (
         getDiaryIdArgument()
         getSelectedDiary()
     }
+
+
     private fun getDiaryIdArgument(){
         uiState = uiState.copy(
             selectedDiaryId = savedStateHandle.get<String>(
@@ -200,8 +203,10 @@ internal class WriteViewModel @Inject constructor (
     private fun uploadImagesToFirebase(){
         viewModelScope.launch {
             val storage = FirebaseStorage.getInstance().reference
-            galleryState.images.forEach{galleryImage->
+            galleryState.images.forEach{ galleryImage->
                 val imagePath = storage.child(galleryImage.remoteImagePath)
+                Log.d("Path1", "uploadImagesToFirebase: ${galleryImage.remoteImagePath}")
+                Log.d("Path2", "uploadImagesToFirebase: ${galleryImage.image} ")
                 imagePath.putFile(galleryImage.image).addOnProgressListener{
                     val sessionUri = it.uploadSessionUri
                     if (sessionUri != null) {
@@ -218,7 +223,6 @@ internal class WriteViewModel @Inject constructor (
                 }
             }
         }
-
     }
     private fun getSelectedDiary(){
         viewModelScope.launch {
@@ -230,33 +234,31 @@ internal class WriteViewModel @Inject constructor (
                 }.collect{diary->
 
                      if(diary is RequestState.Success){
-                            diary.data?.let {selectedDiary->
-                                setSelectedDiary(selectedDiary)
-                                setTitle(title = selectedDiary.title)
-                                setDescription(selectedDiary.description)
-                                setMood(Mood.valueOf(selectedDiary.mood))
+                        diary.data?.let {selectedDiary->
+                            setSelectedDiary(selectedDiary)
+                            setTitle(title = selectedDiary.title)
+                            setDescription(selectedDiary.description)
+                            setMood(Mood.valueOf(selectedDiary.mood))
+                            withContext(Dispatchers.Default){
                                 fetchImagesFromFirebase(
                                     remoteImagePaths = selectedDiary.imagesList,
                                     onImageDownload = {downloadedImage->
-                                          galleryState.addImage(
-                                              GalleryImage(
-                                                  image  = downloadedImage,
-                                                  remoteImagePath = extractImagePath(
-                                                      fullImageUrl = downloadedImage.toString()
-                                                  )
-                                              )
-                                          )
+                                        galleryState.addImage(
+                                            GalleryImage(
+                                                image  = downloadedImage,
+                                                remoteImagePath = extractImagePath(
+                                                    fullImageUrl = downloadedImage.toString()
+                                                )
+                                            )
+                                        )
                                     },
                                     onImageDownloadFailed = {},
                                     onReadyToDisplay = {}
                                 )
                             }
-
-
+                        }
                      }
                  }
-
-
              }
          }
     }
@@ -317,3 +319,4 @@ data class UiState(
     val mood: Mood = Mood.Neutral,
     val updatedDateTime: Instant? = null
 )
+

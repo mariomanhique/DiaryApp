@@ -13,6 +13,8 @@ import com.google.firebase.ktx.Firebase
 import com.mariomanhique.database.ImagesDatabase
 import com.mariomanhique.firestore.repository.firebaseDB.FirestoreDB
 import com.mariomanhique.firestore.repository.firebaseDB.FirestoreRepository
+import com.mariomanhique.firestore.repository.profileRepository.ProfileRepository
+import com.mariomanhique.firestore.repository.profileRepository.ProfileRepositoryImpl
 import com.mariomanhique.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -76,4 +78,11 @@ object FBModule {
     @Provides
     fun provideImageToDeleteDao(imageDatabase: ImagesDatabase)
             = imageDatabase.imageToDeleteDao()
+
+
+    @Singleton
+    @Provides
+    fun provideProfileRepository(profileRepository: ProfileRepositoryImpl): ProfileRepository{
+        return profileRepository
+    }
 }

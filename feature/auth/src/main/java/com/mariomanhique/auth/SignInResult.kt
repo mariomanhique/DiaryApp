@@ -1,13 +1,4 @@
 package com.mariomanhique.auth
 
-data class SignInResult (
-    val data: UserData?,
-    val errorMessage: String?
+import com.mariomanhique.util.model.UserData
 
-)
-
-data class UserData(
-    val userId: String,
-    val username: String?,
-    val profilePictureUrl: String?
-)

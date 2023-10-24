@@ -2,10 +2,12 @@ package com.mariomanhique.util.icons
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Settings
 import com.mariomanhique.util.R
 
@@ -14,8 +16,8 @@ object DiaryIcons {
     val HomeBorder = Icons.Outlined.Home
     val memories = Icons.Rounded.Favorite
     val memoriesBorder = Icons.Rounded.FavoriteBorder
-    val SettingsBorder = Icons.Outlined.Settings
-    val Settings = Icons.Rounded.Settings
+    val ProfileBorder = Icons.Outlined.Person
+    val Profile = Icons.Rounded.Person
 
     //EMOJIS
     val Angry = R.drawable.angry

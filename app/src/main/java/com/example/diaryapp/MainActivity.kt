@@ -6,16 +6,19 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
-import com.example.diaryapp.navigation.NavigationGraph
+import com.example.diaryapp.ui.DiaryApp
 import com.mariomanhique.ui.theme.DiaryAppTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.mariomanhique.firestore.repository.imageRepo.ImageRepository
+import com.mariomanhique.home.navigation.diariesDestinationRoute
 import com.mariomanhique.util.Screen
 import com.mariomanhique.util.retryDeletingImageFromFirebase
 import com.mariomanhique.util.retryUploadingImageToFirebase
@@ -33,6 +36,7 @@ class MainActivity : ComponentActivity() {
     lateinit var imageRepository: ImageRepository
 
     private var keepSplashOpened = true
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen().setKeepOnScreenCondition{
@@ -46,14 +50,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.surface
                 ) {
-                    val navController = rememberNavController()
                     //The startDestination is hard coded now, but then we will dynamically calculate based on user event
-                    NavigationGraph(
-                       startDestination = getStartDestination(),
-                        navController = navController,
-                        onDataLoaded = {
-                            keepSplashOpened = false
-                        }
+                    DiaryApp(
+                        windowSizeClass = calculateWindowSizeClass(this),
+                        onDataLoaded = {keepSplashOpened = false}
                     )
                 }
             }
@@ -100,10 +100,4 @@ private fun cleanupCheck(
         }
 
     }
-}
-
-private fun getStartDestination():String{
-    val user = FirebaseAuth.getInstance().currentUser
-    return if(user!=null) Screen.Home.route
-    else Screen.SignIn.route
 }

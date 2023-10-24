@@ -32,7 +32,7 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun WriteTopBar(
+ fun WriteTopBar(
     selectedDiary: Diary?,
     moodName: () -> String,
     onDateTimeUpdated: (ZonedDateTime) -> Unit,
