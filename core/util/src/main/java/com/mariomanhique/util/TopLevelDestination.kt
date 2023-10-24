@@ -1,8 +1,8 @@
-package com.example.diaryapp.navigation
+package com.mariomanhique.util
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.mariomanhique.util.icons.DiaryIcons
-import com.example.diaryapp.R
+import com.mariomanhique.util.R
 
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,

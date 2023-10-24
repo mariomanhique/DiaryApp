@@ -9,6 +9,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.SignInScreen
 import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.SignUpWithCredentials
+import com.mariomanhique.util.TopLevelDestination
 
 
 const val signUpNavigationRoute = "sign_up_route"
@@ -17,7 +18,8 @@ fun NavController.navigateToSignUp(navOptions: NavOptions? = null){
     this.navigate(signUpNavigationRoute,navOptions)
 }
 fun NavGraphBuilder.signUpRoute(
-    navigateToHome:()->Unit,
+    navigateToHome:(TopLevelDestination)->Unit,
+    destinations: List<TopLevelDestination>,
     navigateToSignIn:()->Unit,
     onDataLoaded: () ->Unit
 ){
@@ -31,7 +33,8 @@ fun NavGraphBuilder.signUpRoute(
         }
         SignUpWithCredentials(
             navigateToHome = navigateToHome,
-            navigateToSignIn = navigateToSignIn
+            navigateToSignIn = navigateToSignIn,
+            destinations = destinations
         )
 
     }

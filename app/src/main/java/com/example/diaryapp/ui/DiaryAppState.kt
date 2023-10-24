@@ -4,23 +4,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
-import com.example.diaryapp.navigation.TopLevelDestination
 import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
+import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.navigateToSignUp
 import com.mariomanhique.home.navigation.diariesDestinationRoute
 import com.mariomanhique.home.navigation.navigateToHome
 import com.mariomanhique.profile.navigation.navigateToProfile
 import com.mariomanhique.profile.navigation.profile_route
-import kotlinx.coroutines.CoroutineScope
+import com.mariomanhique.util.TopLevelDestination
 import navigateToWrite
 
 
@@ -95,6 +92,10 @@ class DiaryAppState(
 
     fun navigateToSignIn(){
         navController.navigateToSignIn()
+    }
+
+    fun navigateToSignUp(){
+        navController.navigateToSignUp()
     }
 }
 

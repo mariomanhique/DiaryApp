@@ -1,7 +1,6 @@
 package com.example.diaryapp.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -71,7 +70,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.example.diaryapp.R
 import com.example.diaryapp.navigation.NavigationHost
-import com.example.diaryapp.navigation.TopLevelDestination
 import com.mariomanhique.auth.authWithCredentials.AuthWithCredentialsViewModel
 import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import com.mariomanhique.home.DiariesViewModel
@@ -79,6 +77,7 @@ import com.mariomanhique.home.DiaryAppBar
 import com.mariomanhique.home.NavigationDrawer
 import com.mariomanhique.home.navigation.diariesDestinationRoute
 import com.mariomanhique.ui.components.DisplayAlertDialog
+import com.mariomanhique.util.TopLevelDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

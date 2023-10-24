@@ -1,17 +1,15 @@
 package com.example.diaryapp.navigation
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import com.example.diaryapp.ui.DiaryAppState
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
+import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
 import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInRoute
-import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.signUpNavigationRoute
+import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.navigateToSignUp
 import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.signUpRoute
 import com.mariomanhique.firestore.repository.firebaseDB.Diaries
-import com.mariomanhique.home.navigation.diariesDestinationRoute
 import com.mariomanhique.home.navigation.diariesRoute
 import com.mariomanhique.profile.navigation.profileRoute
 import writeRoute
@@ -25,10 +23,7 @@ fun NavigationHost(
     windowSizeClass: WindowSizeClass,
     diaries: Diaries
 ){
-
-
     val navController = appState.navController
-
 
     NavHost(
         navController = navController,
@@ -46,26 +41,25 @@ fun NavigationHost(
         )
 
         signInRoute(
-            navigateToHome = {
-                navController.navigate(diariesDestinationRoute)
+            navigateToHome = {destination->
+                 appState.navigateToTopLevelDestination(destination)
             },
             navigateToSignUp = {
-                navController.navigate(signUpNavigationRoute)
+                navController.navigateToSignUp()
             },
-            onDataLoaded = onDataLoaded
+            onDataLoaded = onDataLoaded,
+            destinations = appState.topLevelDestinations
             )
 
         signUpRoute(
-            navigateToHome = {
-                navController.navigate(
-                    diariesDestinationRoute
-                )
-
+            navigateToHome = {destination->
+                 appState.navigateToTopLevelDestination(destination)
             },
             navigateToSignIn = {
-                navController.navigate(signInNavigationRoute)
+                navController.navigateToSignIn()
             },
-            onDataLoaded = onDataLoaded
+            onDataLoaded = onDataLoaded,
+            destinations = appState.topLevelDestinations,
         )
 
         writeRoute(
@@ -74,7 +68,6 @@ fun NavigationHost(
             },
             paddingValues = paddingValues
         )
-
         profileRoute()
     }
 }

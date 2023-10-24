@@ -48,6 +48,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.mariomanhique.auth.R
+import com.mariomanhique.util.TopLevelDestination
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +58,8 @@ internal fun SignInScreen(
     navigateToSignUp:()->Unit,
     onSuccessSignIn: () -> Unit,
     onFailedSignIn: (Exception) -> Unit,
-    navigateToHome: ()->Unit
+    destinations: List<TopLevelDestination>,
+    navigateToHome: (TopLevelDestination)->Unit
 ) {
 
     val state = viewModel.state.collectAsStateWithLifecycle().value
@@ -159,9 +161,10 @@ internal fun SignInScreen(
                                 emailValue.value,
                                 passwordValue.value,
                                 onSuccess = {
-                                    navigateToHome()
+                                    destinations.forEach {destination->
+                                        navigateToHome(destination)
+                                    }
                                     viewModel.setLoading(false)
-
                                 },
                                 onError = {
                                     viewModel.setLoading(false)

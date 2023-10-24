@@ -44,6 +44,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.mariomanhique.auth.R
+import com.mariomanhique.util.TopLevelDestination
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -51,7 +52,8 @@ import com.mariomanhique.auth.R
 @Composable
 internal fun SignUpWithCredentials(
     viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
-    navigateToHome:()->Unit,
+    navigateToHome:(TopLevelDestination)->Unit,
+    destinations: List<TopLevelDestination>,
     navigateToSignIn:()->Unit,
     ){
 
@@ -163,7 +165,9 @@ internal fun SignUpWithCredentials(
                                                 emailValue.value,
                                                 passwordValue.value,
                                                 onSuccess = {
-                                                    navigateToHome()
+                                                    destinations.forEach {destination->
+                                                        navigateToHome(destination)
+                                                    }
                                                     viewModel.setLoading(false)
                                                 },
                                                 onError = {
