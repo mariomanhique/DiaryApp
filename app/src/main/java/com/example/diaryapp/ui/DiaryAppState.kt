@@ -12,13 +12,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
+import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.navigateToSignUp
+import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.signUpNavigationRoute
 import com.mariomanhique.home.navigation.diariesDestinationRoute
 import com.mariomanhique.home.navigation.navigateToHome
 import com.mariomanhique.profile.navigation.navigateToProfile
 import com.mariomanhique.profile.navigation.profile_route
 import com.mariomanhique.util.TopLevelDestination
 import navigateToWrite
+import write_navigation_route
 
 
 @Composable
@@ -87,15 +90,40 @@ class DiaryAppState(
     }
 
     fun navigateToWrite(){
+
+        val navOptions = navOptions {
+            popUpTo(write_navigation_route){
+                inclusive = false
+            }
+            launchSingleTop = true
+
+            restoreState = true
+        }
         navController.navigateToWrite()
     }
 
     fun navigateToSignIn(){
+//        val navOptions = navOptions {
+//            popUpTo(signInNavigationRoute){
+//                inclusive = false
+//            }
+////            launchSingleTop = false
+////
+////            restoreState = false
+//        }
         navController.navigateToSignIn()
     }
 
     fun navigateToSignUp(){
-        navController.navigateToSignUp()
+        val navOptions = navOptions {
+            popUpTo(signUpNavigationRoute){
+                inclusive = false
+            }
+            launchSingleTop = true
+
+            restoreState = true
+        }
+        navController.navigateToSignUp(navOptions)
     }
 }
 

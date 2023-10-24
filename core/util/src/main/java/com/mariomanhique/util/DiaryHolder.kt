@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -50,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import com.mariomanhique.ui.theme.Elevation
 import com.mariomanhique.util.model.Diary
 import com.mariomanhique.util.model.Mood
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -60,6 +63,21 @@ import java.util.Locale
 fun DateHeader(
     localDate: LocalDate
 ){
+
+    val fontFamilyResolver = LocalFontFamilyResolver.current
+    val coroutineScope = rememberCoroutineScope()
+    val fontFam = fontFamily(
+        fontName = "Chakra Petch",
+        fontWeight = FontWeight.Light,
+        fontStyle = FontStyle.Normal
+    )
+
+    //This is to make that the font properly downloads before being displayed
+    LaunchedEffect(key1 = Unit, block = {
+        coroutineScope.launch {
+            fontFamilyResolver.preload(fontFamily = fontFam)
+        }
+    })
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,21 +89,13 @@ fun DateHeader(
             Text(
                 text = String.format("%02d", localDate.dayOfMonth),
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                fontFamily = fontFamily(
-                    fontName = "Chakra Petch",
-                    fontWeight = FontWeight.Light,
-                    fontStyle = FontStyle.Normal
-                )
+                fontFamily = fontFam
             )
 
             Text(
                 text = localDate.dayOfWeek.toString().take(3),
                 fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                fontFamily = fontFamily(
-                    fontName = "Chakra Petch",
-                    fontWeight = FontWeight.Light,
-                    fontStyle = FontStyle.Normal
-                )
+                fontFamily = fontFam
             )
         }
         Spacer(modifier = Modifier.width(14.dp))
@@ -98,22 +108,14 @@ fun DateHeader(
                             it.titlecase()
                         },
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                fontFamily = fontFamily(
-                    fontName = "Chakra Petch",
-                    fontWeight = FontWeight.Light,
-                    fontStyle = FontStyle.Normal
-                )
+                fontFamily = fontFam
             )
 
             Text(
                 text = localDate.year.toString(),
                 fontSize = MaterialTheme.typography.bodySmall.fontSize,
                 color = MaterialTheme.colorScheme.onSurface.copy(0.5f),
-                fontFamily = fontFamily(
-                    fontName = "Chakra Petch",
-                    fontWeight = FontWeight.Light,
-                    fontStyle = FontStyle.Normal
-                )
+                fontFamily = fontFam
             )
 
         }

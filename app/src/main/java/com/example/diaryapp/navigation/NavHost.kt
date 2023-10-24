@@ -45,7 +45,7 @@ fun NavigationHost(
                  appState.navigateToTopLevelDestination(destination)
             },
             navigateToSignUp = {
-                navController.navigateToSignUp()
+                appState.navigateToSignUp()
             },
             onDataLoaded = onDataLoaded,
             destinations = appState.topLevelDestinations
@@ -56,7 +56,7 @@ fun NavigationHost(
                  appState.navigateToTopLevelDestination(destination)
             },
             navigateToSignIn = {
-                navController.navigateToSignIn()
+                appState.navigateToSignIn()
             },
             onDataLoaded = onDataLoaded,
             destinations = appState.topLevelDestinations,

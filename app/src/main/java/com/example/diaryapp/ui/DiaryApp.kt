@@ -295,6 +295,7 @@ fun DiaryContent(
                 authViewModel.signOut()
                 withContext(Dispatchers.Main){
                     appState.navigateToSignIn()
+                    drawerState.close()
                 }
             }
         }
