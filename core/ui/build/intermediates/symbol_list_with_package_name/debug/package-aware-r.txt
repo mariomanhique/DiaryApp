@@ -1,4 +1,0 @@
-com.mariomanhique.ui
-drawable google_logo
-drawable logo
-drawable password_eye
