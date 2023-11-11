@@ -20,6 +20,8 @@ import com.mariomanhique.home.navigation.navigateToHome
 import com.mariomanhique.profile.navigation.navigateToProfile
 import com.mariomanhique.profile.navigation.profile_route
 import com.mariomanhique.util.TopLevelDestination
+import com.mariomanhique.util.TopLevelDestination.HOME
+import com.mariomanhique.util.TopLevelDestination.PROFILE
 import navigateToWrite
 import write_navigation_route
 
@@ -42,7 +44,6 @@ fun rememberDiaryAppState(
 class DiaryAppState(
     val navController: NavHostController,
     val windowSizeClass: WindowSizeClass,
-
 ) {
 
 
@@ -52,8 +53,8 @@ class DiaryAppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route){
-            diariesDestinationRoute -> TopLevelDestination.HOME
-            profile_route -> TopLevelDestination.PROFILE
+            diariesDestinationRoute -> HOME
+            profile_route -> PROFILE
             else -> null
         }
 
@@ -83,8 +84,8 @@ class DiaryAppState(
             }
 
             when(topLevelDestination){
-                TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions)
-                TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
+                HOME -> navController.navigateToHome(topLevelNavOptions)
+                PROFILE -> navController.navigateToProfile(topLevelNavOptions)
             }
         }
     }

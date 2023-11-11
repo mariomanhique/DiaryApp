@@ -42,18 +42,18 @@ class AuthWithCredentialsViewModel @Inject constructor(
         return authRepository.mongoCurrentUser!!
     }
 
-    private fun saveProfile(
-        name:String,
-        profile:String
-    ){
-//        viewModelScope.launch {
-           profileRepository.saveProfile(
-               name = name,
-               profile = profile
-           )
-
-//        }
-    }
+//    private fun saveProfile(
+//        name:String,
+//        profile:String
+//    ){
+////        viewModelScope.launch {
+//           profileRepository.saveProfile(
+//               name = name,
+//               profile = profile
+//           )
+//
+////        }
+//    }
 
     private fun onSignInResult(result: SignInResult){
         _state.update { it.copy(
@@ -120,7 +120,6 @@ class AuthWithCredentialsViewModel @Inject constructor(
 
             val user = authRepository.signUp(email=email, password = password,name=name)
             run {
-                saveProfile(name = name, user?.photoUrl.toString())
                         Log.d("SignUp", "signUp: ${user?.displayName} ")
                 SignInResult(
                     data = user?.run {

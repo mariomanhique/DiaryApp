@@ -165,9 +165,7 @@ internal fun SignUpWithCredentials(
                                                 emailValue.value,
                                                 passwordValue.value,
                                                 onSuccess = {
-                                                    destinations.forEach {destination->
-                                                        navigateToHome(destination)
-                                                    }
+                                                    navigateToHome(TopLevelDestination.HOME)
                                                     viewModel.setLoading(false)
                                                 },
                                                 onError = {

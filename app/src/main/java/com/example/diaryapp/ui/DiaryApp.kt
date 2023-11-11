@@ -1,6 +1,7 @@
 package com.example.diaryapp.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -120,23 +121,16 @@ fun DiaryContent(
     var signOutDialogState by remember { mutableStateOf(false) }
     var deleteAllDialogOpened by remember { mutableStateOf(false) }
     val context = LocalContext.current
-
-    LaunchedEffect(key1 = user, block = {
-        if(authViewModel.user!=null){
-
-        }
-    })
-
-
-    NavigationDrawer(
-        drawerState = drawerState,
-        onDiariesDelete = {
-            deleteAllDialogOpened = true
-        },
-        onSignOutClicked = {
-            signOutDialogState = true
-        }
-    ) {
+//
+//    NavigationDrawer(
+//        drawerState = drawerState,
+//        onDiariesDelete = {
+//            deleteAllDialogOpened = true
+//        },
+//        onSignOutClicked = {
+//            signOutDialogState = true
+//        }
+//    ) {
     Scaffold(
         modifier = Modifier
             .semantics {
@@ -151,7 +145,6 @@ fun DiaryContent(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
-            if (appState.shouldShowNavRail) {
                 if (destination != null){
                     FloatingActionButton(
                         modifier= Modifier
@@ -169,7 +162,6 @@ fun DiaryContent(
                         }
                     }
                 }
-            }
         },
         bottomBar = {
             if (appState.shouldShowBottomBar) {
@@ -191,26 +183,26 @@ fun DiaryContent(
                             .clip(CircleShape)
                             .background(color = MaterialTheme.colorScheme.surface)
                         ){
-                            FloatingActionButton(
-                                modifier= Modifier
-                                    .size(50.dp)
-                                    .padding(4.dp)
-                                    .align(Alignment.TopCenter)
-                                    .clip(CircleShape)
-                                    .offset(x = ((-0).dp), y = (-0).dp),
-                                onClick =  appState::navigateToWrite
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .clip(CircleShape)
-                                ) {
-                                    Icon(
-                                        modifier = Modifier,
-                                        imageVector = Icons.Default.Add,
-                                        contentDescription =""
-                                    )
-                                }
-                            }
+//                            FloatingActionButton(
+//                                modifier= Modifier
+//                                    .size(50.dp)
+//                                    .padding(4.dp)
+//                                    .align(Alignment.TopCenter)
+//                                    .clip(CircleShape)
+//                                    .offset(x = ((-0).dp), y = (-0).dp),
+//                                onClick =  appState::navigateToWrite
+//                            ) {
+//                                Box(
+//                                    modifier = Modifier
+//                                        .clip(CircleShape)
+//                                ) {
+//                                    Icon(
+//                                        modifier = Modifier,
+//                                        imageVector = Icons.Default.Add,
+//                                        contentDescription =""
+//                                    )
+//                                }
+//                            }
                         }
 
                     }
@@ -219,7 +211,6 @@ fun DiaryContent(
             }
         },
     ){paddingValues->
-
             Row(
                 Modifier
                     .fillMaxSize()
@@ -280,7 +271,7 @@ fun DiaryContent(
      }
 
 
-    }
+//    }
 
     DisplayAlertDialog(
         title = "Sign Out",
@@ -354,6 +345,7 @@ fun DiaryBottomBar(
 
         destinations.forEach {destination->
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
+            Log.d("Test Nav", "NiaBottomBar:$destination")
             DiaryNavigationBarItem(
                 selected = selected,
                 onClick = { onNavigateToDestination(destination) },

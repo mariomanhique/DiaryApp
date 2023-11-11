@@ -57,7 +57,6 @@ class DiariesViewModel @Inject constructor(
 
 
     init{
-        getCurrentUser()
         getDiaries()
         viewModelScope.launch {
             connectivity.observe().collect{

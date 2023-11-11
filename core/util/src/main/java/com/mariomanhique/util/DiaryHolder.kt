@@ -69,8 +69,7 @@ fun DateHeader(
     val fontFam = fontFamily(
         fontName = "Chakra Petch",
         fontWeight = FontWeight.Light,
-        fontStyle = FontStyle.Normal
-    )
+        fontStyle = FontStyle.Normal)
 
     //This is to make that the font properly downloads before being displayed
     LaunchedEffect(key1 = Unit, block = {

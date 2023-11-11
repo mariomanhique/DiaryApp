@@ -43,7 +43,7 @@ internal fun HomeContentPortrait(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp)
+//                .padding(horizontal = 24.dp)
                 .navigationBarsPadding()
                 .padding(top = paddingValues.calculateTopPadding())
                 .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))

@@ -1,12 +1,12 @@
 package com.mariomanhique.firestore.repository.authWithCredentials
 
 
-import com.example.diaryapp.data.repository.authWithCredentials.utils.await
+import com.mariomanhique.firestore.repository.authWithCredentials.utils.await
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.mariomanhique.firestore.repository.authWithCredentials.AuthRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mariomanhique.util.Constants
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val mongoAuth: App.Companion
+    private val mongoAuth: App.Companion,
+    private val firestore: FirebaseFirestore
 ): AuthRepository {
 
     override val currentUser: FirebaseUser?

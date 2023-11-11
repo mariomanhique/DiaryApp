@@ -1,4 +1,4 @@
-package com.example.diaryapp.data.repository.authWithCredentials.utils
+package com.mariomanhique.firestore.repository.authWithCredentials.utils
 
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.ExperimentalCoroutinesApi

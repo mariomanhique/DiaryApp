@@ -24,25 +24,17 @@ fun NavGraphBuilder.diariesRoute(
     windowSizeClass: WindowSizeClass,
     diaries: Diaries
 ){
-
     composable(route = diariesDestinationRoute){
-
-
         LaunchedEffect(key1 =diaries){
             if(diaries !is RequestState.Loading){
                 onDataLoaded()
             }
         }
-
         HomeScreen(
             diaries = diaries,
             navigateToWriteWithArgs = navigateToWriteWithArgs,
             paddingValues = paddingValues,
             windowSizeClass = windowSizeClass
             )
-
-
-
     }
-
 }
