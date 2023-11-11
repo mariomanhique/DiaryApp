@@ -28,5 +28,5 @@ Stack:
 * Room Database
 * Connectivity Manager
 
-###Architeture
+# Architeture
 
