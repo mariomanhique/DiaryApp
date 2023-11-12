@@ -83,18 +83,18 @@ fun DiaryAppBar(
                 )
             }
         },
-        navigationIcon = {
-            IconButton(
-                onClick = {
-                    onMenuClicked()
-                }) {
-                Icon(imageVector = navigationIcon,
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onSurface
-
-                    )
-            }
-        },
+//        navigationIcon = {
+//            IconButton(
+//                onClick = {
+//                    onMenuClicked()
+//                }) {
+//                Icon(imageVector = navigationIcon,
+//                    contentDescription = "",
+//                    tint = MaterialTheme.colorScheme.onSurface
+//
+//                    )
+//            }
+//        },
         actions = {
             if(isProfileDestination){
                 if(dateIsSelected){

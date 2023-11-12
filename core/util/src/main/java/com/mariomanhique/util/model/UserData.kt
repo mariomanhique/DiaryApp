@@ -1,9 +1,9 @@
 package com.mariomanhique.util.model
 
 data class UserData(
-    val userId: String,
-    val username: String,
-    val profilePictureUrl: String?
+    val userId: String="",
+    val username: String ="",
+    val profilePictureUrl: String? = null
 )
 
 data class SignInResult(

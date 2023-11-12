@@ -22,13 +22,18 @@ fun NavController.navigateToProfile(navOptions: NavOptions?=null){
     this.navigate(profile_route, navOptions)
 }
 fun NavGraphBuilder.profileRoute(
+    onDeleteClicked: (Boolean) -> Unit,
+    onLogoutClicked: (Boolean) -> Unit
 ){
 
     composable(route = profile_route){
         LaunchedEffect(Unit){
 
         }
-        ProfileScreen()
+        ProfileScreen(
+            onDeleteClicked = onDeleteClicked,
+            onLogoutClicked = onLogoutClicked
+        )
     }
 
 }

@@ -121,16 +121,7 @@ fun DiaryContent(
     var signOutDialogState by remember { mutableStateOf(false) }
     var deleteAllDialogOpened by remember { mutableStateOf(false) }
     val context = LocalContext.current
-//
-//    NavigationDrawer(
-//        drawerState = drawerState,
-//        onDiariesDelete = {
-//            deleteAllDialogOpened = true
-//        },
-//        onSignOutClicked = {
-//            signOutDialogState = true
-//        }
-//    ) {
+
     Scaffold(
         modifier = Modifier
             .semantics {
@@ -179,31 +170,6 @@ fun DiaryContent(
                         contentAlignment = Alignment.Center
                     ) {
 
-                        Box(modifier= Modifier
-                            .clip(CircleShape)
-                            .background(color = MaterialTheme.colorScheme.surface)
-                        ){
-//                            FloatingActionButton(
-//                                modifier= Modifier
-//                                    .size(50.dp)
-//                                    .padding(4.dp)
-//                                    .align(Alignment.TopCenter)
-//                                    .clip(CircleShape)
-//                                    .offset(x = ((-0).dp), y = (-0).dp),
-//                                onClick =  appState::navigateToWrite
-//                            ) {
-//                                Box(
-//                                    modifier = Modifier
-//                                        .clip(CircleShape)
-//                                ) {
-//                                    Icon(
-//                                        modifier = Modifier,
-//                                        imageVector = Icons.Default.Add,
-//                                        contentDescription =""
-//                                    )
-//                                }
-//                            }
-                        }
 
                     }
                 }
@@ -262,6 +228,13 @@ fun DiaryContent(
                     onDataLoaded = onDataLoaded,
                     paddingValues = paddingValues,
                     windowSizeClass = windowSizeClass,
+                    onDeleteClicked = {
+                           deleteAllDialogOpened = it
+                        Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+                    },
+                    onLogoutClicked = {
+                          signOutDialogState = it
+                    },
                     diaries = diaries,
                     startDestination = if(user!=null)  diariesDestinationRoute else  signInNavigationRoute
                 )
@@ -271,7 +244,6 @@ fun DiaryContent(
      }
 
 
-//    }
 
     DisplayAlertDialog(
         title = "Sign Out",

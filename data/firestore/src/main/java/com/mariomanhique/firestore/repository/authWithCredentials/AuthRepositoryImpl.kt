@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mariomanhique.util.Constants
+import com.mariomanhique.util.model.UserData
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import io.realm.kotlin.mongodb.User
@@ -20,6 +21,8 @@ class AuthRepositoryImpl @Inject constructor(
     private val mongoAuth: App.Companion,
     private val firestore: FirebaseFirestore
 ): AuthRepository {
+
+    private val ref = firestore.collection("profile")
 
     override val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
@@ -43,6 +46,16 @@ class AuthRepositoryImpl @Inject constructor(
 
             val result = firebaseAuth.createUserWithEmailAndPassword(email,password).await().user
             result?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())
+
+            result?.uid?.let {userId->
+                ref.document(userId).set(
+                    UserData(
+                        userId,
+                        username = name,
+                        profilePictureUrl = ""
+                    )
+                )
+            }
 
             result
 

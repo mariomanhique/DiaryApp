@@ -21,6 +21,8 @@ fun NavigationHost(
     onDataLoaded: () -> Unit,
     paddingValues: PaddingValues,
     windowSizeClass: WindowSizeClass,
+    onDeleteClicked: (Boolean) -> Unit,
+    onLogoutClicked: (Boolean) -> Unit,
     diaries: Diaries
 ){
     val navController = appState.navController
@@ -68,7 +70,10 @@ fun NavigationHost(
             },
             paddingValues = paddingValues
         )
-        profileRoute()
+        profileRoute(
+            onDeleteClicked = onDeleteClicked,
+            onLogoutClicked = onLogoutClicked
+        )
     }
 }
 

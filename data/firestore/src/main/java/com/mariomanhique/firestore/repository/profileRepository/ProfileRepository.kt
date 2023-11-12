@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {
 
-    fun getProfile()
-    fun saveProfile(name:String, profile:String): RequestState<String>
+    fun getProfile():Flow<UserData?>
     fun updateProfile(userData: UserData):RequestState<String>
 }

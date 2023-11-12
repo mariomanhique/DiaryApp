@@ -4,4 +4,6 @@
 <resources>
     <string name="placeholder">Username</string>
     <string name="saveButton">Save</string>
+    <string name="deleteAll">Delete all diaries</string>
+    <string name="logout">Log out</string>
 </resources>

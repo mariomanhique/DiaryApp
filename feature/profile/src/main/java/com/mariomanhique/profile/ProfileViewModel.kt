@@ -16,6 +16,10 @@ import com.mariomanhique.ui.GalleryState
 import com.mariomanhique.util.fetchImageFromFirebase
 import com.mariomanhique.util.model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,34 +32,45 @@ class ProfileViewModel @Inject constructor(
     val user = authRepository.currentUser
     val galleryState = GalleryState()
 
+    private var _userData: MutableStateFlow<UserData> = MutableStateFlow(UserData("","",""))
+    val userData = _userData.asStateFlow()
+
     init {
         getCurrentUser()
     }
-    fun getCurrentUser() = authRepository.currentUser?.run {
-        fetchImageFromFirebase(
-                remoteImagePath = photoUrl.toString(),
-                onImageDownload = {
-                    Log.d("Image", "getCurrentUser: $it")
-
-                    galleryState.addImage(
-                        GalleryImage(
-                            image = it,
-                            remoteImagePath = extractImagePath(
-                                fullImageUrl = it.toString()
-                            )
-                        )
-                    )
-                },
-                onImageDownloadFailed = {},
-                onReadyToDisplay = {}
-            )
-        Log.d("Image", "getCurrentUser: ${this.photoUrl}")
-        UserData(
-            userId = uid,
-            username = displayName.toString(),
-            profilePictureUrl = photoUrl.toString()
-        )
+    fun getCurrentUser(){
+        viewModelScope.launch {
+            profileRepository.getProfile().collect{
+               it?.let {
+                   _userData.value = it
+               }
+            }
+        }
     }
+
+//    fetchImageFromFirebase(
+//    remoteImagePath = photoUrl.toString(),
+//    onImageDownload = {
+//        Log.d("Image", "getCurrentUser: $it")
+//
+//        galleryState.addImage(
+//            GalleryImage(
+//                image = it,
+//                remoteImagePath = extractImagePath(
+//                    fullImageUrl = it.toString()
+//                )
+//            )
+//        )
+//    },
+//    onImageDownloadFailed = {},
+//    onReadyToDisplay = {}
+//    )
+//    Log.d("Image", "getCurrentUser: ${this.photoUrl}")
+//    UserData(
+//    userId = uid,
+//    username = displayName.toString(),
+//    profilePictureUrl = photoUrl.toString()
+//    )
 
     fun addImage(
         image: Uri,
@@ -69,10 +84,6 @@ class ProfileViewModel @Inject constructor(
                 remoteImagePath = remoteImagePath
             )
         )
-    }
-
-    fun saveProfile(){
-
     }
 
     fun uploadImageToFirebase(){
