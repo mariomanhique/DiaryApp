@@ -27,3 +27,6 @@ Stack:
 * Kotlin flows
 * Room Database
 * Connectivity Manager
+
+# Architeture
+
