@@ -5,13 +5,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,8 +31,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.ExitToApp
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -58,28 +56,34 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.mariomanhique.ui.GalleryImage
+import com.mariomanhique.ui.components.ZoomableImage
 import com.mariomanhique.ui.theme.DiaryAppTheme
 
 @Composable
 fun ProfileContent(
-    imageProfile: String,
+    imageProfile: Uri,
     username: String,
     onValueChanged: (String) -> Unit,
     onSelectImage: (Uri) -> Unit,
     onProfileSaved: () -> Unit,
     onDeleteClicked: (Boolean) -> Unit,
-    onLogoutClicked: (Boolean) -> Unit
+    onLogoutClicked: (Boolean) -> Unit,
+    onImageUpdated: () -> Unit
 ){
     ProfileCardInfo(
         imageProfile = imageProfile,
         username = username,
         onSelectImage = onSelectImage,
-        onProfileSaved = onProfileSaved,
+        onUsernameUpdated = onProfileSaved,
         onValueChanged = onValueChanged,
         onDeleteClicked = onDeleteClicked,
-        onLogoutClicked = onLogoutClicked
+        onLogoutClicked = onLogoutClicked,
+        onImageUpdated = onImageUpdated
 
     )
 }
@@ -87,13 +91,14 @@ fun ProfileContent(
 @Composable
 fun ProfileCardInfo(
     modifier: Modifier = Modifier,
-    imageProfile: String?,
+    imageProfile: Uri?,
     username: String,
     onValueChanged: (String) -> Unit,
     onSelectImage: (Uri) -> Unit,
     onDeleteClicked: (Boolean) -> Unit,
     onLogoutClicked: (Boolean) -> Unit,
-    onProfileSaved: () -> Unit,
+    onUsernameUpdated: () -> Unit,
+    onImageUpdated: () -> Unit,
 ){
 
     var user by remember {
@@ -113,6 +118,7 @@ fun ProfileCardInfo(
           imageProfile = imageProfile,
           username = username,
             onSelectImage = onSelectImage,
+            onImageUpdated = onImageUpdated
         )
 
         Spacer(modifier = Modifier.size(10.dp))
@@ -131,7 +137,6 @@ fun ProfileCardInfo(
                 },
                 placeHolder = R.string.placeholder)
 
-
             Row(
                 modifier
                     .size(50.dp),
@@ -140,7 +145,11 @@ fun ProfileCardInfo(
                 IconButton(
 //                    modifier = Modifier.size(100.dp),
                     onClick = {
-//                    onProfileSaved()
+                        if (imageProfile == null || username.isEmpty()){
+                            //Nothing happens
+                        }else{
+                            onUsernameUpdated()
+                        }
                 }) {
                     Icon(
                         modifier = Modifier
@@ -209,30 +218,38 @@ fun ClickableText(
 
 @Composable
 fun UserDetailsCard(
-    imageProfile: String?,
+    imageProfile: Uri?,
     username: String,
     onSelectImage: (Uri) -> Unit,
+    onImageUpdated: () -> Unit
     ){
+
+    var imageSelected by remember { mutableStateOf("".toUri()) }
+    var imagePreviewState by remember {
+        mutableStateOf(false)
+    }
+
     Box(modifier = Modifier,
         contentAlignment = Alignment.BottomEnd
     ){
 
-        var imageUri by remember {
-            mutableStateOf(imageProfile)
-        }
+        val imageUri by remember { mutableStateOf(imageProfile) }
+
 
         val multiplePhotoPicker = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickVisualMedia(),
         ) { image ->
             if (image != null) {
                 onSelectImage(image)
+                imageSelected = image
+                imagePreviewState = true
             }
         }
 
         AsyncImage(
            modifier = Modifier
                .clip(CircleShape)
-               .size(100.dp)
+               .size(150.dp)
                .border(
                    width = 1.dp,
                    brush = Brush.linearGradient(colors = listOf(Color.Red, Color.Cyan)),
@@ -259,7 +276,9 @@ fun UserDetailsCard(
                     multiplePhotoPicker.launch(
                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                     )
-                }
+                },
+//            contentAlignment = Alignment.TopCenter
+
         ){
             Box(
                 modifier = Modifier
@@ -269,20 +288,41 @@ fun UserDetailsCard(
                         shape = CircleShape
                     )
                     .clip(CircleShape)
-                    .background(Color.LightGray)
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(5.dp),
             ){
 
                 Icon(
                     modifier = Modifier
-                        //                        .size(20.dp)
                         .clip(CircleShape)
                         .align(Alignment.Center),
+                    tint = MaterialTheme.colorScheme.secondary,
                     imageVector = Icons.Default.Edit,
                     contentDescription = ""
                 )
 
             }
+        }
+
+    }
+
+    AnimatedVisibility(
+        visible = imagePreviewState) {
+        Dialog(
+            onDismissRequest = {
+            imagePreviewState
+        }) {
+            ZoomableImage(
+                actionButton = R.string.chooseAction,
+                selectedGalleryImage = GalleryImage(image = imageSelected),
+                onCloseClicked = {
+                    imagePreviewState = false
+                },
+                onActionClicked = {
+                    onImageUpdated()
+                    imagePreviewState = false
+                }
+            )
         }
 
     }
@@ -341,15 +381,16 @@ fun ProfileCardInfoPreview(
 ){
     DiaryAppTheme {
         ProfileCardInfo(
-            imageProfile = "",
+            imageProfile = "".toUri(),
             username = "",
             onValueChanged = {},
             onSelectImage = {
 
             },
-            onProfileSaved = {},
+            onUsernameUpdated = {},
             onDeleteClicked = {},
-            onLogoutClicked = {}
+            onLogoutClicked = {},
+            onImageUpdated = {}
             )
     }
 }

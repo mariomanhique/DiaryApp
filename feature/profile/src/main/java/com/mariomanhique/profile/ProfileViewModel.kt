@@ -1,12 +1,9 @@
 package com.mariomanhique.profile
 
 import android.net.Uri
-import android.util.Log
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.mariomanhique.firestore.repository.authWithCredentials.AuthRepository
@@ -18,8 +15,6 @@ import com.mariomanhique.util.model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +27,9 @@ class ProfileViewModel @Inject constructor(
     val user = authRepository.currentUser
     val galleryState = GalleryState()
 
-    private var _userData: MutableStateFlow<UserData> = MutableStateFlow(UserData("","",""))
+    private var _userData: MutableStateFlow<UserData> =
+        MutableStateFlow(UserData("","",""))
+
     val userData = _userData.asStateFlow()
 
     init {
@@ -41,36 +38,29 @@ class ProfileViewModel @Inject constructor(
     fun getCurrentUser(){
         viewModelScope.launch {
             profileRepository.getProfile().collect{
+
                it?.let {
+                   fetchImageFromFirebase(
+                       remoteImagePath = it.profilePictureUrl.toString(),
+                       onImageDownload = {downloadedImage->
+                           galleryState.addImageProfile(
+                               GalleryImage(
+                                   image = downloadedImage,
+                                   remoteImagePath = extractImagePath(
+                                       fullImageUrl = downloadedImage.toString()
+                                   )
+                               )
+                           )
+                       },
+                       onReadyToDisplay = {},
+                       onImageDownloadFailed = {}
+                   )
                    _userData.value = it
                }
             }
         }
     }
 
-//    fetchImageFromFirebase(
-//    remoteImagePath = photoUrl.toString(),
-//    onImageDownload = {
-//        Log.d("Image", "getCurrentUser: $it")
-//
-//        galleryState.addImage(
-//            GalleryImage(
-//                image = it,
-//                remoteImagePath = extractImagePath(
-//                    fullImageUrl = it.toString()
-//                )
-//            )
-//        )
-//    },
-//    onImageDownloadFailed = {},
-//    onReadyToDisplay = {}
-//    )
-//    Log.d("Image", "getCurrentUser: ${this.photoUrl}")
-//    UserData(
-//    userId = uid,
-//    username = displayName.toString(),
-//    profilePictureUrl = photoUrl.toString()
-//    )
 
     fun addImage(
         image: Uri,
@@ -78,51 +68,48 @@ class ProfileViewModel @Inject constructor(
     ){
         val remoteImagePath = "images/${user?.uid}/" +
                 "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
-        galleryState.addImage(
-            GalleryImage(
-                image = image,
-                remoteImagePath = remoteImagePath
+        if (remoteImagePath.isNullOrEmpty()){
+            //Nothing
+        }else{
+            galleryState.addImageProfile(
+                GalleryImage(
+                    image = image,
+                    remoteImagePath = remoteImagePath
+                )
             )
-        )
+        }
+
     }
 
     fun uploadImageToFirebase(){
         viewModelScope.launch {
-          val  galleryImage = galleryState.images.first()
+          val  galleryImage = galleryState.image.value
             val storage = FirebaseStorage.getInstance().reference
             val imagePath = storage.child(galleryImage.remoteImagePath)
+
             imagePath.putFile(galleryImage.image).addOnProgressListener{
                  it.uploadSessionUri
             }
         }
     }
-    fun updateProfile(
-        username:String,
-        imageUrl: String
-    ){
+    fun updateUsername(username: String){
         viewModelScope.launch {
+            uploadImageToFirebase()
 
-//            fetchImageFromFirebase(
-//                remoteImagePath = imageUrl,
-//                onImageDownload = {
-//                    galleryState.addImage(
-//                        GalleryImage(
-//                            image = it,
-//                            remoteImagePath = extractImagePath(
-//                                fullImageUrl = it.toString()
-//                            )
-//                        )
-//                    )
-//                },
-//                onImageDownloadFailed = {},
-//                onReadyToDisplay = {}
-//            )
-            authRepository.currentUser?.updateProfile(
-                userProfileChangeRequest {
-                    this.displayName = username
-                    this.photoUri = imageUrl.toUri()
-                }
+            profileRepository
+                .updateUsername(username)
+
+        }
+    }
+
+    fun updateImageProfile(imageUrl: String){
+        viewModelScope.launch {
+            uploadImageToFirebase()
+
+            profileRepository.updateImageProfile(
+                imageUrl
             )
+
         }
     }
 }

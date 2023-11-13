@@ -17,6 +17,7 @@
 
     <string name="title">What\'s affecting your mood?</string>
     <string name="description">Let\'s write about it</string>
+    <string name="deleteAction">Delete</string>
 
 
 <!--    <string name="navigate_up">Navigate up</string>-->

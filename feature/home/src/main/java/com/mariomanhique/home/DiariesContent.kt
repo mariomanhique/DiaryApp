@@ -43,7 +43,7 @@ internal fun HomeContentPortrait(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-//                .padding(horizontal = 24.dp)
+                .padding(horizontal = 24.dp)
                 .navigationBarsPadding()
                 .padding(top = paddingValues.calculateTopPadding())
                 .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
@@ -95,7 +95,7 @@ fun HomeContentLandscape(
                 .navigationBarsPadding()
                 .padding(top = paddingValues.calculateTopPadding())
                 .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
-                .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Rtl))
+                .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr))
         ){
             diaryNotes.forEach {(localDate, diaries) ->
                 

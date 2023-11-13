@@ -1,5 +1,6 @@
 package com.mariomanhique.firestore.repository.profileRepository
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.snapshots
@@ -34,30 +35,48 @@ import javax.inject.Inject
         }
     }
 
+        override fun updateImageProfile(imageUrl: String): RequestState<String> {
+            if (this.user !=null){
+                return try {
+                    rf.document(this.user.uid)
+                        .update(
+                            mapOf(
+                                "profilePictureUrl" to imageUrl
+                            )
+                        ).addOnSuccessListener {
+                            updateUser = RequestState.Success("Sucesso")
+                        }
 
+                    updateUser
+                }catch (e:Exception){
+                    RequestState.Error(e)
 
-
-    override fun updateProfile(user: UserData): RequestState<String> {
-        if(user!=null){
-
-            try {
-              rf.document(user.userId)
-                    .update(
-                        mapOf(
-                           "username" to user.username,
-                            "profilePictureUrl" to user.profilePictureUrl
-                        )
-                    ).addOnSuccessListener {
-                        updateUser = RequestState.Success("Sucesso")
-                    }
-
-                return updateUser
-            }catch (e:Exception){
-                return RequestState.Error(e)
-
+                }
             }
-        }else{
-            return RequestState.Error(Exception(""))
+            return RequestState.Error(Exception("user not authenticated"))
         }
-    }
+
+        override fun updateUsername(username: String): RequestState<String> {
+            if (this.user !=null){
+                return try {
+                    rf.document(this.user.uid)
+                        .update(
+                            mapOf(
+                                "username" to username
+                            )
+                        ).addOnSuccessListener {
+                            updateUser = RequestState.Success("Sucesso")
+                        }
+
+                    updateUser
+                }catch (e:Exception){
+                    RequestState.Error(e)
+
+                }
+            }
+            return RequestState.Error(Exception("user not authenticated"))
+        }
+
+
+
 }

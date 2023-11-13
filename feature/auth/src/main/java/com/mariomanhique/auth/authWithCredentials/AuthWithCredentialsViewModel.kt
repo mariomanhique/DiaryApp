@@ -6,11 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mariomanhique.firestore.repository.authWithCredentials.AuthRepository
 import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseUser
 import com.mariomanhique.auth.SignInState
 import com.mariomanhique.firestore.repository.profileRepository.ProfileRepository
 import com.mariomanhique.util.model.SignInResult
-import com.mariomanhique.util.model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.mongodb.User
 import kotlinx.coroutines.Dispatchers
@@ -42,18 +40,6 @@ class AuthWithCredentialsViewModel @Inject constructor(
         return authRepository.mongoCurrentUser!!
     }
 
-//    private fun saveProfile(
-//        name:String,
-//        profile:String
-//    ){
-////        viewModelScope.launch {
-//           profileRepository.saveProfile(
-//               name = name,
-//               profile = profile
-//           )
-//
-////        }
-//    }
 
     private fun onSignInResult(result: SignInResult){
         _state.update { it.copy(
@@ -83,7 +69,7 @@ class AuthWithCredentialsViewModel @Inject constructor(
                 onSuccess()
                 SignInResult(
                     data = user.run {
-                        UserData(
+                        com.mariomanhique.util.model.UserData(
                             userId = uid,
                             username = displayName.toString(),
                             profilePictureUrl = photoUrl.toString()
@@ -123,7 +109,7 @@ class AuthWithCredentialsViewModel @Inject constructor(
                         Log.d("SignUp", "signUp: ${user?.displayName} ")
                 SignInResult(
                     data = user?.run {
-                        UserData(
+                        com.mariomanhique.util.model.UserData(
                             userId = uid,
                             username = displayName.toString(),
                             profilePictureUrl = photoUrl.toString()

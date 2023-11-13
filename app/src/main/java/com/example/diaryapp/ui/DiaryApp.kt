@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -128,7 +129,7 @@ fun DiaryContent(
                 testTagsAsResourceId = true
             }
 //            .background(MaterialTheme.colorScheme.surface)
-//            .navigationBarsPadding()
+            .navigationBarsPadding()
             .statusBarsPadding()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         containerColor = Color.Transparent,

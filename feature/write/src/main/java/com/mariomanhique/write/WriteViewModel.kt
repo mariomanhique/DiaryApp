@@ -157,6 +157,7 @@ internal class WriteViewModel @Inject constructor (
                 }
                 date = uiState.selectedDiary?.date!!
             })
+
             uploadImagesToFirebase()
             galleryState.clearImagesToBeDeleted()
             if (result is RequestState.Success){

@@ -16,7 +16,6 @@ import com.mariomanhique.database.ImageToDeleteDao
 import com.mariomanhique.database.entity.ImageToDelete
 import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 import com.mariomanhique.firestore.repository.firebaseDB.FirestoreRepository
-import com.mariomanhique.firestore.repository.profileRepository.ProfileRepository
 import com.mariomanhique.ui.GalleryImage
 import com.mariomanhique.ui.GalleryState
 import com.mariomanhique.util.fetchImageFromFirebase
