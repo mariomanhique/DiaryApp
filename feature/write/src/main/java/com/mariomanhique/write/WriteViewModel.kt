@@ -18,11 +18,10 @@ import com.google.firebase.storage.FirebaseStorage
 import com.mariomanhique.database.entity.ImageToDelete
 import com.mariomanhique.database.entity.ImageToUpload
 import com.mariomanhique.firestore.repository.firebaseDB.FirestoreDB
-import com.mariomanhique.firestore.repository.imageRepo.ImageRepository
+import com.mariomanhique.database.imageRepo.ImageRepository
 import com.mariomanhique.ui.GalleryImage
 import com.mariomanhique.ui.GalleryState
 import com.mariomanhique.util.Constants.WRITE_SCREEN_ARG_KEY
-import com.mariomanhique.util.fetchImageFromFirebase
 import com.mariomanhique.util.fetchImagesFromFirebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

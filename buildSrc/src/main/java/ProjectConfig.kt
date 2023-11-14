@@ -3,5 +3,5 @@ object ProjectConfig {
     const val minSdk = 26
     const val targetSdk = 34
     const val versionCode = 1
-    const val extensionVersion = "1.5.2"
+    const val extensionVersion = "1.5.4"
 }

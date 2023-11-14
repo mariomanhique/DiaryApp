@@ -51,7 +51,6 @@ import com.mariomanhique.auth.R
 import com.mariomanhique.util.TopLevelDestination
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SignInScreen(
     viewModel: AuthWithCredentialsViewModel = hiltViewModel(),

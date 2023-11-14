@@ -3,8 +3,8 @@ package com.mariomanhique.firestore.repository.profileRepository
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.snapshots
-import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.snapshots
+import com.google.firebase.firestore.toObject
 import com.mariomanhique.util.model.RequestState
 import com.mariomanhique.util.model.UserData
 import kotlinx.coroutines.flow.Flow

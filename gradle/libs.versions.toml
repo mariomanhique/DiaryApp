@@ -1,53 +1,55 @@
 [versions]
 core-ktx = "1.12.0"
+runtime = "1.5.4"
+work-manager = "2.8.1"
 androidxTracing = "1.1.0"
-kotlin = "1.9.0"
+kotlin = "1.9.20"
 lifecycle-runtime = "2.6.2"
-compose = "1.5.4"
-material3-compose = "1.1.1"
+compose = "1.8.0"
+androidxComposeBom = "32.5.0"
+material3-compose = "1.1.2"
 junit = "4.13.2"
 junit-ext = "1.1.5"
 espresso-core = "3.5.1"
 dagger-hilt = "2.48.1"
 hilt-navigation-compose = "1.1.0-alpha01"
-room = "2.5.2"
-firebase = "32.3.1"
-firestore = "24.8.1"
-auth = "22.1.2"
-storage = "20.2.1"
+room = "2.6.0"
+firebase = "32.5.0"
+firestore = "24.9.1"
+auth = "22.2.0"
+storage = "20.3.0"
 message-bar-compose = "1.0.5"
 accompanist-pager = "0.27.0"
 coil-compose = "2.4.0"
-play-services-auth = "20.6.0"
+play-services-auth = "20.7.0"
 realm = "1.10.0"
 splash = "1.0.1"
 #core-splashscreen = "1.0.1"
-navigation-compose = "2.5.0"
+navigation-compose = "2.7.5"
 kotlin-coroutines-core = { strictly = "1.6.0-native-mt" }
-desugar= "2.0.3" ##
+desugar= "2.0.4" ##
 lifecycle-runtime-compose = "2.6.1"
 lifecycle-viewmodel = "2.6.1"
-google-fonts = "1.4.3" #
+google-fonts = "1.5.4" #
 sheets-compose-dialogs = "1.0.2"
 agp = "8.1.3"
-org-jetbrains-kotlin-android = "1.9.0"
+org-jetbrains-kotlin-android = "1.9.20"
 appcompat = "1.6.1"
-material = "1.9.0"
-#implementation ("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
-#implementation ("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
-#implementation ("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
+material = "1.10.0"
 
 
 [libraries]
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist-pager" }
+androidx-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "runtime" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx"}
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime"}
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-runtime"}
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime"}
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "compose"}
 google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "google-fonts"}
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose"}
-compose-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose"}
+compose-ui = { module = "androidx.compose.ui:ui"}
+compose-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"}
 material3-compose = { module = "androidx.compose.material3:material3", version.ref = "material3-compose"}
 junit = { module = "junit:junit", version.ref = "junit"}
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
@@ -63,9 +65,9 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose"}
 firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase"}
-firebase-auth = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "auth"}
-firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx", version.ref = "firestore"}
-firebase-storage = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "storage"}
+firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "auth"}
+firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firestore"}
+firebase-storage = { module = "com.google.firebase:firebase-storage", version.ref = "storage"}
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -76,8 +78,8 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagge
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt"}
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose"}
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose"}
-# [DEPRECATED]
-#accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist"}
+
+androidx-work-manager ={ group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-manager"}
 date-time-picker = { module = "com.maxkeppeler.sheets-compose-dialogs:core", version.ref = "sheets-compose-dialogs"}
 date-dialog = { module = "com.maxkeppeler.sheets-compose-dialogs:calendar", version.ref = "sheets-compose-dialogs"}
 time-dialog = { module = "com.maxkeppeler.sheets-compose-dialogs:clock", version.ref = "sheets-compose-dialogs"}
@@ -85,7 +87,9 @@ message-bar-compose = { module = "com.github.stevdza-san:MessageBarCompose", ver
 desugar-jdk = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar"}
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version = "1.5.2" }
+ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version = "1.5.4" }
+
+
 [plugins]
 com-android-library = { id = "com.android.library", version.ref = "agp" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }

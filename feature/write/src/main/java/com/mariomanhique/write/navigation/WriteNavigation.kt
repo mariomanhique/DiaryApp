@@ -24,7 +24,7 @@ import com.mariomanhique.write.WriteViewModel
 const val write_navigation_route = "write_navigation_route"
 
 fun NavController.navigateToWrite(navOptions: NavOptions?= null){
-    this.navigate(write_navigation_route)
+    this.navigate(write_navigation_route, navOptions)
 }
 
 sealed class Screen(val route: String){

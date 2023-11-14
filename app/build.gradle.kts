@@ -2,7 +2,7 @@
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.org.jetbrains.kotlin.android)
     id("io.realm.kotlin")
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime)
     implementation(libs.activity.compose)
+    implementation(libs.androidx.runtime)
     implementation(platform("androidx.compose:compose-bom:2023.09.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -85,7 +86,6 @@ dependencies {
 
     //Hilt-Dagger
     implementation(libs.hilt.android)
-//    ksp("com.google.dagger:hilt-android-compiler:2.48")
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
@@ -101,15 +101,9 @@ dependencies {
 
 
 
-    //Message Bar Compose
-    implementation(libs.message.bar.compose)
-
-    //One Tap Compose
 
     // Pager - Accompanist
     implementation(libs.accompanist.pager)
-    //Coil
-    implementation(libs.coil)
 
     //Google Auth
     implementation(libs.play.services.auth)
@@ -131,18 +125,6 @@ dependencies {
     implementation (libs.lifecycle.viewmodel)
     implementation (libs.lifecycle.runtime)
     implementation (libs.lifecycle.runtime.compose)
-    //Fonts
-    implementation(libs.google.fonts)
-    // Date-Time Picker
-    implementation (libs.date.time.picker)
-    // CALENDAR
-    implementation (libs.date.dialog)
-    // CLOCK
-    implementation (libs.time.dialog)
-    //Corotuines
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-//    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
 
     implementation(project(":core:ui"))
     implementation(project(":core:util"))
@@ -152,7 +134,5 @@ dependencies {
     implementation(project(":feature:home"))
     implementation(project(":feature:write"))
     implementation(project(":feature:profile"))
-    implementation(project(":feature:feed"))
-    implementation(project(":feature:connect"))
 
 }

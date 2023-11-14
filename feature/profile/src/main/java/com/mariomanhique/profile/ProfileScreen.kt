@@ -2,7 +2,6 @@ package com.mariomanhique.profile
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mariomanhique.util.fetchImageFromFirebase
-import com.mariomanhique.util.model.UserData
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

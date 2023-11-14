@@ -9,7 +9,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
@@ -17,8 +16,7 @@ import com.example.diaryapp.ui.DiaryApp
 import com.mariomanhique.ui.theme.DiaryAppTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.mariomanhique.firestore.repository.imageRepo.ImageRepository
+import com.mariomanhique.database.imageRepo.ImageRepository
 import com.mariomanhique.util.retryDeletingImageFromFirebase
 import com.mariomanhique.util.retryUploadingImageToFirebase
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,7 +48,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.surface
                 ) {
                     //The startDestination is hard coded now, but then we will dynamically calculate based on user event
-                   val user = FirebaseAuth.getInstance().currentUser
 
                     DiaryApp(
                         windowSizeClass = calculateWindowSizeClass(this),

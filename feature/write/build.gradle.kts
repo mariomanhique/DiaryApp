@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
@@ -65,23 +64,24 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.tooling.preview)
     implementation(libs.ui.tooling.preview.android)
-
+    implementation(libs.androidx.runtime)
     implementation(libs.coil)
     implementation(libs.google.fonts)
 
+    implementation(platform(libs.firebase))
+    implementation(libs.firebase.auth)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.firestore)
+
     implementation(libs.coroutines.core)
 
     implementation(libs.hilt.android)
-//    ksp("com.google.dagger:hilt-android-compiler:2.48")
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.lifecycle.runtime.compose)
 
     implementation(libs.firebase.auth)
-    implementation(libs.realm.sync)
     implementation(libs.accompanist.pager)
 
     implementation(libs.date.time.picker)

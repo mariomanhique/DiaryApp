@@ -1,4 +1,4 @@
-package com.mariomanhique.firestore.repository.imageRepo
+package com.mariomanhique.database.imageRepo
 
 import com.mariomanhique.database.ImageToDeleteDao
 import com.mariomanhique.database.ImageToUploadDao

@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
@@ -231,6 +232,7 @@ fun UserDetailsCard(
 
     Box(modifier = Modifier,
         contentAlignment = Alignment.BottomEnd
+
     ){
 
         val imageUri by remember { mutableStateOf(imageProfile) }
@@ -276,7 +278,8 @@ fun UserDetailsCard(
                     multiplePhotoPicker.launch(
                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                     )
-                },
+                }
+
 //            contentAlignment = Alignment.TopCenter
 
         ){
