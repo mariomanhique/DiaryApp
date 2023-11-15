@@ -4,7 +4,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("io.realm.kotlin")
-    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
@@ -39,12 +38,12 @@ android {
 
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
         isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true
@@ -82,16 +81,16 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //Hilt-Dagger
-    implementation("com.google.dagger:hilt-android:2.47")
-    annotationProcessor("com.google.dagger:hilt-compiler:2.47")
-    kapt("com.google.dagger:hilt-android-compiler:2.47")
+    implementation("com.google.dagger:hilt-android:2.48.1")
+//    annotationProcessor("com.google.dagger:hilt-compiler:2.48.1")
+//    ksp("com.google.dagger:hilt-android-compiler:2.48.1")
 //    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-    kapt("com.google.dagger:hilt-compiler:2.47")
+    ksp("com.google.dagger:hilt-compiler:2.48.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     implementation("androidx.room:room-runtime:2.5.2")
     annotationProcessor("androidx.room:room-compiler:2.5.2")
-    kapt("androidx.room:room-compiler:2.5.2")
+    ksp("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
 
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
@@ -158,12 +157,6 @@ dependencies {
 
     // CLOCK
     implementation ("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
-    
-
-    //Corotuines
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-//    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
 
 
 }

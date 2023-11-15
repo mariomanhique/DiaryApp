@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor(
     private lateinit var allFilteredDiariesJob: Job
 
     private var network by mutableStateOf(ConnectivityObserver.Status.Unavailable)
-    val user = FirebaseAuth.getInstance().currentUser
+    private val user = FirebaseAuth.getInstance().currentUser
     private var _diaries: MutableStateFlow<Diaries> = MutableStateFlow(RequestState.Idle)
     val diaries = _diaries.asStateFlow()
 
@@ -82,7 +82,7 @@ class HomeViewModel @Inject constructor(
                 allFilteredDiariesJob.cancelAndJoin()
             }
             if(user != null){
-                firestoreRepository.getAllDiaries().distinctUntilChanged().collect{
+                firestoreRepository.getDiaries().distinctUntilChanged().collect{
                     _diaries.value = it
                 }
             }

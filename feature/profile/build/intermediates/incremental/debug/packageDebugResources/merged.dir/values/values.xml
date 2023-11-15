@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chooseAction">Choose</string>
+    <string name="deleteAll">Delete all diaries</string>
+    <string name="logout">Log out</string>
+    <string name="placeholder">Username</string>
+    <string name="saveButton">Save</string>
+</resources>

@@ -1,0 +1,4 @@
+/Users/mariomanhique/AndroidStudioProjects/DiaryApp/feature/feed/src/main/java/com/mariomanhique/feed/FeedContent.kt
+/Users/mariomanhique/AndroidStudioProjects/DiaryApp/feature/feed/src/main/java/com/mariomanhique/feed/FeedViewModel.kt
+/Users/mariomanhique/AndroidStudioProjects/DiaryApp/feature/feed/src/main/java/com/mariomanhique/feed/FeedScreen.kt
+/Users/mariomanhique/AndroidStudioProjects/DiaryApp/feature/feed/src/main/java/com/mariomanhique/feed/navigation/FeedNavigation.kt

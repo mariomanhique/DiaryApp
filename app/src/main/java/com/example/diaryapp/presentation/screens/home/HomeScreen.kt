@@ -104,16 +104,6 @@ fun HomeScreen(
                     }
                 }
             },
-//            bottomBar = {
-//                BottomAppBar(
-//                    modifier = Modifier.background(Color.Transparent),
-//                    containerColor = MaterialTheme.colorScheme.surface,
-//                    contentColor = MaterialTheme.colorScheme.surface,
-//                ) {
-//                   // Display()
-//                }
-//            },
-
             ){
 
                 padding = it

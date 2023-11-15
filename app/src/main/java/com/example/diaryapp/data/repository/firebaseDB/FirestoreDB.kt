@@ -27,7 +27,7 @@ import javax.inject.Inject
 class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore): FirestoreRepository {
 
     private lateinit var updatedDiary: RequestState<String>
-    val user = FirebaseAuth.getInstance().currentUser
+    private val user = FirebaseAuth.getInstance().currentUser
     private val ref = firestore.collection("diary")
 
     override fun getDiaries(): Flow<Diaries>{
