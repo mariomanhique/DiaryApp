@@ -12,7 +12,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.navigateToSignUp
 import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.signUpNavigationRoute
 import com.mariomanhique.home.navigation.diariesDestinationRoute
@@ -22,6 +21,7 @@ import com.mariomanhique.profile.navigation.profile_route
 import com.mariomanhique.util.TopLevelDestination
 import com.mariomanhique.util.TopLevelDestination.HOME
 import com.mariomanhique.util.TopLevelDestination.PROFILE
+import kotlinx.coroutines.flow.SharingStarted
 import navigateToWrite
 import write_navigation_route
 
@@ -42,17 +42,16 @@ fun rememberDiaryAppState(
     }
 }
 class DiaryAppState(
-    val navController: NavHostController,
-    val windowSizeClass: WindowSizeClass,
+     val navController: NavHostController,
+    private val windowSizeClass: WindowSizeClass,
 ) {
-
 
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route){
+        @Composable get() = when (currentDestination?.route) {
             diariesDestinationRoute -> HOME
             profile_route -> PROFILE
             else -> null
@@ -64,31 +63,39 @@ class DiaryAppState(
     val shouldShowNavRail: Boolean
         get() = !shouldShowBottomBar
 
+
+    /**
+     * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the
+     * route.
+     */
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
 
 
-    fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination){
+
+
+    fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         trace("Navigation: ${topLevelDestination.name}"){
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
-            // on the back stack as users select items
-            val topLevelNavOptions = navOptions {
+                val topLevelNavOptions = navOptions {
+                    // Pop up to the start destination of the graph to
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    popUpTo(navController.graph.findStartDestination().id){
+                        saveState = true
+                    }
 
-                popUpTo(navController.graph.findStartDestination().id){
-                    saveState = true
+                    launchSingleTop = true
+
+                    restoreState = true
                 }
-
-                launchSingleTop = true
-
-                restoreState = true
-            }
 
             when(topLevelDestination){
                 HOME -> navController.navigateToHome(topLevelNavOptions)
                 PROFILE -> navController.navigateToProfile(topLevelNavOptions)
             }
         }
-    }
+
+
+        }
 
     fun navigateToWrite(){
 
@@ -100,7 +107,7 @@ class DiaryAppState(
 
             restoreState = true
         }
-        navController.navigateToWrite()
+        navController.navigateToWrite(navOptions)
     }
 
     fun navigateToSignIn(){

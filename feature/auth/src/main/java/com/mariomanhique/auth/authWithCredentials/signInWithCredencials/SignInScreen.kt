@@ -49,6 +49,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.mariomanhique.auth.R
 import com.mariomanhique.util.TopLevelDestination
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -56,6 +58,7 @@ internal fun SignInScreen(
     viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
     navigateToSignUp:()->Unit,
     onSuccessSignIn: () -> Unit,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     onFailedSignIn: (Exception) -> Unit,
     destinations: List<TopLevelDestination>,
     navigateToHome: (TopLevelDestination)->Unit
@@ -74,12 +77,6 @@ internal fun SignInScreen(
 
     val passwordVisibility = remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
-
-    Scaffold (modifier = Modifier
-        .background(MaterialTheme.colorScheme.surface)
-        .imePadding()
-        .navigationBarsPadding()
-        .statusBarsPadding()){
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
         Box(
@@ -160,7 +157,12 @@ internal fun SignInScreen(
                                 emailValue.value,
                                 passwordValue.value,
                                 onSuccess = {
-                                    navigateToHome(TopLevelDestination.HOME)
+                                    scope.launch {
+                                        onShowSnackbar("Logged In Successfully",null)
+                                        delay(4000L)
+//                                        cancel()
+                                        navigateToHome(TopLevelDestination.HOME)
+                                    }
                                     viewModel.setLoading(false)
                                 },
                                 onError = {
@@ -224,7 +226,5 @@ internal fun SignInScreen(
         }
 
     }
-    }
-
 
 }

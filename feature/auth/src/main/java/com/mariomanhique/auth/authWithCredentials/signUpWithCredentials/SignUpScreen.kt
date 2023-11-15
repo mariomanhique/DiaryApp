@@ -45,12 +45,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.mariomanhique.auth.R
 import com.mariomanhique.util.TopLevelDestination
+import kotlinx.coroutines.delay
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SignUpWithCredentials(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
     navigateToHome:(TopLevelDestination)->Unit,
     destinations: List<TopLevelDestination>,
@@ -68,12 +70,6 @@ internal fun SignUpWithCredentials(
     val passwordValue = remember { mutableStateOf("") }
 
     val passwordVisibility = remember { mutableStateOf(false) }
-
-    Scaffold (modifier = Modifier
-        .background(MaterialTheme.colorScheme.surface)
-        .imePadding()
-        .navigationBarsPadding()
-        .statusBarsPadding()) {
 
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
             Box(
@@ -161,10 +157,15 @@ internal fun SignUpWithCredentials(
                                     password = passwordValue.value,
                                     onSuccess = { isSingInSuccess ->
                                         if (isSingInSuccess) {
+
                                             viewModel.signInWithMongoAtlas(
                                                 emailValue.value,
                                                 passwordValue.value,
                                                 onSuccess = {
+                                                    scope.launch {
+                                                        onShowSnackbar("Sign Up Successfully",null)
+                                                        delay(500L)
+                                                    }
                                                     navigateToHome(TopLevelDestination.HOME)
                                                     viewModel.setLoading(false)
                                                 },
@@ -172,15 +173,12 @@ internal fun SignUpWithCredentials(
                                                     viewModel.setLoading(false)
                                                     scope.launch {
                                                         withContext(Dispatchers.Main){
-                                                            snackbarHostState.showSnackbar(
-                                                                message = it.message.toString(),
-                                                                duration = SnackbarDuration.Short
-                                                            )
+                                                            onShowSnackbar(it.message.toString(),null)
                                                         }
                                                     }
-                                                    //SnackBarHost
                                                 }
                                             )
+
                                         }
                                     },
                                     onError = {
@@ -217,5 +215,4 @@ internal fun SignUpWithCredentials(
                 }
             }
         }
-    }
 }

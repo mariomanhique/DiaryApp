@@ -3,7 +3,6 @@ package com.example.diaryapp.ui
 import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -25,7 +23,6 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.Menu
@@ -41,14 +38,15 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,7 +55,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -76,7 +73,6 @@ import com.mariomanhique.auth.authWithCredentials.AuthWithCredentialsViewModel
 import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import com.mariomanhique.home.DiariesViewModel
 import com.mariomanhique.home.DiaryAppBar
-import com.mariomanhique.home.NavigationDrawer
 import com.mariomanhique.home.navigation.diariesDestinationRoute
 import com.mariomanhique.ui.components.DisplayAlertDialog
 import com.mariomanhique.util.TopLevelDestination
@@ -118,7 +114,7 @@ fun DiaryContent(
 
 
 
-    var user = authViewModel.user
+    val user = authViewModel.user
     var signOutDialogState by remember { mutableStateOf(false) }
     var deleteAllDialogOpened by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -129,7 +125,7 @@ fun DiaryContent(
                 testTagsAsResourceId = true
             }
 //            .background(MaterialTheme.colorScheme.surface)
-            .navigationBarsPadding()
+//            .navigationBarsPadding()
             .statusBarsPadding()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         containerColor = Color.Transparent,
@@ -137,23 +133,23 @@ fun DiaryContent(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
-                if (destination != null){
-                    FloatingActionButton(
-                        modifier= Modifier
-                            .padding(4.dp),
-                        onClick =  appState::navigateToWrite
+            if (destination != null){
+                FloatingActionButton(
+                    modifier= Modifier
+                        .padding(4.dp),
+                    onClick =  appState::navigateToWrite
+                ) {
+                    Box(
+                        modifier = Modifier
                     ) {
-                        Box(
-                            modifier = Modifier
-                        ) {
-                            Icon(
-                                modifier = Modifier,
-                                imageVector = Icons.Default.Add,
-                                contentDescription =""
-                            )
-                        }
+                        Icon(
+                            modifier = Modifier,
+                            imageVector = Icons.Default.Add,
+                            contentDescription =""
+                        )
                     }
                 }
+            }
         },
         bottomBar = {
             if (appState.shouldShowBottomBar) {
@@ -164,15 +160,7 @@ fun DiaryContent(
                             currentDestination = appState.currentDestination,
                             modifier = Modifier.testTag("DiaryBottomBar"),
                         )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .offset(x = ((-0).dp), y = (-0).dp),
-                        contentAlignment = Alignment.Center
-                    ) {
 
-
-                    }
                 }
 
             }
@@ -225,6 +213,13 @@ fun DiaryContent(
                     )
                 }
                 NavigationHost(
+                    onShowSnackbar = {message, action->
+                        snackbarHostState.showSnackbar(
+                            message = message,
+                            actionLabel = action,
+                            duration = Short
+                            ) == ActionPerformed
+                    },
                     appState = appState,
                     onDataLoaded = onDataLoaded,
                     paddingValues = paddingValues,

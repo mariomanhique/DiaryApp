@@ -1,13 +1,10 @@
 package com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation
 
-import android.widget.Toast
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.SignInScreen
 import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.SignUpWithCredentials
 import com.mariomanhique.util.TopLevelDestination
 
@@ -18,6 +15,7 @@ fun NavController.navigateToSignUp(navOptions: NavOptions? = null){
     this.navigate(signUpNavigationRoute,navOptions)
 }
 fun NavGraphBuilder.signUpRoute(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     navigateToHome:(TopLevelDestination)->Unit,
     destinations: List<TopLevelDestination>,
     navigateToSignIn:()->Unit,
@@ -32,6 +30,7 @@ fun NavGraphBuilder.signUpRoute(
             onDataLoaded()
         }
         SignUpWithCredentials(
+            onShowSnackbar = onShowSnackbar,
             navigateToHome = navigateToHome,
             navigateToSignIn = navigateToSignIn,
             destinations = destinations

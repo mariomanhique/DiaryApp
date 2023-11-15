@@ -26,6 +26,7 @@ fun NavigationHost(
     startDestination:String,
     appState: DiaryAppState,
     onDataLoaded: () -> Unit,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     paddingValues: PaddingValues,
     windowSizeClass: WindowSizeClass,
     onDeleteClicked: (Boolean) -> Unit,
@@ -52,6 +53,7 @@ fun NavigationHost(
         )
 
         signInRoute(
+            onShowSnackbar = onShowSnackbar,
             navigateToHome = {destination->
                  appState.navigateToTopLevelDestination(destination)
             },
@@ -63,6 +65,7 @@ fun NavigationHost(
             )
 
         signUpRoute(
+            onShowSnackbar = onShowSnackbar,
             navigateToHome = {destination->
                  appState.navigateToTopLevelDestination(destination)
             },

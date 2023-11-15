@@ -17,6 +17,7 @@ fun NavController.navigateToSignIn(navOptions: NavOptions? = null){
     this.navigate(signInNavigationRoute,navOptions)
 }
 fun NavGraphBuilder.signInRoute(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     navigateToHome:(TopLevelDestination)->Unit,
     destinations: List<TopLevelDestination>,
     navigateToSignUp:()->Unit,
@@ -30,6 +31,7 @@ fun NavGraphBuilder.signInRoute(
         }
 
         SignInScreen(
+            onShowSnackbar = onShowSnackbar,
             navigateToHome = navigateToHome,
             destinations = destinations,
             navigateToSignUp = navigateToSignUp,

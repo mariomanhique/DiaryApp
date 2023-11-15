@@ -46,7 +46,6 @@ class DiariesViewModel @Inject constructor(
     private lateinit var allFilteredDiariesJob: Job
 
     private var network by mutableStateOf(ConnectivityObserver.Status.Unavailable)
-    val galleryState = GalleryState()
     private val user = FirebaseAuth.getInstance().currentUser
     private var _diaries: MutableStateFlow<Diaries> = MutableStateFlow(RequestState.Idle)
     val diaries = _diaries.asStateFlow()
@@ -65,36 +64,9 @@ class DiariesViewModel @Inject constructor(
     }
 
 
-
-    private fun getCurrentUser() = user?.run {
-        fetchImageFromFirebase(
-            remoteImagePath = photoUrl.toString(),
-            onImageDownload = {
-                Log.d("Image", "getCurrentUser: $it")
-
-                galleryState.addImage(
-                    GalleryImage(
-                        image = it,
-                        remoteImagePath = extractImagePath(
-                            fullImageUrl = it.toString()
-                        )
-                    )
-                )
-            },
-            onImageDownloadFailed = {},
-            onReadyToDisplay = {}
-        )
-        Log.d("Image", "getCurrentUser: ${this.photoUrl}")
-        UserData(
-            userId = uid,
-            username = displayName.toString(),
-            profilePictureUrl = photoUrl.toString()
-        )
-    }
-
     fun getDiaries(zonedDateTime: ZonedDateTime? = null){
         dateIsSelected = zonedDateTime != null
-        _diaries.value = RequestState.Loading
+//        _diaries.value = RequestState.Loading
         if(dateIsSelected && zonedDateTime != null){
             observeFilteredDiaries(zonedDateTime = zonedDateTime)
         } else{
@@ -120,7 +92,7 @@ class DiariesViewModel @Inject constructor(
                 allFilteredDiariesJob.cancelAndJoin()
             }
             if(user != null){
-                firestoreRepository.getAllDiaries().distinctUntilChanged().debounce(2000)
+                firestoreRepository.getDiaries().distinctUntilChanged()
                     .collect{
                     _diaries.value = it
                 }

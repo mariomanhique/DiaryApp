@@ -12,7 +12,7 @@ import com.mariomanhique.util.model.Diary
 import com.mariomanhique.util.model.Mood
 import com.mariomanhique.util.model.RequestState
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.mariomanhique.database.entity.ImageToDelete
@@ -40,7 +40,7 @@ internal class WriteViewModel @Inject constructor (
     private val imageRepository: ImageRepository
 ): ViewModel() {
 
-    val user = FirebaseAuth.getInstance().currentUser
+    private val user = FirebaseAuth.getInstance().currentUser
     val galleryState = GalleryState()
     var uiState by mutableStateOf(UiState())
         private set
@@ -266,8 +266,9 @@ internal class WriteViewModel @Inject constructor (
     private fun extractImagePath(fullImageUrl: String): String {
         val chunks = fullImageUrl.split("%2F")
         val imageName = chunks[2].split("?").first()
-        return "images/${Firebase.auth.currentUser?.uid}/$imageName"
+        return "images/${user?.uid}/$imageName"
     }
+
     fun setTitle(title: String){
         uiState = uiState.copy(
             title = title
