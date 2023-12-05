@@ -1,6 +1,7 @@
 package com.mariomanhique.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,7 +19,6 @@ import androidx.compose.ui.Modifier
 import com.mariomanhique.util.model.RequestState
 import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
  fun HomeScreen(
     diaries: Diaries,
@@ -32,9 +32,7 @@ import com.mariomanhique.firestore.repository.firebaseDB.Diaries
                 padding = paddingValues
                 when (diaries) {
                 is RequestState.Success -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
+                    Log.d("Home Content", "HomeScreen: Success")
                         when(windowSizeClass.widthSizeClass){
                             WindowWidthSizeClass.Compact -> {
                                 HomeContentPortrait(
@@ -50,7 +48,6 @@ import com.mariomanhique.firestore.repository.firebaseDB.Diaries
                                     onClick = navigateToWriteWithArgs
                                 )
                             }
-                        }
                     }
                 }
                 is RequestState.Error -> {
@@ -60,6 +57,8 @@ import com.mariomanhique.firestore.repository.firebaseDB.Diaries
                     )
                 }
                 is RequestState.Loading -> {
+                    Log.d("Home Content", "HomeScreen: Loading")
+
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center

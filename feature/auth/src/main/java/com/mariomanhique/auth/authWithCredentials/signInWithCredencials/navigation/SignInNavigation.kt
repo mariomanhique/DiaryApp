@@ -18,26 +18,17 @@ fun NavController.navigateToSignIn(navOptions: NavOptions? = null){
 }
 fun NavGraphBuilder.signInRoute(
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    navigateToHome:(TopLevelDestination)->Unit,
-    destinations: List<TopLevelDestination>,
+    navigateToHome:()->Unit,
     navigateToSignUp:()->Unit,
-    onDataLoaded: () ->Unit
 ){
     composable(signInNavigationRoute){
 
         val context = LocalContext.current
-        LaunchedEffect(Unit){
-            onDataLoaded()
-        }
 
         SignInScreen(
             onShowSnackbar = onShowSnackbar,
             navigateToHome = navigateToHome,
-            destinations = destinations,
             navigateToSignUp = navigateToSignUp,
-            onSuccessSignIn = {
-
-            },
             onFailedSignIn = {
                 Toast.makeText(context,"SignIn Failed, check", Toast.LENGTH_SHORT).show()
             }

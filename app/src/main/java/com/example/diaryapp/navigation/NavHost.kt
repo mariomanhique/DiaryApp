@@ -14,10 +14,12 @@ import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigati
 import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.signUpRoute
 import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 import com.mariomanhique.home.navigation.diariesRoute
+import com.mariomanhique.home.navigation.navigateToHome
 import com.mariomanhique.profile.ProfileViewModel
 import com.mariomanhique.profile.extractImagePath
 import com.mariomanhique.profile.navigation.profileRoute
 import com.mariomanhique.ui.GalleryImage
+import com.mariomanhique.util.TopLevelDestination
 import com.mariomanhique.util.fetchImageFromFirebase
 import writeRoute
 
@@ -25,7 +27,6 @@ import writeRoute
 fun NavigationHost(
     startDestination:String,
     appState: DiaryAppState,
-    onDataLoaded: () -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     paddingValues: PaddingValues,
     windowSizeClass: WindowSizeClass,
@@ -43,7 +44,6 @@ fun NavigationHost(
         ){
 
         diariesRoute(
-            onDataLoaded = onDataLoaded,
             navigateToWriteWithArgs = {
                 navController.navigate(Screen.Write.passDiaryId(it))
             },
@@ -54,25 +54,19 @@ fun NavigationHost(
 
         signInRoute(
             onShowSnackbar = onShowSnackbar,
-            navigateToHome = {destination->
-                 appState.navigateToTopLevelDestination(destination)
+            navigateToHome = {
+                navController.navigateToHome()
+
             },
-            navigateToSignUp = {
-                appState.navigateToSignUp()
-            },
-            onDataLoaded = onDataLoaded,
-            destinations = appState.topLevelDestinations
+            navigateToSignUp = navController::navigateToSignUp,
             )
 
         signUpRoute(
             onShowSnackbar = onShowSnackbar,
             navigateToHome = {destination->
-                 appState.navigateToTopLevelDestination(destination)
+                 appState.navigateToTopLevelDestination(TopLevelDestination.HOME)
             },
-            navigateToSignIn = {
-                appState.navigateToSignIn()
-            },
-            onDataLoaded = onDataLoaded,
+            navigateToSignIn = navController::navigateToSignIn,
             destinations = appState.topLevelDestinations,
         )
 

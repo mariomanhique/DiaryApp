@@ -70,6 +70,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import com.example.diaryapp.R
 import com.example.diaryapp.navigation.NavigationHost
 import com.mariomanhique.auth.authWithCredentials.AuthWithCredentialsViewModel
+import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
 import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import com.mariomanhique.home.DiariesViewModel
 import com.mariomanhique.home.DiaryAppBar
@@ -83,12 +84,10 @@ import kotlinx.coroutines.withContext
 @Composable
 fun DiaryApp(
     windowSizeClass: WindowSizeClass,
-    onDataLoaded: () -> Unit
 ){
     DiaryContent(
-        windowSizeClass = windowSizeClass,
-        onDataLoaded = onDataLoaded
-        )
+        windowSizeClass = windowSizeClass
+    )
 }
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class,
@@ -100,7 +99,6 @@ fun DiaryContent(
     windowSizeClass: WindowSizeClass,
     appState: DiaryAppState  = rememberDiaryAppState(
         windowSizeClass = windowSizeClass),
-    onDataLoaded: () -> Unit,
     authViewModel: AuthWithCredentialsViewModel = hiltViewModel(),
     diariesViewModel: DiariesViewModel = hiltViewModel()
 ){
@@ -109,12 +107,12 @@ fun DiaryContent(
     val scope = rememberCoroutineScope()
     val destination = appState.currentTopLevelDestination
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val diaries = diariesViewModel.diaries.collectAsStateWithLifecycle().value
 
 
 
     val user = authViewModel.user
+    val navController = appState.navController
     var signOutDialogState by remember { mutableStateOf(false) }
     var deleteAllDialogOpened by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -160,9 +158,7 @@ fun DiaryContent(
                             currentDestination = appState.currentDestination,
                             modifier = Modifier.testTag("DiaryBottomBar"),
                         )
-
                 }
-
             }
         },
     ){paddingValues->
@@ -198,11 +194,7 @@ fun DiaryContent(
                         isProfileDestination = destination != TopLevelDestination.PROFILE,
                         navigationIcon = Icons.Rounded.Menu,
                         scrollBehavior = scrollBehavior,
-                        onMenuClicked = {
-                            scope.launch {
-                                drawerState.open()
-                            }
-                        },
+                        onMenuClicked = {},
                         dateIsSelected = diariesViewModel.dateIsSelected,
                         onDateSelected = {
                             diariesViewModel.getDiaries(it)
@@ -221,7 +213,6 @@ fun DiaryContent(
                             ) == ActionPerformed
                     },
                     appState = appState,
-                    onDataLoaded = onDataLoaded,
                     paddingValues = paddingValues,
                     windowSizeClass = windowSizeClass,
                     onDeleteClicked = {
@@ -250,13 +241,8 @@ fun DiaryContent(
         },
         onYesClicked = {
             signOutDialogState      = false
-            scope.launch(Dispatchers.IO) {
-                authViewModel.signOut()
-                withContext(Dispatchers.Main){
-                    appState.navigateToSignIn()
-                    drawerState.close()
-                }
-            }
+            authViewModel.signOut()
+            navController.navigateToSignIn()
         }
     )
 
@@ -275,8 +261,7 @@ fun DiaryContent(
                         onSuccess = {
                             if(it){
                                 scope.launch {
-                                    Toast.makeText(context,"Diaries Deleted", Toast.LENGTH_SHORT).show()
-                                    drawerState.close()
+
                                 }
                             }
 
@@ -290,7 +275,6 @@ fun DiaryContent(
                                 }else{
                                     Toast.makeText(context,"${error.message}", Toast.LENGTH_SHORT).show()
                                 }
-                                drawerState.close()
                             }
                         }
                     )

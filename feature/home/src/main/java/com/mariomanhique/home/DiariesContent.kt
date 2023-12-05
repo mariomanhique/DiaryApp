@@ -63,9 +63,7 @@ internal fun HomeContentPortrait(
 //                        Random.nextInt()
 //                    }
                     DiaryHolder(
-                        modifier = Modifier.animateItemPlacement(
-                            tween(durationMillis = 250)
-                        ),
+                        modifier = Modifier,
                         diary = it,
                         onClick = onClick
                     )
@@ -114,9 +112,7 @@ fun HomeContentLandscape(
                     }
                 ){
                     DiaryHolder(
-                        modifier = Modifier.animateItemPlacement(
-                            tween(durationMillis = 250)
-                        ),
+                        modifier = Modifier,
                         diary = it,
                         onClick = onClick
                     )

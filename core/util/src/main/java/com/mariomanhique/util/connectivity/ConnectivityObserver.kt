@@ -1,4 +1,4 @@
-package com.stevdzasan.diaryapp.connectivity
+package com.mariomanhique.util.connectivity
 
 import kotlinx.coroutines.flow.Flow
 

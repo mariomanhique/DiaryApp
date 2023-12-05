@@ -3,19 +3,24 @@ package com.example.diaryapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.diaryapp.ui.DiaryApp
 import com.mariomanhique.ui.theme.DiaryAppTheme
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 import com.mariomanhique.database.imageRepo.ImageRepository
 import com.mariomanhique.util.retryDeletingImageFromFirebase
 import com.mariomanhique.util.retryUploadingImageToFirebase
@@ -25,6 +30,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.example.diaryapp.MainActivityUiState.Loading
+import com.example.diaryapp.MainActivityUiState.Success
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,11 +42,30 @@ class MainActivity : ComponentActivity() {
     lateinit var imageRepository: ImageRepository
 
     private var keepSplashOpened = true
+    val viewModel: MainActivityViewModel by viewModels()
+
+
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        var uiState: MainActivityUiState by mutableStateOf(Loading)
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.uiState
+                    .onEach {
+                        uiState = it
+                }.collect()
+            }
+        }
+
+
         installSplashScreen().setKeepOnScreenCondition{
-            keepSplashOpened
+            when(uiState){
+                Loading -> true
+                is Success -> false
+            }
         }
         WindowCompat.setDecorFitsSystemWindows(window,false)
         FirebaseApp.initializeApp(this)
@@ -47,11 +75,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.surface
                 ) {
-                    //The startDestination is hard coded now, but then we will dynamically calculate based on user event
-
                     DiaryApp(
                         windowSizeClass = calculateWindowSizeClass(this),
-                        onDataLoaded = {keepSplashOpened = false}
                     )
                 }
             }

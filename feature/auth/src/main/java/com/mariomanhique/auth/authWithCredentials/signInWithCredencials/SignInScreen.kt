@@ -5,19 +5,13 @@ package com.mariomanhique.auth.authWithCredentials.signInWithCredencials
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,29 +38,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mariomanhique.auth.authWithCredentials.AuthWithCredentialsViewModel
 import com.mariomanhique.ui.components.GoogleButton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import com.mariomanhique.auth.R
-import com.mariomanhique.util.TopLevelDestination
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
+import com.mariomanhique.ui.R
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 internal fun SignInScreen(
     viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
     navigateToSignUp:()->Unit,
-    onSuccessSignIn: () -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     onFailedSignIn: (Exception) -> Unit,
-    destinations: List<TopLevelDestination>,
-    navigateToHome: (TopLevelDestination)->Unit
+    navigateToHome: ()->Unit
 ) {
 
-    val state = viewModel.state.collectAsStateWithLifecycle().value
     var loadingState by viewModel.loadingState
-    val snackbarHostState = remember { SnackbarHostState() }
 
 
     val scope = rememberCoroutineScope()
@@ -85,7 +70,7 @@ internal fun SignInScreen(
             contentAlignment = Alignment.TopCenter
         ) {
 
-           Image(painter = painterResource(id = com.mariomanhique.ui.R.drawable.logo), contentDescription = "")
+           Image(painter = painterResource(id = R.drawable.logo), contentDescription = "")
         }
 
         Column(
@@ -151,45 +136,6 @@ internal fun SignInScreen(
 
                     )
 
-                    LaunchedEffect(key1 = state.isSignInSuccessful) {
-                        if(state.isSignInSuccessful) {
-                            viewModel.signInWithMongoAtlas(
-                                emailValue.value,
-                                passwordValue.value,
-                                onSuccess = {
-                                    scope.launch {
-                                        onShowSnackbar("Logged In Successfully",null)
-                                        delay(4000L)
-//                                        cancel()
-                                        navigateToHome(TopLevelDestination.HOME)
-                                    }
-                                    viewModel.setLoading(false)
-                                },
-                                onError = {
-                                    viewModel.setLoading(false)
-                                    scope.launch {
-                                        withContext(Dispatchers.Main){
-                                            snackbarHostState.showSnackbar(
-                                                message = it.message.toString(),
-                                                duration = SnackbarDuration.Short
-                                            )
-                                        }
-                                    }
-                                }
-                            )
-                        }else{
-                            scope.launch {
-                                withContext(Dispatchers.Main){
-                                    snackbarHostState.showSnackbar(
-                                        message = "Unable to sign in",
-                                        duration = SnackbarDuration.Short
-                                    )
-                                }
-                            }
-                        }
-
-                        viewModel.resetState()
-                    }
 
 
 
@@ -202,7 +148,13 @@ internal fun SignInScreen(
                             viewModel.signIn(
                                 email = emailValue.value,
                                 password = passwordValue.value,
-                                onSuccess = onSuccessSignIn,
+                                onSuccess = {
+                                    scope.launch {
+                                        onShowSnackbar("Logged In Successfully",null)
+                                        navigateToHome()
+                                        viewModel.setLoading(false)
+                                    }
+                                },
                                 onError = {
                                     viewModel.setLoading(false)
                                 }

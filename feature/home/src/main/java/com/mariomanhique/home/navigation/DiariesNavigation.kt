@@ -19,17 +19,12 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.diariesRoute(
     navigateToWriteWithArgs: (String)-> Unit,
-    onDataLoaded: () ->Unit,
     paddingValues: PaddingValues,
     windowSizeClass: WindowSizeClass,
     diaries: Diaries
 ){
     composable(route = diariesDestinationRoute){
-        LaunchedEffect(key1 =diaries){
-            if(diaries !is RequestState.Loading){
-                onDataLoaded()
-            }
-        }
+
         HomeScreen(
             diaries = diaries,
             navigateToWriteWithArgs = navigateToWriteWithArgs,

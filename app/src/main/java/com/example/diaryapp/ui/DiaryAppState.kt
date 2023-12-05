@@ -110,28 +110,5 @@ class DiaryAppState(
         navController.navigateToWrite(navOptions)
     }
 
-    fun navigateToSignIn(){
-//        val navOptions = navOptions {
-//            popUpTo(signInNavigationRoute){
-//                inclusive = false
-//            }
-////            launchSingleTop = false
-////
-////            restoreState = false
-//        }
-        navController.navigateToSignIn()
-    }
-
-    fun navigateToSignUp(){
-        val navOptions = navOptions {
-            popUpTo(signUpNavigationRoute){
-                inclusive = false
-            }
-            launchSingleTop = true
-
-            restoreState = true
-        }
-        navController.navigateToSignUp(navOptions)
-    }
 }
 

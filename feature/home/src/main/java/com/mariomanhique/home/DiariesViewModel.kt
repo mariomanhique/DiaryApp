@@ -1,6 +1,5 @@
 package com.mariomanhique.home
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,20 +15,14 @@ import com.mariomanhique.database.ImageToDeleteDao
 import com.mariomanhique.database.entity.ImageToDelete
 import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 import com.mariomanhique.firestore.repository.firebaseDB.FirestoreRepository
-import com.mariomanhique.ui.GalleryImage
-import com.mariomanhique.ui.GalleryState
-import com.mariomanhique.util.fetchImageFromFirebase
-import com.mariomanhique.util.model.UserData
-import com.stevdzasan.diaryapp.connectivity.ConnectivityObserver
+import com.mariomanhique.util.connectivity.ConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
@@ -66,7 +59,7 @@ class DiariesViewModel @Inject constructor(
 
     fun getDiaries(zonedDateTime: ZonedDateTime? = null){
         dateIsSelected = zonedDateTime != null
-//        _diaries.value = RequestState.Loading
+        _diaries.value = RequestState.Loading
         if(dateIsSelected && zonedDateTime != null){
             observeFilteredDiaries(zonedDateTime = zonedDateTime)
         } else{
@@ -85,14 +78,13 @@ class DiariesViewModel @Inject constructor(
             }
         }
     }
-    @OptIn(FlowPreview::class)
     private fun observeAllDiaries(){
         allDiariesJob = viewModelScope.launch {
             if(::allFilteredDiariesJob.isInitialized){
                 allFilteredDiariesJob.cancelAndJoin()
             }
             if(user != null){
-                firestoreRepository.getDiaries().distinctUntilChanged()
+                firestoreRepository.getAllDiaries().distinctUntilChanged()
                     .collect{
                     _diaries.value = it
                 }
