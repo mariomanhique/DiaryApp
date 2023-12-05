@@ -108,6 +108,7 @@ fun DiaryContent(
     val destination = appState.currentTopLevelDestination
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val diaries = diariesViewModel.diaries.collectAsStateWithLifecycle().value
+    Log.d("Diary App", "DiaryContent: $diaries")
 
 
 

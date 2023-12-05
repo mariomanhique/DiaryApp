@@ -55,15 +55,14 @@ fun NavigationHost(
         signInRoute(
             onShowSnackbar = onShowSnackbar,
             navigateToHome = {
-                navController.navigateToHome()
-
+                appState.navigateToTopLevelDestination(TopLevelDestination.HOME)
             },
             navigateToSignUp = navController::navigateToSignUp,
             )
 
         signUpRoute(
             onShowSnackbar = onShowSnackbar,
-            navigateToHome = {destination->
+            navigateToHome = {
                  appState.navigateToTopLevelDestination(TopLevelDestination.HOME)
             },
             navigateToSignIn = navController::navigateToSignIn,

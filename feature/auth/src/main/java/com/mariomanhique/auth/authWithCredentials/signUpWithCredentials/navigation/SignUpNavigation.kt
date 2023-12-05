@@ -20,17 +20,14 @@ fun NavGraphBuilder.signUpRoute(
     destinations: List<TopLevelDestination>,
     navigateToSignIn:()->Unit,
 ){
-
     composable(
         route = signUpNavigationRoute
     ){
-
         SignUpWithCredentials(
             onShowSnackbar = onShowSnackbar,
             navigateToHome = navigateToHome,
             navigateToSignIn = navigateToSignIn,
             destinations = destinations
         )
-
     }
 }

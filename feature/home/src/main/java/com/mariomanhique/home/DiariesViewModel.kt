@@ -1,5 +1,6 @@
 package com.mariomanhique.home
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -59,7 +60,8 @@ class DiariesViewModel @Inject constructor(
 
     fun getDiaries(zonedDateTime: ZonedDateTime? = null){
         dateIsSelected = zonedDateTime != null
-        _diaries.value = RequestState.Loading
+//        _diaries.value = RequestState.Loading
+        Log.d("ViewModel", "getDiaries: ${_diaries.value}")
         if(dateIsSelected && zonedDateTime != null){
             observeFilteredDiaries(zonedDateTime = zonedDateTime)
         } else{
