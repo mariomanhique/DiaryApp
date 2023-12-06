@@ -57,7 +57,7 @@ internal fun SignUpWithCredentials(
     navigateToHome:(TopLevelDestination)->Unit,
     destinations: List<TopLevelDestination>,
     navigateToSignIn:()->Unit,
-    ){
+    ) {
 
     val scrollState = rememberScrollState()
     val state = viewModel.state.collectAsStateWithLifecycle().value
@@ -71,148 +71,155 @@ internal fun SignUpWithCredentials(
 
     val passwordVisibility = remember { mutableStateOf(false) }
 
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                   contentAlignment = Alignment.TopCenter
-            ) {
-                Image(painter = painterResource(id = com.mariomanhique.ui.R.drawable.logo), contentDescription = "")
 
-            }
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Image(
+                painter = painterResource(id = com.mariomanhique.ui.R.drawable.logo),
+                contentDescription = ""
+            )
+
+        }
 
 
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.70f)
+                .clip(RoundedCornerShape(30.dp))
+                .padding(10.dp)
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.70f)
-                    .clip(RoundedCornerShape(30.dp))
-                    .padding(10.dp)
-                    .verticalScroll(scrollState),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Sign Up", fontSize = 30.sp,
-                        style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 2.sp
-                        )
+                Text(
+                    text = "Sign Up", fontSize = 30.sp,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 2.sp
                     )
-                    Spacer(modifier = Modifier.padding(20.dp))
+                )
+                Spacer(modifier = Modifier.padding(20.dp))
 
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        OutlinedTextField(
-                            value = nameValue.value,
-                            onValueChange = { nameValue.value = it },
-                            label = { Text(text = "Name") },
-                            placeholder = { Text(text = "Name") },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth(0.8f)
-                        )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    OutlinedTextField(
+                        value = nameValue.value,
+                        onValueChange = { nameValue.value = it },
+                        label = { Text(text = "Name") },
+                        placeholder = { Text(text = "Name") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
 
-                        OutlinedTextField(
-                            value = emailValue.value,
-                            onValueChange = { emailValue.value = it },
-                            label = { Text(text = "Email Address") },
-                            placeholder = { Text(text = "Email Address") },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth(0.8f)
-                        )
+                    OutlinedTextField(
+                        value = emailValue.value,
+                        onValueChange = { emailValue.value = it },
+                        label = { Text(text = "Email Address") },
+                        placeholder = { Text(text = "Email Address") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
 
 
-                        OutlinedTextField(
-                            value = passwordValue.value,
-                            onValueChange = { passwordValue.value = it },
-                            label = { Text(text = "Password") },
-                            placeholder = { Text(text = "Password") },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth(0.8f),
-                            trailingIcon = {
-                                IconButton(onClick = {
-                                    passwordVisibility.value = !passwordVisibility.value
-                                }) {
-                                    Icon(
-                                        painter = painterResource(id = com.mariomanhique.ui.R.drawable.password_eye),
-                                        contentDescription = "",
-                                        tint = if (passwordVisibility.value) Color.White else Color.Gray
-                                    )
-                                }
-                            },
-                            visualTransformation = if (passwordVisibility.value) VisualTransformation.None
-                            else PasswordVisualTransformation()
-                        )
+                    OutlinedTextField(
+                        value = passwordValue.value,
+                        onValueChange = { passwordValue.value = it },
+                        label = { Text(text = "Password") },
+                        placeholder = { Text(text = "Password") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                passwordVisibility.value = !passwordVisibility.value
+                            }) {
+                                Icon(
+                                    painter = painterResource(id = com.mariomanhique.ui.R.drawable.password_eye),
+                                    contentDescription = "",
+                                    tint = if (passwordVisibility.value) Color.White else Color.Gray
+                                )
+                            }
+                        },
+                        visualTransformation = if (passwordVisibility.value) VisualTransformation.None
+                        else PasswordVisualTransformation()
+                    )
 
-                        Spacer(modifier = Modifier.padding(10.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
 
-                        LaunchedEffect(key1 = state.isSignInSuccessful) {
-                            if (state.isSignInSuccessful) {
-                                viewModel.signUpWithMongoAtlas(
-                                    email = emailValue.value,
-                                    password = passwordValue.value,
-                                    onSuccess = { isSingInSuccess ->
-                                        if (isSingInSuccess) {
+                    LaunchedEffect(key1 = state.isSignInSuccessful) {
+                        if (state.isSignInSuccessful) {
+                            viewModel.signUpWithMongoAtlas(
+                                email = emailValue.value,
+                                password = passwordValue.value,
+                                onSuccess = { isSingInSuccess ->
+                                    if (isSingInSuccess) {
 
-                                            viewModel.signInWithMongoAtlas(
-                                                emailValue.value,
-                                                passwordValue.value,
-                                                onSuccess = {
-                                                    scope.launch {
-                                                        onShowSnackbar("Sign Up Successfully",null)
-                                                        delay(500L)
-                                                    }
-                                                    navigateToHome(TopLevelDestination.HOME)
-                                                    viewModel.setLoading(false)
-                                                },
-                                                onError = {
-                                                    viewModel.setLoading(false)
-                                                    scope.launch {
-                                                        withContext(Dispatchers.Main){
-                                                            onShowSnackbar(it.message.toString(),null)
-                                                        }
+                                        viewModel.signInWithMongoAtlas(
+                                            emailValue.value,
+                                            passwordValue.value,
+                                            onSuccess = {
+                                                scope.launch {
+                                                    onShowSnackbar("Sign Up Successfully", null)
+                                                    delay(500L)
+                                                }
+                                                navigateToHome(TopLevelDestination.HOME)
+                                                viewModel.setLoading(false)
+                                            },
+                                            onError = {
+                                                viewModel.setLoading(false)
+                                                scope.launch {
+                                                    withContext(Dispatchers.Main) {
+                                                        onShowSnackbar(
+                                                            it.message.toString(),
+                                                            null
+                                                        )
                                                     }
                                                 }
-                                            )
+                                            }
+                                        )
 
-                                        }
-                                    },
-                                    onError = {
-                                        viewModel.setLoading(false)
-                                        //SnackBarHost
                                     }
-                                )
-                            }
+                                },
+                                onError = {
+                                    viewModel.setLoading(false)
+                                    //SnackBarHost
+                                }
+                            )
+                        }
+                        viewModel.resetState()
+                    }
+                    GoogleButton(
+                        primaryText = "Sign Up",
+                        loadingState = loadingState
+                    ) {
+                        if (emailValue.value.isNotEmpty() && passwordValue.value.isNotEmpty()) {
+                            viewModel.signUp(
+                                name = nameValue.value,
+                                email = emailValue.value,
+                                password = passwordValue.value
+                            )
+                            viewModel.setLoading(true)
                             viewModel.resetState()
                         }
-                        GoogleButton(
-                            primaryText = "Sign Up",
-                            loadingState = loadingState
-                        ) {
-                            if (emailValue.value.isNotEmpty() && passwordValue.value.isNotEmpty()) {
-                                viewModel.signUp(
-                                    name = nameValue.value,
-                                    email = emailValue.value,
-                                    password = passwordValue.value
-                                )
-                                viewModel.setLoading(true)
-                                viewModel.resetState()
-                            }
-                        }
-                        Spacer(modifier = Modifier.padding(20.dp))
-                        Text(
-                            text = "Login Instead",
-                            modifier = Modifier.clickable(onClick = {
-                                navigateToSignIn()
-                            })
-                        )
-                        Spacer(modifier = Modifier.padding(20.dp))
                     }
+                    Spacer(modifier = Modifier.padding(20.dp))
+                    Text(
+                        text = "Login Instead",
+                        modifier = Modifier.clickable(onClick = {
+                            navigateToSignIn()
+                        })
+                    )
+                    Spacer(modifier = Modifier.padding(20.dp))
                 }
             }
         }
+    }
 }

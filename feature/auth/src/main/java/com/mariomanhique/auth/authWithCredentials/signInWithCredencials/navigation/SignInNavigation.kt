@@ -29,10 +29,6 @@ fun NavGraphBuilder.signInRoute(
             onShowSnackbar = onShowSnackbar,
             navigateToHome = navigateToHome,
             navigateToSignUp = navigateToSignUp,
-            onFailedSignIn = {
-                Toast.makeText(context,"SignIn Failed, check", Toast.LENGTH_SHORT).show()
-            }
-
         )
     }
 }

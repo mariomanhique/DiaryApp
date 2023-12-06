@@ -16,6 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mariomanhique.util.model.RequestState
 import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 
@@ -24,27 +26,32 @@ import com.mariomanhique.firestore.repository.firebaseDB.Diaries
     diaries: Diaries,
     navigateToWriteWithArgs: (String)-> Unit,
     paddingValues: PaddingValues,
-    windowSizeClass: WindowSizeClass
+    windowSizeClass: WindowSizeClass,
+    viewModel: DiariesViewModel = hiltViewModel()
 
 ){
+
+    val diariesList = viewModel.diaries.collectAsStateWithLifecycle().value
+
+
     var padding by remember { mutableStateOf(PaddingValues()) }
 
                 padding = paddingValues
-                when (diaries) {
+                when (diariesList) {
                 is RequestState.Success -> {
                     Log.d("Home Content", "HomeScreen: Success")
                         when(windowSizeClass.widthSizeClass){
                             WindowWidthSizeClass.Compact -> {
                                 HomeContentPortrait(
                                     paddingValues = paddingValues,
-                                    diaryNotes = diaries.data,
+                                    diaryNotes = diariesList.data,
                                     onClick = navigateToWriteWithArgs
                                 )
                             }
                             WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> {
                                 HomeContentLandscape(
                                     paddingValues = paddingValues,
-                                    diaryNotes = diaries.data,
+                                    diaryNotes = diariesList.data,
                                     onClick = navigateToWriteWithArgs
                                 )
                             }
@@ -53,7 +60,7 @@ import com.mariomanhique.firestore.repository.firebaseDB.Diaries
                 is RequestState.Error -> {
                     EmptyPage(
                         title = "Error",
-                        subtitle = "${diaries.error.message}"
+                        subtitle = "${diariesList.error.message}"
                     )
                 }
                 is RequestState.Loading -> {

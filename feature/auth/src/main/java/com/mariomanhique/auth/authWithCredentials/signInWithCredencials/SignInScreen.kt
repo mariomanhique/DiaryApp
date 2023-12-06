@@ -21,12 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -44,11 +46,10 @@ import com.mariomanhique.ui.R
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 internal fun SignInScreen(
-    viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
+    navigateToHome: ()->Unit,
     navigateToSignUp:()->Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    onFailedSignIn: (Exception) -> Unit,
-    navigateToHome: ()->Unit
+    viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
 ) {
 
     var loadingState by viewModel.loadingState
@@ -63,7 +64,11 @@ internal fun SignInScreen(
     val passwordVisibility = remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ){
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -102,10 +107,9 @@ internal fun SignInScreen(
                         label = { Text(text = "Email Address") },
                         placeholder = { Text(text = "Email Address") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
-//                        onImeActionPerformed = { _, _ ->
-//                            focusRequester.requestFocus()
-//                        }
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .focusRequester(focusRequester = focusRequester),
                     )
 
                     OutlinedTextField(
@@ -130,10 +134,6 @@ internal fun SignInScreen(
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
                             .focusRequester(focusRequester = focusRequester),
-//                        onImeActionPerformed = { _, controller ->
-//                            controller?.hideSoftwareKeyboard()
-//                        }
-
                     )
 
 
@@ -156,6 +156,9 @@ internal fun SignInScreen(
                                     }
                                 },
                                 onError = {
+                                    scope.launch {
+                                        onShowSnackbar("Something wen wrong, check credentials",null)
+                                    }
                                     viewModel.setLoading(false)
                                 }
                             )
@@ -172,11 +175,7 @@ internal fun SignInScreen(
                     )
                     Spacer(modifier = Modifier.padding(20.dp))
                 }
-
-
             }
         }
-
     }
-
 }
