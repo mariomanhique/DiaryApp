@@ -3,6 +3,7 @@ package com.example.diaryapp.ui
 import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -124,7 +125,7 @@ fun DiaryContent(
             .semantics {
                 testTagsAsResourceId = true
             }
-//            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.surface)
 //            .navigationBarsPadding()
             .imePadding()
             .statusBarsPadding()

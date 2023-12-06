@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
     lateinit var imageRepository: ImageRepository
 
     private var keepSplashOpened = true
+
     val viewModel: MainActivityViewModel by viewModels()
 
 
