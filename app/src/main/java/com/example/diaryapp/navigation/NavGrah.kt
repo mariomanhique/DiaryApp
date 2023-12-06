@@ -47,8 +47,6 @@ fun NavigationGraph(
     startDestination:String,
     navController: NavHostController,
     onDataLoaded: () -> Unit,
-
-
 ){
     NavHost(
         startDestination = startDestination,

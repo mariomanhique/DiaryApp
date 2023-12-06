@@ -1,4 +1,0 @@
-/Users/mariomanhique/AndroidStudioProjects/DiaryApp/feature/connect/src/main/java/com/mariomanhique/connect/ConnectViewModel.kt
-/Users/mariomanhique/AndroidStudioProjects/DiaryApp/feature/connect/src/main/java/com/mariomanhique/connect/ConnectContent.kt
-/Users/mariomanhique/AndroidStudioProjects/DiaryApp/feature/connect/src/main/java/com/mariomanhique/connect/navigation/ConnectNavigation.kt
-/Users/mariomanhique/AndroidStudioProjects/DiaryApp/feature/connect/src/main/java/com/mariomanhique/connect/ConnectScreen.kt

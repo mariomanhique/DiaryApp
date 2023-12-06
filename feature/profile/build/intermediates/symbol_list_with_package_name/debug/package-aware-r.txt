@@ -1,7 +1,0 @@
-com.mariomanhique.profile
-drawable me
-string chooseAction
-string deleteAll
-string logout
-string placeholder
-string saveButton

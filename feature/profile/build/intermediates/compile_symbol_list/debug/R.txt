@@ -1,6 +1,0 @@
-int drawable me 0x0
-int string chooseAction 0x0
-int string deleteAll 0x0
-int string logout 0x0
-int string placeholder 0x0
-int string saveButton 0x0
