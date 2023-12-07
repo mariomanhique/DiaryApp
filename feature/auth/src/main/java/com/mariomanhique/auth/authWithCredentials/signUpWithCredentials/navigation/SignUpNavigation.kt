@@ -16,8 +16,7 @@ fun NavController.navigateToSignUp(navOptions: NavOptions? = null){
 }
 fun NavGraphBuilder.signUpRoute(
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    navigateToHome:(TopLevelDestination)->Unit,
-    destinations: List<TopLevelDestination>,
+    navigateToHome:()->Unit,
     navigateToSignIn:()->Unit,
 ){
     composable(
@@ -27,7 +26,6 @@ fun NavGraphBuilder.signUpRoute(
             onShowSnackbar = onShowSnackbar,
             navigateToHome = navigateToHome,
             navigateToSignIn = navigateToSignIn,
-            destinations = destinations
         )
     }
 }

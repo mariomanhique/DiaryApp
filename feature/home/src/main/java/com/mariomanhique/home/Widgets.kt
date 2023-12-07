@@ -153,7 +153,7 @@ fun NavigationDrawer(
                 ){
                     Image(
                         painter = painterResource(
-                            id = R.drawable.logo
+                            id = R.drawable.diary
                         ),
                         contentDescription ="",
                         modifier = Modifier.size(250.dp)
