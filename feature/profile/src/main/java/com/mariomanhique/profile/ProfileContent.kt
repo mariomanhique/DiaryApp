@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
@@ -64,6 +63,7 @@ import coil.request.ImageRequest
 import com.mariomanhique.ui.GalleryImage
 import com.mariomanhique.ui.components.ZoomableImage
 import com.mariomanhique.ui.theme.DiaryAppTheme
+import com.mariomanhique.profile.R
 
 @Composable
 fun ProfileContent(
@@ -235,7 +235,13 @@ fun UserDetailsCard(
 
     ){
 
-        val imageUri by remember { mutableStateOf(imageProfile) }
+        val imageUri by remember {
+            mutableStateOf(
+                if (imageProfile.toString().isEmpty()) R.drawable.profile
+                else imageProfile
+            )
+        }
+
 
 
         val multiplePhotoPicker = rememberLauncherForActivityResult(
@@ -279,9 +285,6 @@ fun UserDetailsCard(
                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                     )
                 }
-
-//            contentAlignment = Alignment.TopCenter
-
         ){
             Box(
                 modifier = Modifier
