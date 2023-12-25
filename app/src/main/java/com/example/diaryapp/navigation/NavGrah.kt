@@ -1,19 +1,17 @@
 package com.example.diaryapp.navigation
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
-import com.example.diaryapp.data.repository.firebaseDB.Diaries
 import com.example.diaryapp.presentation.screens.profile.ProfileViewModel
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInRoute
-import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.navigateToSignUp
-import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.signUpRoute
+import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
+import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.signInRoute
+import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signUpWithCredentials.navigation.navigateToSignUp
+import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signUpWithCredentials.navigation.signUpRoute
 import com.example.diaryapp.presentation.screens.home.navigation.homeRoute
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
+import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import com.example.diaryapp.presentation.screens.profile.navigation.profileRoute
 import writeRoute
 
@@ -37,10 +35,6 @@ fun NavigationHost(
     ){
 
         homeRoute(
-//            navigateToWrite = {
-//                navController.navigate(Screen.Write.route)
-//                Log.d("Route", "NavigationGraph: ${Screen.Write.route}")
-//            },
             navigateToAuth = {
                 navController.popBackStack()
                 navController.navigate(signInNavigationRoute)

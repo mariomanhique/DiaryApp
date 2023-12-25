@@ -63,9 +63,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.example.diaryapp.presentation.components.DisplayAlertDialog
-import com.example.diaryapp.presentation.screens.home.HomeViewModel
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWithCredentialsViewModel
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
+import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import com.example.diaryapp.presentation.screens.home.navigation.homeRoute
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -89,7 +88,7 @@ fun DiaryContent(
     windowSizeClass: WindowSizeClass,
     appState: DiaryAppState = rememberDiaryAppState(
         windowSizeClass = windowSizeClass),
-    homeViewModel: HomeViewModel = hiltViewModel(),
+//    homeViewModel: HomeViewModel = hiltViewModel(),
     authViewModel: AuthWithCredentialsViewModel = hiltViewModel(),
 ){
 
@@ -245,27 +244,27 @@ fun DiaryContent(
             deleteAllDialogOpened = false
             scope.launch(Dispatchers.IO) {
                 withContext(Dispatchers.Main){
-                    homeViewModel.deleteAllDiaries(
-                        onSuccess = {
-                            if(it){
-                                scope.launch {
-
-                                }
-                            }
-
-                        },
-                        onError = {error->
-
-                            scope.launch {
-                                if (error.message == "No internet connection."){
-                                    Toast.makeText(context,"You need internet connection " +
-                                            "to perform this action", Toast.LENGTH_SHORT).show()
-                                }else{
-                                    Toast.makeText(context,"${error.message}", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        }
-                    )
+//                    homeViewModel.deleteAllDiaries(
+//                        onSuccess = {
+//                            if(it){
+//                                scope.launch {
+//
+//                                }
+//                            }
+//
+//                        },
+//                        onError = {error->
+//
+//                            scope.launch {
+//                                if (error.message == "No internet connection."){
+//                                    Toast.makeText(context,"You need internet connection " +
+//                                            "to perform this action", Toast.LENGTH_SHORT).show()
+//                                }else{
+//                                    Toast.makeText(context,"${error.message}", Toast.LENGTH_SHORT).show()
+//                                }
+//                            }
+//                        }
+//                    )
                 }
             }
         }

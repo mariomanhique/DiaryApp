@@ -7,8 +7,6 @@ import com.example.diaryapp.data.database.entity.ImageToDelete
 import com.example.diaryapp.data.database.entity.ImageToUpload
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
-import io.realm.kotlin.types.RealmInstant
-import java.time.Instant
 
 fun fetchImagesFromFirebase(
     remoteImagePaths: List<String>,

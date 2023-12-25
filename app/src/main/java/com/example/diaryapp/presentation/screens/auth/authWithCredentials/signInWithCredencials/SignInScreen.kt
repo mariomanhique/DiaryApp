@@ -1,4 +1,4 @@
-package com.mariomanhique.auth.authWithCredentials.signInWithCredencials
+package com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials
 
 
 

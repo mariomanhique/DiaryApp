@@ -1,13 +1,11 @@
-package com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation
+package com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation
 
-import android.widget.Toast
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.SignInScreen
+import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.SignInScreen
 
 
 const val signInNavigationRoute = "sign_in_route"

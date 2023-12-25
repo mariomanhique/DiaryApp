@@ -11,19 +11,15 @@ import com.example.diaryapp.presentation.screens.auth.SignInState
 import com.example.diaryapp.presentation.screens.auth.UserData
 import com.google.firebase.auth.FirebaseAuthException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.kotlin.mongodb.User
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthWithCredentialsViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val profileRepository: ProfileRepository
 ):ViewModel() {
 
     private val _state = MutableStateFlow(SignInState())

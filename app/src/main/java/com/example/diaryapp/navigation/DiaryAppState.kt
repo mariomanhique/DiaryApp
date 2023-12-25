@@ -15,7 +15,7 @@ import com.example.diaryapp.presentation.screens.home.navigation.homeRoute
 import com.example.diaryapp.presentation.screens.home.navigation.navigateToHome
 import com.example.diaryapp.presentation.screens.profile.navigation.navigateToProfile
 import com.example.diaryapp.presentation.screens.profile.navigation.profile_route
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
+import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
 import navigateToWrite
 import write_navigation_route
 

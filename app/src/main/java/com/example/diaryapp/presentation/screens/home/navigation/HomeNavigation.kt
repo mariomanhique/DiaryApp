@@ -35,7 +35,6 @@ fun NavGraphBuilder.homeRoute(
 ){
 
     composable(route = homeRoute){
-
         val context = LocalContext.current
         val viewModel: HomeViewModel = hiltViewModel()
         val auth: AuthWithCredentialsViewModel = hiltViewModel()
@@ -48,17 +47,11 @@ fun NavGraphBuilder.homeRoute(
 
         HomeScreen(
             diaries = diaries,
-            drawerState = drawerState,
-            onSignOutClicked = {
-                dialogState = true
-            },
+
             onMenuClicked = {
                 scope.launch {
                     drawerState.open()
                 }
-            },
-            onDeleteDiariesClicked = {
-                deleteAllDialogOpened = true
             },
             navigateToWriteWithArgs = navigateToWriteWithArgs,
             dateIsSelected= viewModel.dateIsSelected,

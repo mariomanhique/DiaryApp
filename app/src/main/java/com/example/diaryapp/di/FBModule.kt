@@ -28,14 +28,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object FBModule {
 
-//
-//
-//    @Singleton
-//    @Provides
-//    fun provideFirebaseDatabase(): DatabaseReference
-//            = FirebaseDatabase.getInstance().reference
-
-
 
     @Singleton
     @Provides

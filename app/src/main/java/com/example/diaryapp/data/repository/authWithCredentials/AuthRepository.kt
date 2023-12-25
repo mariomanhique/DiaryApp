@@ -1,7 +1,6 @@
 package com.example.diaryapp.data.repository.authWithCredentials
 
 import com.google.firebase.auth.FirebaseUser
-import io.realm.kotlin.mongodb.User
 
 interface AuthRepository {
 

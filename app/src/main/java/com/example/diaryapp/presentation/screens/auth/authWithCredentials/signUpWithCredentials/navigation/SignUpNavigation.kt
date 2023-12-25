@@ -1,4 +1,4 @@
-package com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation
+package com.example.diaryapp.presentation.screens.auth.authWithCredentials.signUpWithCredentials.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

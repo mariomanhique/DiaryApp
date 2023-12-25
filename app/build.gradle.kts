@@ -3,7 +3,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("io.realm.kotlin")
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
@@ -60,7 +59,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -79,11 +77,8 @@ dependencies {
 
     //Hilt-Dagger
     implementation("com.google.dagger:hilt-android:2.48.1")
-//    annotationProcessor("com.google.dagger:hilt-compiler:2.48.1")
-//    ksp("com.google.dagger:hilt-android-compiler:2.48.1")
-//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     ksp("com.google.dagger:hilt-compiler:2.48.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
@@ -97,13 +92,6 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation ("com.google.firebase:firebase-auth:22.3.0")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
-//
-
-    //Message Bar Compose
-    implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
-
-    //One Tap Compose
-    implementation("com.github.stevdza-san:OneTapCompose:1.0.7")
 
     // Pager - Accompanist
     implementation("com.google.accompanist:accompanist-pager:0.27.0")
@@ -113,13 +101,6 @@ dependencies {
 
     //Google Auth
     implementation("com.google.android.gms:play-services-auth:20.7.0")
-
-    //Mongo DB Realm
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt"){
-        version {
-            strictly("1.6.0-native-mt")
-        }
-    }
 
     implementation("io.realm.kotlin:library-base:1.10.0")
 
@@ -144,7 +125,6 @@ dependencies {
     //Fonts
     implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
 
-
     // Date-Time Picker
     implementation ("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
 
@@ -154,8 +134,7 @@ dependencies {
     // CLOCK
     implementation ("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
 
-   implementation("androidx.compose.material3:material3-window-size-class")
-
+    implementation("androidx.compose.material3:material3-window-size-class")
     implementation("androidx.tracing:tracing-ktx:1.1.0")
 
 

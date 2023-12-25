@@ -2,22 +2,21 @@ package com.example.diaryapp.data.repository.authWithCredentials
 
 
 import com.example.diaryapp.data.repository.authWithCredentials.utils.await
-import com.example.diaryapp.util.Constants
+import com.example.diaryapp.presentation.screens.auth.UserData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import io.realm.kotlin.mongodb.App
-import io.realm.kotlin.mongodb.Credentials
-import io.realm.kotlin.mongodb.User
-import kotlinx.coroutines.runBlocking
+import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
 
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore
 ): AuthRepository {
 
+    val ref = firestore.collection("profile")
     override val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
     override suspend fun signIn(email: String, password: String): FirebaseUser? {
@@ -37,6 +36,16 @@ class AuthRepositoryImpl @Inject constructor(
 
             val result = firebaseAuth.createUserWithEmailAndPassword(email,password).await().user
             result?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())
+
+            result?.uid?.let {userId->
+                ref.document(userId).set(
+                    UserData(
+                        userId,
+                        username = name,
+                        profilePictureUrl = ""
+                    )
+                )
+            }
 
             result
 

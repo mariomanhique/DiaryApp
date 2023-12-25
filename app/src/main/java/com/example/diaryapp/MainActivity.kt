@@ -14,16 +14,12 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.diaryapp.navigation.Screen
 import com.example.diaryapp.ui.theme.DiaryAppTheme
 import com.example.diaryapp.util.retryDeletingImageFromFirebase
 import com.example.diaryapp.util.retryUploadingImageToFirebase
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 import com.example.diaryapp.data.repository.imageRepo.ImageRepository
 import com.example.diaryapp.navigation.DiaryApp
-import com.example.diaryapp.presentation.screens.home.navigation.homeRoute
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -104,12 +100,5 @@ private fun cleanupCheck(
                 )
             }
         }
-
     }
-}
-
-private fun getStartDestination():String{
-    val user = FirebaseAuth.getInstance().currentUser
-    return if(user!=null) homeRoute
-    else signInNavigationRoute
 }

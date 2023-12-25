@@ -1,7 +1,6 @@
 package com.example.diaryapp.presentation.screens.write
 
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
