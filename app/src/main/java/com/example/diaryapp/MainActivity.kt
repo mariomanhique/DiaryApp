@@ -6,24 +6,28 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.compose.rememberNavController
-import com.example.diaryapp.data.database.ImageToUploadDao
-import com.example.diaryapp.navigation.NavigationGraph
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.diaryapp.navigation.Screen
 import com.example.diaryapp.ui.theme.DiaryAppTheme
 import com.example.diaryapp.util.retryDeletingImageFromFirebase
 import com.example.diaryapp.util.retryUploadingImageToFirebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.example.diaryapp.data.database.ImageToDeleteDao
 import com.example.diaryapp.data.repository.imageRepo.ImageRepository
+import com.example.diaryapp.navigation.DiaryApp
+import com.example.diaryapp.presentation.screens.home.navigation.homeRoute
+import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,8 +39,15 @@ class MainActivity : ComponentActivity() {
     lateinit var imageRepository: ImageRepository
 
     private var keepSplashOpened = true
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+               delay(500L)
+                keepSplashOpened = false
+            }
+        }
         installSplashScreen().setKeepOnScreenCondition{
             keepSplashOpened
         }
@@ -48,15 +59,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.surface
                 ) {
-                    val navController = rememberNavController()
                     //The startDestination is hard coded now, but then we will dynamically calculate based on user event
-                    NavigationGraph(
-                       startDestination = getStartDestination(),
-                        navController = navController,
-                        onDataLoaded = {
-                            keepSplashOpened = false
-                        }
-                    )
+                    DiaryApp(windowSizeClass = calculateWindowSizeClass(activity = this))
                 }
             }
         }
@@ -106,6 +110,6 @@ private fun cleanupCheck(
 
 private fun getStartDestination():String{
     val user = FirebaseAuth.getInstance().currentUser
-    return if(user!=null) Screen.Home.route
-    else Screen.SignIn.route
+    return if(user!=null) homeRoute
+    else signInNavigationRoute
 }

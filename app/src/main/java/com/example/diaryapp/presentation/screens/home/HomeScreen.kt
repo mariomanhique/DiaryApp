@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
@@ -36,9 +35,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.diaryapp.data.repository.firebaseDB.Diaries
 import com.example.diaryapp.model.RequestState
-import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWithCredentialsViewModel
 import com.example.diaryapp.widgets.DiaryAppBar
 import com.example.diaryapp.widgets.NavigationDrawer
+import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWithCredentialsViewModel
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,13 +48,11 @@ fun HomeScreen(
     drawerState: DrawerState,
     onSignOutClicked: ()-> Unit,
     onMenuClicked: ()-> Unit,
-    onNavigateToWrite: ()-> Unit,
     onDeleteDiariesClicked: () -> Unit,
     navigateToWriteWithArgs: (String)-> Unit,
     dateIsSelected: Boolean,
     onDateSelected: (ZonedDateTime) -> Unit,
     onDateReset: () -> Unit,
-    viewModel: AuthWithCredentialsViewModel = hiltViewModel()
 ){
 
     val scope = rememberCoroutineScope()
@@ -78,7 +75,7 @@ fun HomeScreen(
                 DiaryAppBar(
                     title = "My Diary",
                     navigationIcon = Icons.Default.Menu,
-                    actionIcon = Icons.Default.DateRange,
+//                    actionIcon = Icons.Default.DateRange,
                     scrollBehavior = scrollBehavior,
                     dateIsSelected = dateIsSelected,
                     onDateSelected = onDateSelected,
@@ -86,24 +83,7 @@ fun HomeScreen(
                     onMenuClicked = {
                         onMenuClicked()
                     })
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    modifier= Modifier.padding(end = padding.calculateEndPadding(LayoutDirection.Ltr)),
-                    onClick = onNavigateToWrite
-                ) {
-                    Box(
-                        modifier = Modifier.clip(CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-
-                        Icon(
-                            imageVector = Icons.Default.Add ,
-                            contentDescription ="")
-
-                    }
-                }
-            },
+            }
             ){
 
                 padding = it

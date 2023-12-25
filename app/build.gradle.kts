@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.example.diaryapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.diaryapp"
@@ -57,21 +57,18 @@ android {
         }
     }
 
-//    kapt {
-//        correctErrorTypes = true
-//    }
 }
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.1.1")
+    implementation("androidx.compose.material3:material3:1.1.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -88,20 +85,19 @@ dependencies {
     ksp("com.google.dagger:hilt-compiler:2.48.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
-    implementation("androidx.room:room-runtime:2.5.2")
-    annotationProcessor("androidx.room:room-compiler:2.5.2")
-    ksp("androidx.room:room-compiler:2.5.2")
-    implementation("androidx.room:room-ktx:2.5.2")
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
 
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
 
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-analytics")
 
-    implementation("com.google.firebase:firebase-storage")
-    implementation("com.google.firebase:firebase-database-ktx")
-    implementation ("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")
-
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation ("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
+//
 
     //Message Bar Compose
     implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
@@ -116,7 +112,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
 
     //Google Auth
-    implementation("com.google.android.gms:play-services-auth:20.6.0")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     //Mongo DB Realm
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt"){
@@ -133,20 +129,20 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     //Compose Navigation
-    implementation("androidx.navigation:navigation-compose:2.5.0")
+    implementation("androidx.navigation:navigation-compose:2.7.6")
 
     //Desugar JDK
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
     //Coroutine lifecycle scope
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
     //Fonts
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.4.3")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
 
 
     // Date-Time Picker
@@ -157,6 +153,12 @@ dependencies {
 
     // CLOCK
     implementation ("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
+
+   implementation("androidx.compose.material3:material3-window-size-class")
+
+    implementation("androidx.tracing:tracing-ktx:1.1.0")
+
+
 
 
 }

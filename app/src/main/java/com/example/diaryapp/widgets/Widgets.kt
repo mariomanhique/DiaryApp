@@ -59,10 +59,10 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryAppBar(
-    title: String,
     modifier: Modifier=Modifier,
+    title: String,
+    isProfileDestination: Boolean = true,
     navigationIcon: ImageVector,
-    actionIcon: ImageVector,
     scrollBehavior: TopAppBarScrollBehavior,
     onMenuClicked: ()->Unit,
     dateIsSelected: Boolean,
@@ -78,7 +78,6 @@ fun DiaryAppBar(
         scrollBehavior = scrollBehavior,
         title = {
             Column(modifier =  modifier.fillMaxWidth()) {
-
                 Text(
                     text = title,
                     fontFamily = fontFamily(
@@ -88,59 +87,57 @@ fun DiaryAppBar(
                     )
                 )
             }
-
         },
-        navigationIcon = {
-            IconButton(
-                onClick = {
-                    onMenuClicked()
-                }) {
-                Icon(imageVector = navigationIcon,
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onSurface
-
-                    )
-
-            }
-        },
+//        navigationIcon = {
+//            IconButton(
+//                onClick = {
+//                    onMenuClicked()
+//                }) {
+//                Icon(imageVector = navigationIcon,
+//                    contentDescription = "",
+//                    tint = MaterialTheme.colorScheme.onSurface
+//
+//                    )
+//            }
+//        },
         actions = {
-
-            if(dateIsSelected){
-                IconButton(onClick = onDateReset) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close Icon",
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
+            if(isProfileDestination){
+                if(dateIsSelected){
+                    IconButton(onClick = onDateReset) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Close Icon",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }else{
+                    IconButton(onClick = {
+                        dialogState.show()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Date Icon",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }
-            }else{
-                IconButton(onClick = {
-                    dialogState.show()
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Date Icon",
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
+            }else{}
         }
-
     )
 
     CalendarDialog(
         state = dialogState,
-        selection =CalendarSelection.Date{localDate->
-        pickedDate = localDate
-        onDateSelected(
-            ZonedDateTime.of(
-                pickedDate,
-                LocalTime.now(),
-                ZoneId.systemDefault()
+        selection = CalendarSelection.Date{localDate->
+            pickedDate = localDate
+            onDateSelected(
+                ZonedDateTime.of(
+                    pickedDate,
+                    LocalTime.now(),
+                    ZoneId.systemDefault()
+                )
             )
-        )
-    },
-        config = CalendarConfig(monthSelection = true, yearSelection = true)
+        },
+        config = CalendarConfig(monthSelection = true, yearSelection = true),
     )
 }
 

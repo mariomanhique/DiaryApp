@@ -17,10 +17,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
@@ -37,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -48,6 +51,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.diaryapp.model.Diary
 import com.example.diaryapp.model.Mood
 import com.example.diaryapp.ui.theme.Elevation
@@ -132,7 +137,7 @@ fun DiaryHolder(
     var localDensity = LocalDensity.current
     var context = LocalContext.current
     var componentHeight by remember { mutableStateOf(0.dp) }
-    var galleryOpened by rememberSaveable { mutableStateOf(false) }
+    var galleryOpened by rememberSaveable { mutableStateOf(true) }
     var galleryLoading by remember { mutableStateOf(false) }
     val downloadedImages = remember { mutableStateListOf<Uri>() }
 
@@ -156,7 +161,7 @@ fun DiaryHolder(
                 },
                 onReadyToDisplay = {
                     galleryLoading = false
-                    galleryOpened = true
+//                    galleryOpened = true
                 }
             )
         }
@@ -207,6 +212,24 @@ fun DiaryHolder(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(14.dp)
                 )
+
+                if (downloadedImages.isNotEmpty()){
+                    AsyncImage(
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .fillMaxWidth()
+                            .heightIn(min = 250.dp, max = 250.dp)
+                            .clip(RoundedCornerShape(5.dp))
+                        ,
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(downloadedImages.first())
+                            .crossfade(true)
+                            .build(),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = "Gallery Image"
+                    )
+
+                }
 
                 if(diary.imagesList.isNotEmpty()){
                     ShowGalleryButton(

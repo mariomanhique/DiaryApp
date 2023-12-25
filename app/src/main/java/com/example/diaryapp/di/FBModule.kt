@@ -13,6 +13,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.example.diaryapp.data.database.ImagesDatabase
+import com.example.diaryapp.data.repository.profileRepository.ProfileRepository
+import com.example.diaryapp.data.repository.profileRepository.ProfileRepositoryImpl
 import com.example.diaryapp.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -85,4 +87,10 @@ object FBModule {
     @Provides
     fun provideImageToDeleteDao(imageDatabase: ImagesDatabase)
             = imageDatabase.imageToDeleteDao()
+
+    @Singleton
+    @Provides
+    fun provideProfileRepository(profileRepository: ProfileRepositoryImpl): ProfileRepository {
+        return profileRepository
+    }
 }

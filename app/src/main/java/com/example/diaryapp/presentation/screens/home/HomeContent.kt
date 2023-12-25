@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -73,6 +77,54 @@ fun HomeContent(
             }
         }
     } else {
+        EmptyPage()
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun HomeContentLandscape(
+    paddingValues: PaddingValues,
+    diaryNotes: Map<LocalDate, List<Diary>>,
+    onClick: (String) -> Unit,
+){
+    if(diaryNotes.isNotEmpty()){
+        LazyVerticalGrid(
+            contentPadding = paddingValues,
+            columns = GridCells.Adaptive(230.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp)
+                .navigationBarsPadding()
+                .padding(top = paddingValues.calculateTopPadding())
+                .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
+                .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr))
+        ){
+            diaryNotes.forEach {(localDate, diaries) ->
+
+                item(
+                    span = {
+                        GridItemSpan(maxLineSpan)
+                    },
+                    key = localDate
+                ) {
+                    DateHeader(localDate = localDate)
+                }
+                items(
+                    items = diaries,
+                    key = {
+                        it.id
+                    }
+                ){
+                    DiaryHolder(
+                        modifier = Modifier,
+                        diary = it,
+                        onClick = onClick
+                    )
+                }
+            }
+        }
+    }else{
         EmptyPage()
     }
 }

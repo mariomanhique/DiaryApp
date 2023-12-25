@@ -3,7 +3,7 @@
     <style name="Theme.DiaryApp.MySplash" parent="Theme.SplashScreen">
 
         <item name="windowSplashScreenBackground">#1B1C2C</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/diary</item>
         <item name="postSplashScreenTheme">@style/Theme.DiaryApp</item>
         <!--Meaning- Whenever the splash screens completes we will then get back to our root theme-->
     </style>

@@ -9,6 +9,8 @@
 
     <string name="home">Home</string>
 
+    <string name="profile">Profile</string>
+
 
     <string name="memories">Memories</string>
 
@@ -17,6 +19,15 @@
 
     <string name="title">What\'s affecting your mood?</string>
     <string name="description">Let\'s write about it</string>
+
+    <string name="placeholder">Username</string>
+    <string name="saveButton">Save</string>
+    <string name="deleteAll">Delete all diaries</string>
+    <string name="logout">Log out</string>
+    <string name="chooseAction">Choose</string>
+
+    <string name="deleteAction">Delete</string>
+
 
 
 <!--    <string name="navigate_up">Navigate up</string>-->

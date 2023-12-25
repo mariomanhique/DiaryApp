@@ -2,8 +2,11 @@ package com.example.diaryapp.model
 
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.core.net.toUri
 
 //will allow to remember GalleryState across multiple recompositions
 @Composable
@@ -14,6 +17,8 @@ fun rememberGalleryState(): GalleryState {
 class GalleryState {
     val images = mutableStateListOf<GalleryImage>()
     val imagesToBeDeleted = mutableStateListOf<GalleryImage>()
+    val image: MutableState<GalleryImage> = mutableStateOf(GalleryImage("".toUri(),""))
+
 
     fun addImage(galleryImage: GalleryImage) {
         images.add(galleryImage)
@@ -23,6 +28,11 @@ class GalleryState {
         images.remove(galleryImage)
         imagesToBeDeleted.add(galleryImage)
     }
+
+    fun addImageProfile(galleryImage: GalleryImage) {
+        image.value = galleryImage
+    }
+
 
     fun clearImagesToBeDeleted(){
         imagesToBeDeleted.clear()

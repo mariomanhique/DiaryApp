@@ -1,17 +1,16 @@
 package com.example.diaryapp.presentation.screens.auth.authWithCredentials
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.diaryapp.data.repository.authWithCredentials.AuthRepository
+import com.example.diaryapp.data.repository.profileRepository.ProfileRepository
 import com.example.diaryapp.presentation.screens.auth.SignInResult
 import com.example.diaryapp.presentation.screens.auth.SignInState
 import com.example.diaryapp.presentation.screens.auth.UserData
-import com.example.diaryapp.util.Constants.App_ID
 import com.google.firebase.auth.FirebaseAuthException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.kotlin.mongodb.App
-import io.realm.kotlin.mongodb.Credentials
 import io.realm.kotlin.mongodb.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,11 +23,13 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthWithCredentialsViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository
 ):ViewModel() {
 
     private val _state = MutableStateFlow(SignInState())
-     var loadingState = mutableStateOf(false)
-          private set
+    val user = authRepository.currentUser
+    var loadingState = mutableStateOf(false)
+        private set
 
     val state = _state.asStateFlow()
 
@@ -36,17 +37,6 @@ class AuthWithCredentialsViewModel @Inject constructor(
     fun setLoading(loading:Boolean){
         loadingState.value = loading
     }
-    fun getMongoUser(): User {
-        return authRepository.mongoCurrentUser!!
-    }
-    fun getCurrentUser() = authRepository.currentUser?.run {
-        UserData(
-            userId = uid,
-            username = displayName,
-            profilePictureUrl = null
-        )
-    }
-
 
     private fun onSignInResult(result: SignInResult){
         _state.update { it.copy(
@@ -68,41 +58,40 @@ class AuthWithCredentialsViewModel @Inject constructor(
         onError: (Exception) -> Unit
     )= viewModelScope.launch {
 
-         val result = try {
+        val result = try {
 
-             val user = authRepository.signIn(email,password)
+            val user = authRepository.signIn(email,password)
 
-             if ( user!= null){
-                 onSuccess()
-                 SignInResult(
-                     data = user?.run {
-                         UserData(
-                             userId = uid,
-                             username = displayName,
-                             profilePictureUrl = photoUrl.toString()
-                         )
-                     },
-                     errorMessage = null
-                 )
-             }else{
-                 onError(Exception("Error authenticating user"))
-                 SignInResult(
-                     null,
-                     errorMessage = Exception("Error authenticating user").message
-                 )
-             }
-
-
-
-            }catch (e: FirebaseAuthException){
-              e.printStackTrace()
-//              if(e is CancellationException) throw e
-              SignInResult(
-                    null,
-                    errorMessage = e.message
+            if ( user!= null){
+                onSuccess()
+                SignInResult(
+                    data = user.run {
+                        UserData(
+                            userId = uid,
+                            username = displayName.toString(),
+                            profilePictureUrl = photoUrl.toString()
+                        )
+                    },
+                    errorMessage = null
                 )
-
+            }else{
+                onError(Exception("Error authenticating user"))
+                SignInResult(
+                    null,
+                    errorMessage = Exception("Error authenticating user").message
+                )
             }
+
+
+
+        }catch (e: FirebaseAuthException){
+            e.printStackTrace()
+            SignInResult(
+                null,
+                errorMessage = e.message
+            )
+
+        }
 
         onSignInResult(result = result)
     }
@@ -112,17 +101,21 @@ class AuthWithCredentialsViewModel @Inject constructor(
         val result = try {
 
             val user = authRepository.signUp(email=email, password = password,name=name)
+            run {
+                Log.d("SignUp", "signUp: ${user?.displayName} ")
+                SignInResult(
+                    data = user?.run {
+                        UserData(
+                            userId = uid,
+                            username = displayName.toString(),
+                            profilePictureUrl = photoUrl.toString()
+                        )
+                    },
+                    errorMessage = null
+                )
+            }
 
-            SignInResult(
-                data = user?.run {
-                    UserData(
-                        userId = uid,
-                        username = displayName,
-                        profilePictureUrl = photoUrl.toString()
-                    )
-                },
-                errorMessage = null
-            )
+
         }catch (e: FirebaseAuthException){
             e.printStackTrace()
 //            if(e is CancellationException) throw e
@@ -134,66 +127,13 @@ class AuthWithCredentialsViewModel @Inject constructor(
         onSignInResult(result = result)
     }
 
-    fun signInWithMongoAtlas(
-          email: String,
-          password: String,
-          onSuccess: () -> Unit,
-          onError: (Exception) -> Unit,
-        ){
+
+    fun signOut(){
         viewModelScope.launch {
-            try {
-                val result = authRepository
-                    .mongoSignIn(
-                        email = email,
-                        password = password
-                        )?.loggedIn
-             withContext(Dispatchers.Main) {
-                 if(result==true){
-                     onSuccess()
-                 }
-             }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onError(e)
-                }
-            }
+            authRepository.logout()
         }
     }
 
-    fun signUpWithMongoAtlas(
-        email: String,
-        password: String,
-        onSuccess: (Boolean) -> Unit,
-        onError: (Exception) -> Unit,
-    ) {
-        viewModelScope.launch {
 
-
-          try {
-              authRepository.mongoSignUp(
-                  email = email,
-                  password = password
-              )
-              withContext(Dispatchers.Main){
-                   onSuccess(true)//TODO change this to a dynamic value
-
-              }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onError(e)
-                }
-            }
-        }
-    }
-
-     fun signOut(){
-        authRepository.logout()
-    }
-
-    private fun signOutFromMongo(){
-        viewModelScope.launch {
-            authRepository.logoutFromMongo()
-        }
-    }
 
 }

@@ -16,14 +16,10 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val mongoAuth: App.Companion
 ): AuthRepository {
 
     override val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
-    override val mongoCurrentUser: User?
-        get() = mongoAuth.create(Constants.App_ID).currentUser
-
     override suspend fun signIn(email: String, password: String): FirebaseUser? {
       return try{
 
@@ -50,30 +46,8 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun mongoSignIn(email: String, password: String): User?{
-        return mongoAuth
-            .create(Constants.App_ID)
-            .login(Credentials.emailPassword(
-               email = email,
-                password = password
-            ))
-    }
-
-    override suspend fun mongoSignUp(email: String, password: String) {
-        runBlocking {
-            mongoAuth.create(Constants.App_ID)
-                .emailPasswordAuth.registerUser(email = email, password = password)
-        }
-
-
-
-    }
-
     override fun logout() {
         firebaseAuth.signOut()
     }
 
-    override suspend fun logoutFromMongo() {
-        mongoAuth.create(Constants.App_ID).currentUser?.logOut()
-    }
 }

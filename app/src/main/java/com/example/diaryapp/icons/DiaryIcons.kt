@@ -3,6 +3,7 @@ package com.example.diaryapp.icons
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -21,10 +22,8 @@ object DiaryIcons {
     val googleLogo = R.drawable.google_logo
     val Home = Icons.Rounded.Home
     val HomeBorder = Icons.Outlined.Home
-    val memories = Icons.Rounded.Favorite
-    val memoriesBorder = Icons.Rounded.FavoriteBorder
-    val SettingsBorder = Icons.Outlined.Settings
-    val Settings = Icons.Rounded.Settings
+    val ProfileBorder = Icons.Outlined.Person
+    val Profile = Icons.Rounded.Person
 
     //EMOJIS
     val Angry = R.drawable.angry

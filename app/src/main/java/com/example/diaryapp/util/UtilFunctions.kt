@@ -34,6 +34,22 @@ fun fetchImagesFromFirebase(
     }
 }
 
+fun fetchImageFromFirebase(
+    remoteImagePath: String,
+    onImageDownload: (Uri) -> Unit,
+    onImageDownloadFailed:(Exception) -> Unit,
+    onReadyToDisplay: () -> Unit
+){
+    if(remoteImagePath.trim().isNotEmpty()){
+        FirebaseStorage.getInstance().reference.child(remoteImagePath.trim()).downloadUrl
+            .addOnSuccessListener{
+                onImageDownload(it)
+            }.addOnFailureListener{
+                onImageDownloadFailed(it)
+            }
+    }
+}
+
 fun retryUploadingImageToFirebase(
     imageToUpload: ImageToUpload,
     onSuccess: () -> Unit

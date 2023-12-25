@@ -1,15 +1,15 @@
 package com.example.diaryapp.data.repository.firebaseDB
 
 import android.util.Log
+import com.example.diaryapp.data.repository.authWithCredentials.AuthRepository
 import com.example.diaryapp.model.Diary
 import com.example.diaryapp.model.RequestState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.snapshots
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.ktx.toObjects
-import io.realm.kotlin.types.RealmInstant
+import com.google.firebase.firestore.snapshots
+import com.google.firebase.firestore.toObject
+import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -17,17 +17,18 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.tasks.await
-import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.Date
 import javax.inject.Inject
 
-class FirestoreDB @Inject constructor(private val firestore: FirebaseFirestore): FirestoreRepository {
+class FirestoreDB @Inject constructor(
+    private val firestore: FirebaseFirestore,
+    private val authRepository: AuthRepository,
+): FirestoreRepository {
 
     private lateinit var updatedDiary: RequestState<String>
-    private val user = FirebaseAuth.getInstance().currentUser
+    private val user = authRepository.currentUser
     private val ref = firestore.collection("diary")
 
     override fun getDiaries(): Flow<Diaries>{
