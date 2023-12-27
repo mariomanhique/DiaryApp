@@ -4,7 +4,6 @@ import android.util.Log
 import com.example.diaryapp.data.repository.authWithCredentials.AuthRepository
 import com.example.diaryapp.model.Diary
 import com.example.diaryapp.model.RequestState
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.snapshots

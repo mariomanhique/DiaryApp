@@ -25,8 +25,10 @@
     <string name="deleteAll">Delete all diaries</string>
     <string name="logout">Log out</string>
     <string name="chooseAction">Choose</string>
-
     <string name="deleteAction">Delete</string>
+    <string name="not_connected">⚠️ You aren’t connected to the internet</string>
+    <string name="online"> ✅ You are online</string>
+
 
 
 

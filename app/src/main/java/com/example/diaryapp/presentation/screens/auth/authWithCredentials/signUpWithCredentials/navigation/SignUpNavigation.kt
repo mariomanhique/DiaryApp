@@ -14,6 +14,7 @@ fun NavController.navigateToSignUp(navOptions: NavOptions? = null){
 }
 fun NavGraphBuilder.signUpRoute(
     onShowSnackbar: suspend (String, String?) -> Boolean,
+    isNetworkAvailable: Boolean,
     navigateToHome:()->Unit,
     navigateToSignIn:()->Unit,
 ){
@@ -22,6 +23,7 @@ fun NavGraphBuilder.signUpRoute(
     ){
         SignUpWithCredentials(
             onShowSnackbar = onShowSnackbar,
+            isNetworkAvailable = isNetworkAvailable,
             navigateToHome = navigateToHome,
             navigateToSignIn = navigateToSignIn,
         )

@@ -1,11 +1,14 @@
 package com.example.diaryapp.presentation.screens.auth.authWithCredentials
 
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.diaryapp.connectivity.ConnectivityObserver.Status.Unavailable
+import com.example.diaryapp.connectivity.NetworkConnectivityObserver
 import com.example.diaryapp.data.repository.authWithCredentials.AuthRepository
-import com.example.diaryapp.data.repository.profileRepository.ProfileRepository
 import com.example.diaryapp.presentation.screens.auth.SignInResult
 import com.example.diaryapp.presentation.screens.auth.SignInState
 import com.example.diaryapp.presentation.screens.auth.UserData
@@ -20,14 +23,25 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthWithCredentialsViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val connectivity: NetworkConnectivityObserver,
 ):ViewModel() {
 
+    private var _network by mutableStateOf(Unavailable)
+    val network = _network
     private val _state = MutableStateFlow(SignInState())
     val user = authRepository.currentUser
     var loadingState = mutableStateOf(false)
         private set
 
     val state = _state.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            connectivity.observe().collect{
+                _network = it
+            }
+        }
+    }
 
 
     fun setLoading(loading:Boolean){
@@ -55,7 +69,6 @@ class AuthWithCredentialsViewModel @Inject constructor(
     )= viewModelScope.launch {
 
         val result = try {
-
             val user = authRepository.signIn(email,password)
 
             if ( user!= null){
@@ -78,8 +91,6 @@ class AuthWithCredentialsViewModel @Inject constructor(
                 )
             }
 
-
-
         }catch (e: FirebaseAuthException){
             e.printStackTrace()
             SignInResult(
@@ -88,8 +99,7 @@ class AuthWithCredentialsViewModel @Inject constructor(
             )
 
         }
-
-        onSignInResult(result = result)
+            onSignInResult(result = result)
     }
 
     fun signUp(name:String,email:String,password: String) = viewModelScope.launch {

@@ -36,6 +36,7 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -44,6 +45,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,7 +54,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -60,8 +61,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import com.example.diaryapp.R
+import com.example.diaryapp.connectivity.ConnectivityObserver
+import com.example.diaryapp.connectivity.NetworkConnectivityObserver
 import com.example.diaryapp.presentation.components.DisplayAlertDialog
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWithCredentialsViewModel
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
@@ -73,9 +78,12 @@ import kotlinx.coroutines.withContext
 @Composable
 fun DiaryApp(
     windowSizeClass: WindowSizeClass,
+    connectivity: NetworkConnectivityObserver,
+
 ){
     DiaryContent(
-        windowSizeClass = windowSizeClass
+        windowSizeClass = windowSizeClass,
+        connectivity = connectivity
     )
 }
 
@@ -86,23 +94,64 @@ fun DiaryApp(
 @Composable
 fun DiaryContent(
     windowSizeClass: WindowSizeClass,
+    connectivity: NetworkConnectivityObserver,
+
     appState: DiaryAppState = rememberDiaryAppState(
-        windowSizeClass = windowSizeClass),
-//    homeViewModel: HomeViewModel = hiltViewModel(),
-    authViewModel: AuthWithCredentialsViewModel = hiltViewModel(),
+        windowSizeClass = windowSizeClass,
+        connectivity = connectivity,
+
+    ),
+        authViewModel: AuthWithCredentialsViewModel = hiltViewModel(),
 ){
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val destination = appState.currentTopLevelDestination
+    val isOffline by appState.isOffline.collectAsStateWithLifecycle()
+    var isNetworkAvailable by remember {
+        mutableStateOf(true)
+    }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-
 
     val user = authViewModel.user
     var signOutDialogState by remember { mutableStateOf(false) }
     var deleteAllDialogOpened by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
+    val notConnectedMessage = stringResource(R.string.not_connected)
+    val connectedMessage = stringResource(R.string.online)
+    LaunchedEffect(key1 = isOffline){
+        when(isOffline){
+            ConnectivityObserver.Status.Available -> {
+                isNetworkAvailable = true
+                snackbarHostState.showSnackbar(
+                    message = connectedMessage,
+                    duration = Short,
+                )
+            }
+            ConnectivityObserver.Status.Unavailable ->{
+                isNetworkAvailable = false
+                snackbarHostState.showSnackbar(
+                    message = notConnectedMessage,
+                    duration = SnackbarDuration.Indefinite,
+                )
+            }
+            ConnectivityObserver.Status.Losing ->{
+                isNetworkAvailable = false
+                snackbarHostState.showSnackbar(
+                    message = notConnectedMessage,
+                    duration = SnackbarDuration.Indefinite,
+                )
+            }
+            ConnectivityObserver.Status.Lost ->{
+                isNetworkAvailable = false
+                snackbarHostState.showSnackbar(
+                    message = notConnectedMessage,
+                    duration = SnackbarDuration.Indefinite,
+                )
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -112,8 +161,7 @@ fun DiaryContent(
             .background(MaterialTheme.colorScheme.surface)
 //            .navigationBarsPadding()
             .imePadding()
-            .statusBarsPadding()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .statusBarsPadding(),
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -163,14 +211,16 @@ fun DiaryContent(
             ) {
 
                 if (appState.shouldShowNavRail) {
-                    DiaryNavRail(
-                        destinations = appState.topLevelDestinations,
-                        onNavigateToDestination = appState::navigateToTopLevelDestination,
-                        currentDestination = appState.currentDestination,
-                        modifier = Modifier
-                            .testTag("DiaryNavRail")
-                            .safeDrawingPadding(),
-                    )
+                    if (destination != null) {
+                        DiaryNavRail(
+                            destinations = appState.topLevelDestinations,
+                            onNavigateToDestination = appState::navigateToTopLevelDestination,
+                            currentDestination = appState.currentDestination,
+                            modifier = Modifier
+                                .testTag("DiaryNavRail")
+                                .safeDrawingPadding(),
+                        )
+                    }
                 }
 
             Column(modifier = Modifier.fillMaxSize()) {
@@ -200,9 +250,10 @@ fun DiaryContent(
                             duration = Short
                         ) == ActionPerformed
                     },
+                    isNetworkAvailable = isNetworkAvailable,
                     appState = appState,
                     paddingValues = paddingValues,
-                    windowSizeClass = windowSizeClass,
+                    shouldShowLandscape = appState.shouldShowNavRail,
                     onDeleteClicked = {
                         deleteAllDialogOpened = it
                         Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()

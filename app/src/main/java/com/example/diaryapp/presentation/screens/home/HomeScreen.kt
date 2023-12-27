@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -27,7 +26,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.example.diaryapp.data.repository.firebaseDB.Diaries
 import com.example.diaryapp.model.RequestState
 import com.example.diaryapp.widgets.DiaryAppBar
-import com.example.diaryapp.widgets.NavigationDrawer
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,11 +33,12 @@ import java.time.ZonedDateTime
 @Composable
 fun HomeScreen(
     diaries: Diaries,
-    onMenuClicked: ()-> Unit,
+    onSettingsClicked: ()-> Unit,
     navigateToWriteWithArgs: (String)-> Unit,
     dateIsSelected: Boolean,
     onDateSelected: (ZonedDateTime) -> Unit,
     onDateReset: () -> Unit,
+    shouldShowLandscape: Boolean
 ){
 
     val scope = rememberCoroutineScope()
@@ -63,8 +62,8 @@ fun HomeScreen(
                 dateIsSelected = dateIsSelected,
                 onDateSelected = onDateSelected,
                 onDateReset = onDateReset,
-                onMenuClicked = {
-                    onMenuClicked()
+                onSettingsClicked = {
+                    onSettingsClicked()
                 })
         }
         ){
@@ -72,11 +71,21 @@ fun HomeScreen(
             padding = it
             when (diaries) {
             is RequestState.Success -> {
-                HomeContent(
-                    paddingValues = it,
-                    diaryNotes = diaries.data,
-                    onClick = navigateToWriteWithArgs
-                )
+
+                if(shouldShowLandscape){
+                    HomeContentLandscape(
+                        paddingValues = padding,
+                        diaryNotes = diaries.data,
+                        onClick = navigateToWriteWithArgs
+                    )
+                }else{
+                    HomeContent(
+                        paddingValues = padding,
+                        diaryNotes = diaries.data,
+                        onClick = navigateToWriteWithArgs
+                    )
+                }
+
 
             }
             is RequestState.Error -> {

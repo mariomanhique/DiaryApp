@@ -1,6 +1,5 @@
 package com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation
 
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -15,17 +14,16 @@ fun NavController.navigateToSignIn(navOptions: NavOptions? = null){
 }
 fun NavGraphBuilder.signInRoute(
     onShowSnackbar: suspend (String, String?) -> Boolean,
+    isNetworkAvailable: Boolean,
     navigateToHome:()->Unit,
     navigateToSignUp:()->Unit,
 ){
     composable(signInNavigationRoute){
-
-        val context = LocalContext.current
-
         SignInScreen(
             onShowSnackbar = onShowSnackbar,
             navigateToHome = navigateToHome,
             navigateToSignUp = navigateToSignUp,
+            isNetworkAvailable = isNetworkAvailable
         )
     }
 }

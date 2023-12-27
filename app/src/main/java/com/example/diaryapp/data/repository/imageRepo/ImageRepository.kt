@@ -1,8 +1,5 @@
 package com.example.diaryapp.data.repository.imageRepo
 
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
 import com.example.diaryapp.data.database.ImageToDeleteDao
 import com.example.diaryapp.data.database.ImageToUploadDao
 import com.example.diaryapp.data.database.entity.ImageToDelete

@@ -32,6 +32,7 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.homeRoute(
     navigateToAuth: () ->Unit,
     navigateToWriteWithArgs: (String)-> Unit,
+    shouldShowLandscape: Boolean
 ){
 
     composable(route = homeRoute){
@@ -48,7 +49,7 @@ fun NavGraphBuilder.homeRoute(
         HomeScreen(
             diaries = diaries,
 
-            onMenuClicked = {
+            onSettingsClicked = {
                 scope.launch {
                     drawerState.open()
                 }
@@ -61,7 +62,7 @@ fun NavGraphBuilder.homeRoute(
             onDateReset = {
                 viewModel.getDiaries()
             },
-
+            shouldShowLandscape = shouldShowLandscape
             )
 
         DisplayAlertDialog(

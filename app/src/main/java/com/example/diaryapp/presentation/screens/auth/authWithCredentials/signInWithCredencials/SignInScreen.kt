@@ -41,15 +41,12 @@ import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWi
 fun SignInScreen(
     navigateToHome: ()->Unit,
     navigateToSignUp:()->Unit,
+    isNetworkAvailable: Boolean,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
 ) {
 
     val loadingState by viewModel.loadingState
-
-    val textFieldEnabled by remember {
-        mutableStateOf(true)
-    }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -59,10 +56,6 @@ fun SignInScreen(
     val focusRequester = remember { FocusRequester() }
     val scrollState = rememberScrollState()
 
-
-
-
-
     Spacer(modifier = Modifier.height(20.dp))
     Column(
         modifier = Modifier
@@ -70,8 +63,6 @@ fun SignInScreen(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
         Image(
             painter = painterResource(id = R.drawable.diary),
             contentDescription = "logo"
@@ -87,7 +78,7 @@ fun SignInScreen(
         )
         OutlinedTextField(
             value = emailValue,
-            enabled = textFieldEnabled,
+            enabled = isNetworkAvailable,
             onValueChange = {
                 emailValue = it },
             label = { Text(text = "Email Address") },
@@ -100,7 +91,7 @@ fun SignInScreen(
 
         OutlinedTextField(
             value = passwordValue,
-            enabled = textFieldEnabled,
+            enabled = isNetworkAvailable,
             onValueChange = { passwordValue = it },
             trailingIcon = {
                 IconButton(onClick = {
@@ -123,12 +114,13 @@ fun SignInScreen(
                 .focusRequester(focusRequester = focusRequester),
         )
 
-
-
-
         Spacer(modifier = Modifier.padding(10.dp))
 
         GoogleButton(loadingState = loadingState) {
+//            if(!isNetworkAvailable){
+//                Toast.makeText(context, "Check your internet connection", Toast.LENGTH_SHORT).show()
+//            }
+
             if(emailValue.isNotEmpty() && passwordValue.isNotEmpty()){
                 viewModel.signIn(
                     email = emailValue,
@@ -142,7 +134,7 @@ fun SignInScreen(
                     },
                     onError = {
                         scope.launch {
-                            onShowSnackbar("Something wen wrong, check credentials",null)
+                            onShowSnackbar(it.message.toString(),null)
                         }
                         viewModel.setLoading(false)
                     }

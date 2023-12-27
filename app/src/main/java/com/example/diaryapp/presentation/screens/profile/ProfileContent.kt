@@ -12,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -74,7 +75,8 @@ fun ProfileContent(
     onProfileSaved: () -> Unit,
     onDeleteClicked: (Boolean) -> Unit,
     onLogoutClicked: (Boolean) -> Unit,
-    onImageUpdated: () -> Unit
+    onImageUpdated: () -> Unit,
+    paddingValues: PaddingValues
 ){
     ProfileCardInfo(
         imageProfile = imageProfile,
@@ -84,7 +86,8 @@ fun ProfileContent(
         onValueChanged = onValueChanged,
         onDeleteClicked = onDeleteClicked,
         onLogoutClicked = onLogoutClicked,
-        onImageUpdated = onImageUpdated
+        onImageUpdated = onImageUpdated,
+        paddingValues = paddingValues
 
     )
 }
@@ -100,6 +103,7 @@ fun ProfileCardInfo(
     onLogoutClicked: (Boolean) -> Unit,
     onUsernameUpdated: () -> Unit,
     onImageUpdated: () -> Unit,
+    paddingValues: PaddingValues
 ){
 
     var user by remember {
@@ -111,6 +115,7 @@ fun ProfileCardInfo(
         modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
+            .padding(paddingValues)
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -396,7 +401,8 @@ fun ProfileCardInfoPreview(
             onUsernameUpdated = {},
             onDeleteClicked = {},
             onLogoutClicked = {},
-            onImageUpdated = {}
+            onImageUpdated = {},
+            paddingValues = PaddingValues(5.dp)
             )
     }
 }

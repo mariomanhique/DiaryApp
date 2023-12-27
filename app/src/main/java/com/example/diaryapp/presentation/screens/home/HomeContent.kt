@@ -80,7 +80,6 @@ fun HomeContent(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeContentLandscape(
     paddingValues: PaddingValues,
@@ -90,12 +89,11 @@ fun HomeContentLandscape(
     if(diaryNotes.isNotEmpty()){
         LazyVerticalGrid(
             contentPadding = paddingValues,
-            columns = GridCells.Adaptive(230.dp),
+            columns = GridCells.Adaptive(350.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
                 .navigationBarsPadding()
-                .padding(top = paddingValues.calculateTopPadding())
                 .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
                 .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr))
         ){

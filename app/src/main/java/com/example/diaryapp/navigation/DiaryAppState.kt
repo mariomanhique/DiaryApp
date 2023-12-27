@@ -3,7 +3,11 @@ package com.example.diaryapp.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -11,11 +15,17 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
+import com.example.diaryapp.connectivity.ConnectivityObserver
+import com.example.diaryapp.connectivity.NetworkConnectivityObserver
 import com.example.diaryapp.presentation.screens.home.navigation.homeRoute
 import com.example.diaryapp.presentation.screens.home.navigation.navigateToHome
 import com.example.diaryapp.presentation.screens.profile.navigation.navigateToProfile
 import com.example.diaryapp.presentation.screens.profile.navigation.profile_route
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import navigateToWrite
 import write_navigation_route
 
@@ -24,21 +34,31 @@ import write_navigation_route
 fun rememberDiaryAppState(
     windowSizeClass: WindowSizeClass,
     navController: NavHostController = rememberNavController(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    connectivity: NetworkConnectivityObserver,
 ): DiaryAppState {
     return remember(
         navController,
         windowSizeClass,
+        coroutineScope,
+        connectivity
     ) {
         DiaryAppState(
             navController,
             windowSizeClass,
+            coroutineScope,
+            connectivity
         )
     }
 }
 class DiaryAppState(
-     val navController: NavHostController,
+    val navController: NavHostController,
     private val windowSizeClass: WindowSizeClass,
-) {
+    private val coroutineScope: CoroutineScope,
+    private val connectivity: NetworkConnectivityObserver,
+    ) {
+
+    private var network by mutableStateOf(ConnectivityObserver.Status.Unavailable)
 
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -56,6 +76,15 @@ class DiaryAppState(
 
     val shouldShowNavRail: Boolean
         get() = !shouldShowBottomBar
+
+    val isOffline = connectivity.observe()
+        .map{
+           it
+        }.stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = ConnectivityObserver.Status.Lost
+            )
 
 
     /**

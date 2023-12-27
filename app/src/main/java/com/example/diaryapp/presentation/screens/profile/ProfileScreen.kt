@@ -3,6 +3,7 @@ package com.example.diaryapp.presentation.screens.profile
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -54,34 +55,39 @@ fun ProfileScreen(
 
     Box {
 
-        ProfileContent(
-            imageProfile = galleryState.image.value.image,
-            username = username,
-            onSelectImage = {imageUrl->
-               val type = context.contentResolver.getType(imageUrl)?.split("/")?.last() ?: "jpg"
-                profileViewModel.addImage(
-                   image = imageUrl,
-                   imageType = type
-               )
-            },
-            onProfileSaved = {
-                profileViewModel.updateUsername(
-                    username = username
-                )
-            },
-            onValueChanged = {
-                username = it
-            },
-            onDeleteClicked = onDeleteClicked,
-            onLogoutClicked = onLogoutClicked,
-            onImageUpdated = {
-                profileViewModel.updateImageProfile(
-                    galleryState.image.value.remoteImagePath
-                )
+        Scaffold(
+            topBar = {
+                ProfileTopBar()
             }
-        )
-
-
+        ) {
+            ProfileContent(
+                imageProfile = galleryState.image.value.image,
+                username = username,
+                onSelectImage = {imageUrl->
+                    val type = context.contentResolver.getType(imageUrl)?.split("/")?.last() ?: "jpg"
+                    profileViewModel.addImage(
+                        image = imageUrl,
+                        imageType = type
+                    )
+                },
+                onProfileSaved = {
+                    profileViewModel.updateUsername(
+                        username = username
+                    )
+                },
+                onValueChanged = {
+                    username = it
+                },
+                onDeleteClicked = onDeleteClicked,
+                onLogoutClicked = onLogoutClicked,
+                onImageUpdated = {
+                    profileViewModel.updateImageProfile(
+                        galleryState.image.value.remoteImagePath
+                    )
+                },
+                paddingValues = it
+            )
+        }
     }
 }
 

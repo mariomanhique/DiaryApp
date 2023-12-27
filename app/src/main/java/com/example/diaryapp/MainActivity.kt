@@ -14,6 +14,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.diaryapp.connectivity.NetworkConnectivityObserver
 import com.example.diaryapp.ui.theme.DiaryAppTheme
 import com.example.diaryapp.util.retryDeletingImageFromFirebase
 import com.example.diaryapp.util.retryUploadingImageToFirebase
@@ -33,6 +34,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var imageRepository: ImageRepository
+
+    @Inject
+    lateinit var connectivity: NetworkConnectivityObserver
 
     private var keepSplashOpened = true
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -56,7 +60,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.surface
                 ) {
                     //The startDestination is hard coded now, but then we will dynamically calculate based on user event
-                    DiaryApp(windowSizeClass = calculateWindowSizeClass(activity = this))
+                    DiaryApp(
+                        windowSizeClass = calculateWindowSizeClass(activity = this),
+                        connectivity = connectivity
+                        )
                 }
             }
         }

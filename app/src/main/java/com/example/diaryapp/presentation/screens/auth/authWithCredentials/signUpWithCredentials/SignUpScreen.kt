@@ -39,6 +39,7 @@ import com.example.diaryapp.presentation.components.GoogleButton
 @Composable
 internal fun SignUpWithCredentials(
     onShowSnackbar: suspend (String, String?) -> Boolean,
+    isNetworkAvailable: Boolean,
     viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
     navigateToHome:()->Unit,
     navigateToSignIn:()->Unit,
@@ -91,7 +92,7 @@ internal fun SignUpWithCredentials(
         )
         OutlinedTextField(
             value = nameValue,
-            enabled = textFieldEnabled,
+            enabled = isNetworkAvailable,
             onValueChange = { nameValue = it },
             label = { Text(text = "Name") },
             placeholder = { Text(text = "Name") },
@@ -101,7 +102,7 @@ internal fun SignUpWithCredentials(
 
         OutlinedTextField(
             value = emailValue,
-            enabled = textFieldEnabled,
+            enabled = isNetworkAvailable,
             onValueChange = { emailValue = it },
             label = { Text(text = "Email Address") },
             placeholder = { Text(text = "Email Address") },
@@ -112,7 +113,7 @@ internal fun SignUpWithCredentials(
 
         OutlinedTextField(
             value = passwordValue,
-            enabled = textFieldEnabled,
+            enabled = isNetworkAvailable,
             onValueChange = { passwordValue = it },
             label = { Text(text = "Password") },
             placeholder = { Text(text = "Password") },
@@ -138,11 +139,9 @@ internal fun SignUpWithCredentials(
         LaunchedEffect(key1 = state.isSignInSuccessful) {
             if (state.isSignInSuccessful) {
                 scope.launch {
-                    onShowSnackbar("Successful Sign Up",null)
+                    onShowSnackbar("Successful Signed Up",null)
                 }
                 navigateToHome()
-            }else{
-                onShowSnackbar("Something went wrong",null)
             }
             viewModel.resetState()
         }

@@ -1,7 +1,6 @@
 package com.example.diaryapp.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -20,8 +19,9 @@ fun NavigationHost(
     startDestination:String = signInNavigationRoute,
     appState: DiaryAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
+    isNetworkAvailable: Boolean,
     paddingValues: PaddingValues,
-    windowSizeClass: WindowSizeClass,
+    shouldShowLandscape: Boolean,
     onDeleteClicked: (Boolean) -> Unit,
     onLogoutClicked: (Boolean) -> Unit,
 ){
@@ -41,11 +41,13 @@ fun NavigationHost(
             },
             navigateToWriteWithArgs = {
                 navController.navigate(Screen.Write.passDiaryId(it))
-            }
+            },
+            shouldShowLandscape = shouldShowLandscape
         )
 
         signInRoute(
             onShowSnackbar = onShowSnackbar,
+            isNetworkAvailable = isNetworkAvailable,
             navigateToHome = {
                 appState.navigateToTopLevelDestination(TopLevelDestination.HOME)
             },
@@ -54,6 +56,7 @@ fun NavigationHost(
 
         signUpRoute(
             onShowSnackbar = onShowSnackbar,
+            isNetworkAvailable = isNetworkAvailable,
             navigateToHome = {
                 appState.navigateToTopLevelDestination(TopLevelDestination.HOME)
             },
