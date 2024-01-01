@@ -106,10 +106,6 @@ fun ProfileCardInfo(
     paddingValues: PaddingValues
 ){
 
-    var user by remember {
-        mutableStateOf(username)
-    }
-
     val scrollState = rememberScrollState()
     Column(
         modifier
@@ -321,7 +317,7 @@ fun UserDetailsCard(
         visible = imagePreviewState) {
         Dialog(
             onDismissRequest = {
-            imagePreviewState
+            imagePreviewState = false
         }) {
             ZoomableImage(
                 actionButton = R.string.chooseAction,

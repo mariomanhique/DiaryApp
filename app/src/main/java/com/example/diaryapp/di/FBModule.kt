@@ -21,18 +21,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.realm.kotlin.mongodb.App
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object FBModule {
-
-
-    @Singleton
-    @Provides
-    fun provideMongoAuth(): App.Companion
-    = App.Companion
 
     @Singleton
     @Provides

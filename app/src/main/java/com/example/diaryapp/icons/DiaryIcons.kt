@@ -32,5 +32,4 @@ object DiaryIcons {
     val Surprised = R.drawable.surprised
     val Suspicious = R.drawable.suspicious
     val Tense = R.drawable.tense
-
 }

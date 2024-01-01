@@ -134,8 +134,8 @@ fun DiaryHolder(
     diary: Diary,
     onClick: (String) -> Unit){
 
-    var localDensity = LocalDensity.current
-    var context = LocalContext.current
+    val localDensity = LocalDensity.current
+    val context = LocalContext.current
     var componentHeight by remember { mutableStateOf(0.dp) }
     var galleryOpened by rememberSaveable { mutableStateOf(true) }
     var galleryLoading by remember { mutableStateOf(false) }

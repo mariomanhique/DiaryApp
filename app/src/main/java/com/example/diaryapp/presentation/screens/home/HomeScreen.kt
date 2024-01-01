@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,15 +30,13 @@ import java.time.ZonedDateTime
 @Composable
 fun HomeScreen(
     diaries: Diaries,
-    onSettingsClicked: ()-> Unit,
+    onDialogOpened: ()-> Unit,
     navigateToWriteWithArgs: (String)-> Unit,
     dateIsSelected: Boolean,
     onDateSelected: (ZonedDateTime) -> Unit,
     onDateReset: () -> Unit,
     shouldShowLandscape: Boolean
 ){
-
-    val scope = rememberCoroutineScope()
 
     var padding by remember { mutableStateOf(PaddingValues()) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -56,14 +51,12 @@ fun HomeScreen(
         topBar = {
             DiaryAppBar(
                 title = "My Diary",
-                navigationIcon = Icons.Default.Menu,
-//                    actionIcon = Icons.Default.DateRange,
                 scrollBehavior = scrollBehavior,
                 dateIsSelected = dateIsSelected,
                 onDateSelected = onDateSelected,
                 onDateReset = onDateReset,
                 onSettingsClicked = {
-                    onSettingsClicked()
+                    onDialogOpened()
                 })
         }
         ){

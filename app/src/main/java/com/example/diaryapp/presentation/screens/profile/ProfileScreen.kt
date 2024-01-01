@@ -46,7 +46,6 @@ fun ProfileScreen(
             onImageDownload = {
                 downloadedImage.add(it)
             },
-            onReadyToDisplay = {},
             onImageDownloadFailed = {}
         )
     }

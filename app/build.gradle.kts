@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
+    id("com.google.protobuf")
     id("com.google.devtools.ksp")
 }
 
@@ -58,6 +59,28 @@ android {
 
 }
 
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.24.4"
+    }
+
+    // Generates the java Protobuf-lite code for the Protobufs in this project. See
+    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
+    // for more information.
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("java") {
+                    option("lite")
+                }
+                register("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -102,10 +125,6 @@ dependencies {
     //Google Auth
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
-    implementation("io.realm.kotlin:library-base:1.10.0")
-
-    implementation("io.realm.kotlin:library-sync:1.10.0")
-
     //Splash API
     implementation("androidx.core:core-splashscreen:1.0.1")
 
@@ -137,7 +156,11 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class")
     implementation("androidx.tracing:tracing-ktx:1.1.0")
 
-
-
+//    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("com.google.protobuf:protobuf-javalite:3.24.4")
+    implementation("com.google.protobuf:protobuf-kotlin-lite:3.24.4")
+    implementation("io.grpc:grpc-kotlin-stub:1.3.0")
+    implementation("com.google.protobuf:protoc:3.24.4")
 
 }

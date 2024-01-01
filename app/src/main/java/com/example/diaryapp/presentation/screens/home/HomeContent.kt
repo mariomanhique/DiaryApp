@@ -62,9 +62,6 @@ fun HomeContent(
                     }
                 ) {
 
-                    val rememberedValue = rememberSaveable() {
-                        Random.nextInt()
-                    }
                     DiaryHolder(
                         modifier = Modifier.animateItemPlacement(
                             tween(durationMillis = 250)

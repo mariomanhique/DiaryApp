@@ -18,6 +18,7 @@ import writeRoute
 fun NavigationHost(
     startDestination:String = signInNavigationRoute,
     appState: DiaryAppState,
+    onDialogOpened: ()-> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     isNetworkAvailable: Boolean,
     paddingValues: PaddingValues,
@@ -39,6 +40,7 @@ fun NavigationHost(
                 navController.popBackStack()
                 navController.navigate(signInNavigationRoute)
             },
+            onDialogOpened = onDialogOpened,
             navigateToWriteWithArgs = {
                 navController.navigate(Screen.Write.passDiaryId(it))
             },

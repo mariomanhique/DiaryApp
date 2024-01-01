@@ -41,7 +41,6 @@ fun DisplayAlertDialog(
     onCloseDialog: () -> Unit,
     onYesClicked: () -> Unit
 ){
-
     if(dialogOpened){
         AlertDialog(
             onDismissRequest =onCloseDialog,
@@ -49,19 +48,12 @@ fun DisplayAlertDialog(
                 usePlatformDefaultWidth = false
             )
         ) {
-//
-//            Dialog(onDismissRequest = onCloseDialog,
-//                properties = DialogProperties(
-//                    usePlatformDefaultWidth = false
-//                )
-//            ) {
                 Card(
                     elevation = CardDefaults.cardElevation(5.dp),
                     shape = CircleShape.copy(all = CornerSize(15.dp)),
                     modifier = Modifier
                         .fillMaxWidth(0.85f)
                         .border(1.dp, color = Color.White, shape = RoundedCornerShape(15.dp)),
-//            colors = CardDefaults.cardColors(AppColors.mGreen)
 
                 ) {
                     Column(modifier = Modifier
@@ -146,8 +138,6 @@ fun DisplayAlertDialog(
                                     )
                                 }
                             }
-
-
 
                         }
                     }

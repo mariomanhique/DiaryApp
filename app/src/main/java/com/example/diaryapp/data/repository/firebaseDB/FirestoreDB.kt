@@ -234,8 +234,7 @@ class FirestoreDB @Inject constructor(
                         "imagesList" to diary.imagesList
                     )).addOnSuccessListener {
                         updatedDiary = RequestState.Success("Success")
-
-                    }.addOnFailureListener{exception->
+                    }.addOnFailureListener{
                         updatedDiary = RequestState.Error(Exception("Failure"))
                     }
              return updatedDiary
@@ -256,24 +255,17 @@ class FirestoreDB @Inject constructor(
                    .map {
                        it.toObjects<Diary>()
                    }
-
-                diary.map {diary->
-                    RequestState.Success(data = diary.first())
+                diary.map {mappedDiary->
+                    RequestState.Success(data = mappedDiary.first())
                 }
-
-
             }catch (e: Exception){
                flow { RequestState.Error(e) }
             }
         }else{
-
            flow{
                RequestState.Error(UserNotAuthenticatedException())
            }
         }
     }
-
-
-
 }
-private class UserNotAuthenticatedException(): Exception("User not logged in")
+private class UserNotAuthenticatedException: Exception("User not logged in")

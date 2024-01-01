@@ -2,6 +2,7 @@ package com.example.diaryapp.di
 
 import android.content.Context
 import com.example.diaryapp.connectivity.NetworkConnectivityObserver
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,3 +21,4 @@ object NetworkModule {
     fun provideNetworkConnectivity(@ApplicationContext context: Context)=
         NetworkConnectivityObserver(context)
 }
+

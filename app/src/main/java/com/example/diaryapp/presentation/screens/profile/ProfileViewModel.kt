@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    authRepository: AuthRepository,
     private val profileRepository: ProfileRepository
 ): ViewModel() {
 
@@ -35,7 +35,7 @@ class ProfileViewModel @Inject constructor(
     init {
         getCurrentUser()
     }
-    fun getCurrentUser(){
+    private fun getCurrentUser(){
         viewModelScope.launch {
             profileRepository.getProfile().collect{
 
@@ -52,7 +52,6 @@ class ProfileViewModel @Inject constructor(
                                )
                            )
                        },
-                       onReadyToDisplay = {},
                        onImageDownloadFailed = {}
                    )
                    _userData.value = it
@@ -81,7 +80,7 @@ class ProfileViewModel @Inject constructor(
 
     }
 
-    fun uploadImageToFirebase(){
+    private fun uploadImageToFirebase(){
         viewModelScope.launch {
           val  galleryImage = galleryState.image.value
             val storage = FirebaseStorage.getInstance().reference
@@ -93,23 +92,27 @@ class ProfileViewModel @Inject constructor(
         }
     }
     fun updateUsername(username: String){
+        if (username.isEmpty()){
+            return
+        }
         viewModelScope.launch {
             uploadImageToFirebase()
-
             profileRepository
                 .updateUsername(username)
-
         }
     }
 
-    fun updateImageProfile(imageUrl: String){
+    fun updateImageProfile(
+        imageUrl: String
+    ){
+        if (imageUrl.isEmpty()){
+            return
+        }
         viewModelScope.launch {
             uploadImageToFirebase()
-
             profileRepository.updateImageProfile(
                 imageUrl
             )
-
         }
     }
 }

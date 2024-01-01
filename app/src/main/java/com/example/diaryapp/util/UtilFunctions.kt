@@ -7,6 +7,7 @@ import com.example.diaryapp.data.database.entity.ImageToDelete
 import com.example.diaryapp.data.database.entity.ImageToUpload
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
+import javax.inject.Qualifier
 
 fun fetchImagesFromFirebase(
     remoteImagePaths: List<String>,
@@ -36,7 +37,6 @@ fun fetchImageFromFirebase(
     remoteImagePath: String,
     onImageDownload: (Uri) -> Unit,
     onImageDownloadFailed:(Exception) -> Unit,
-    onReadyToDisplay: () -> Unit
 ){
     if(remoteImagePath.trim().isNotEmpty()){
         FirebaseStorage.getInstance().reference.child(remoteImagePath.trim()).downloadUrl
@@ -68,3 +68,18 @@ fun retryDeletingImageFromFirebase(
     storage.child(imageToDelete.remoteImagePath).delete()
         .addOnSuccessListener { onSuccess() }
 }
+
+
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+annotation class ApplicationScope
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Dispatcher(val niaDispatcher: NiaDispatchers)
+
+enum class NiaDispatchers {
+    Default,
+    IO,
+}
+

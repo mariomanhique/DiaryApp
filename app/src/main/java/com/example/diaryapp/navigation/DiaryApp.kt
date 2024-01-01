@@ -67,10 +67,15 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import com.example.diaryapp.R
 import com.example.diaryapp.connectivity.ConnectivityObserver
 import com.example.diaryapp.connectivity.NetworkConnectivityObserver
+import com.example.diaryapp.presentation.components.DiaryBackground
+import com.example.diaryapp.presentation.components.DiaryGradientBackground
 import com.example.diaryapp.presentation.components.DisplayAlertDialog
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWithCredentialsViewModel
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import com.example.diaryapp.presentation.screens.home.navigation.homeRoute
+import com.example.diaryapp.presentation.screens.settingsDialog.SettingsDialog
+import com.example.diaryapp.ui.theme.GradientColors
+import com.example.diaryapp.ui.theme.LocalGradientColors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -104,6 +109,9 @@ fun DiaryContent(
         authViewModel: AuthWithCredentialsViewModel = hiltViewModel(),
 ){
 
+    val shouldShowGradientBackground =
+        appState.currentTopLevelDestination == TopLevelDestination.HOME
+
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val destination = appState.currentTopLevelDestination
@@ -117,114 +125,135 @@ fun DiaryContent(
     var signOutDialogState by remember { mutableStateOf(false) }
     var deleteAllDialogOpened by remember { mutableStateOf(false) }
     val context = LocalContext.current
-
-    val notConnectedMessage = stringResource(R.string.not_connected)
-    val connectedMessage = stringResource(R.string.online)
-    LaunchedEffect(key1 = isOffline){
-        when(isOffline){
-            ConnectivityObserver.Status.Available -> {
-                isNetworkAvailable = true
-                snackbarHostState.showSnackbar(
-                    message = connectedMessage,
-                    duration = Short,
-                )
-            }
-            ConnectivityObserver.Status.Unavailable ->{
-                isNetworkAvailable = false
-                snackbarHostState.showSnackbar(
-                    message = notConnectedMessage,
-                    duration = SnackbarDuration.Indefinite,
-                )
-            }
-            ConnectivityObserver.Status.Losing ->{
-                isNetworkAvailable = false
-                snackbarHostState.showSnackbar(
-                    message = notConnectedMessage,
-                    duration = SnackbarDuration.Indefinite,
-                )
-            }
-            ConnectivityObserver.Status.Lost ->{
-                isNetworkAvailable = false
-                snackbarHostState.showSnackbar(
-                    message = notConnectedMessage,
-                    duration = SnackbarDuration.Indefinite,
-                )
-            }
-        }
+    var showSettingsDialog by remember {
+        mutableStateOf(false)
     }
 
-    Scaffold(
-        modifier = Modifier
-            .semantics {
-                testTagsAsResourceId = true
-            }
-            .background(MaterialTheme.colorScheme.surface)
+    DiaryBackground {
+       DiaryGradientBackground(
+            gradientColors = if (shouldShowGradientBackground) {
+                LocalGradientColors.current
+            } else {
+                GradientColors()
+            },
+        ) {
+
+           val notConnectedMessage = stringResource(R.string.not_connected)
+           val connectedMessage = stringResource(R.string.online)
+           LaunchedEffect(key1 = isOffline) {
+               when (isOffline) {
+                   ConnectivityObserver.Status.Available -> {
+                       isNetworkAvailable = true
+                       snackbarHostState.showSnackbar(
+                           message = connectedMessage,
+                           duration = Short,
+                       )
+                   }
+
+                   ConnectivityObserver.Status.Unavailable -> {
+                       isNetworkAvailable = false
+                       snackbarHostState.showSnackbar(
+                           message = notConnectedMessage,
+                           duration = SnackbarDuration.Indefinite,
+                       )
+                   }
+
+                   ConnectivityObserver.Status.Losing -> {
+                       isNetworkAvailable = false
+                       snackbarHostState.showSnackbar(
+                           message = notConnectedMessage,
+                           duration = SnackbarDuration.Indefinite,
+                       )
+                   }
+
+                   ConnectivityObserver.Status.Lost -> {
+                       isNetworkAvailable = false
+                       snackbarHostState.showSnackbar(
+                           message = notConnectedMessage,
+                           duration = SnackbarDuration.Indefinite,
+                       )
+                   }
+               }
+           }
+
+           if (showSettingsDialog) {
+               SettingsDialog(
+                   onDismiss = { showSettingsDialog = false },
+               )
+           }
+
+           Scaffold(
+               modifier = Modifier
+                   .semantics {
+                       testTagsAsResourceId = true
+                   }
+                   .background(MaterialTheme.colorScheme.surface)
 //            .navigationBarsPadding()
-            .imePadding()
-            .statusBarsPadding(),
-        containerColor = Color.Transparent,
-        contentColor = MaterialTheme.colorScheme.onBackground,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        floatingActionButton = {
-            if (destination != null){
-                FloatingActionButton(
-                    modifier= Modifier
-                        .padding(4.dp),
-                    onClick =  appState::navigateToWrite
-                ) {
-                    Box(
-                        modifier = Modifier
-                    ) {
-                        Icon(
-                            modifier = Modifier,
-                            imageVector = Icons.Default.Add,
-                            contentDescription =""
-                        )
-                    }
-                }
-            }
-        },
-        bottomBar = {
-            if (appState.shouldShowBottomBar) {
-                if (destination != null){
-                        DiaryBottomBar(
-                            destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination,
-                            modifier = Modifier.testTag("DiaryBottomBar"),
-                        )
-                }
-            }
-        },
-    ){paddingValues->
-            Row(
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .consumeWindowInsets(paddingValues)
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.Horizontal,
-                        ),
-                    ),
-            ) {
+                   .imePadding()
+                   .statusBarsPadding(),
+               containerColor = Color.Transparent,
+               contentColor = MaterialTheme.colorScheme.onBackground,
+               contentWindowInsets = WindowInsets(0, 0, 0, 0),
+               snackbarHost = { SnackbarHost(snackbarHostState) },
+               floatingActionButton = {
+                   if (destination != null) {
+                       FloatingActionButton(
+                           modifier = Modifier
+                               .padding(4.dp),
+                           onClick = appState::navigateToWrite
+                       ) {
+                           Box(
+                               modifier = Modifier
+                           ) {
+                               Icon(
+                                   modifier = Modifier,
+                                   imageVector = Icons.Default.Add,
+                                   contentDescription = ""
+                               )
+                           }
+                       }
+                   }
+               },
+               bottomBar = {
+                   if (appState.shouldShowBottomBar) {
+                       if (destination != null) {
+                           DiaryBottomBar(
+                               destinations = appState.topLevelDestinations,
+                               onNavigateToDestination = appState::navigateToTopLevelDestination,
+                               currentDestination = appState.currentDestination,
+                               modifier = Modifier.testTag("DiaryBottomBar"),
+                           )
+                       }
+                   }
+               },
+           ) { paddingValues ->
+               Row(
+                   Modifier
+                       .fillMaxSize()
+                       .padding(paddingValues)
+                       .consumeWindowInsets(paddingValues)
+                       .windowInsetsPadding(
+                           WindowInsets.safeDrawing.only(
+                               WindowInsetsSides.Horizontal,
+                           ),
+                       ),
+               ) {
 
-                if (appState.shouldShowNavRail) {
-                    if (destination != null) {
-                        DiaryNavRail(
-                            destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination,
-                            modifier = Modifier
-                                .testTag("DiaryNavRail")
-                                .safeDrawingPadding(),
-                        )
-                    }
-                }
+                   if (appState.shouldShowNavRail) {
+                       if (destination != null) {
+                           DiaryNavRail(
+                               destinations = appState.topLevelDestinations,
+                               onNavigateToDestination = appState::navigateToTopLevelDestination,
+                               currentDestination = appState.currentDestination,
+                               modifier = Modifier
+                                   .testTag("DiaryNavRail")
+                                   .safeDrawingPadding(),
+                           )
+                       }
+                   }
 
-            Column(modifier = Modifier.fillMaxSize()) {
-                if(destination != null){
+                   Column(modifier = Modifier.fillMaxSize()) {
+                       if (destination != null) {
 //                    DiaryAppBar(
 //                        title = stringResource(
 //                            if(destination == TopLevelDestination.HOME) R.string.home
@@ -241,32 +270,37 @@ fun DiaryContent(
 //                            homeViewModel.getDiaries()
 //                        }
 //                    )
-                }
-                NavigationHost(
-                    onShowSnackbar = {message, action->
-                        snackbarHostState.showSnackbar(
-                            message = message,
-                            actionLabel = action,
-                            duration = Short
-                        ) == ActionPerformed
-                    },
-                    isNetworkAvailable = isNetworkAvailable,
-                    appState = appState,
-                    paddingValues = paddingValues,
-                    shouldShowLandscape = appState.shouldShowNavRail,
-                    onDeleteClicked = {
-                        deleteAllDialogOpened = it
-                        Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                    },
-                    onLogoutClicked = {
-                        signOutDialogState = it
-                    },
-                    startDestination = if(user!=null)  homeRoute else  signInNavigationRoute
-                )
-            }
-        }
+                       }
+                       NavigationHost(
+                           onShowSnackbar = { message, action ->
+                               snackbarHostState.showSnackbar(
+                                   message = message,
+                                   actionLabel = action,
+                                   duration = Short
+                               ) == ActionPerformed
+                           },
+                           isNetworkAvailable = isNetworkAvailable,
+                           appState = appState,
+                           onDialogOpened = {
+                               showSettingsDialog = true
+                           },
+                           paddingValues = paddingValues,
+                           shouldShowLandscape = appState.shouldShowNavRail,
+                           onDeleteClicked = {
+                               deleteAllDialogOpened = it
+                               Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
+                           },
+                           onLogoutClicked = {
+                               signOutDialogState = it
+                           },
+                           startDestination = if (user != null) homeRoute else signInNavigationRoute
+                       )
+                   }
+               }
 
-     }
+           }
+       }
+    }
 
 
 

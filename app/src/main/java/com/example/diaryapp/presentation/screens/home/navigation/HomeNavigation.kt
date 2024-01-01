@@ -31,6 +31,7 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.homeRoute(
     navigateToAuth: () ->Unit,
+    onDialogOpened: ()-> Unit,
     navigateToWriteWithArgs: (String)-> Unit,
     shouldShowLandscape: Boolean
 ){
@@ -49,11 +50,7 @@ fun NavGraphBuilder.homeRoute(
         HomeScreen(
             diaries = diaries,
 
-            onSettingsClicked = {
-                scope.launch {
-                    drawerState.open()
-                }
-            },
+            onDialogOpened = onDialogOpened,
             navigateToWriteWithArgs = navigateToWriteWithArgs,
             dateIsSelected= viewModel.dateIsSelected,
             onDateSelected = {

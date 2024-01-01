@@ -114,7 +114,6 @@ fun NavGraphBuilder.writeRoute(
             onImageDeleteClicked = {
                 galleryState.removeImage(it)
             },
-            paddingValues = paddingValues
         )
     }
 }

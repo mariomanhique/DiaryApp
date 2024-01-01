@@ -12,6 +12,8 @@ dependencyResolutionManagement {
         mavenCentral()
         maven(url = "https://jitpack.io")
     }
+
+
 }
 
 rootProject.name = "DiaryApp"

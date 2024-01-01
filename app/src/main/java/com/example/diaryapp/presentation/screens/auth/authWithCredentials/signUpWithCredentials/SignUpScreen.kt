@@ -45,7 +45,6 @@ internal fun SignUpWithCredentials(
     navigateToSignIn:()->Unit,
 ) {
 
-    val scrollState = rememberScrollState()
     val state = viewModel.state.collectAsStateWithLifecycle().value
     val loadingState by viewModel.loadingState
     val scope = rememberCoroutineScope()

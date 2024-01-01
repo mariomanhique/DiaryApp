@@ -80,8 +80,6 @@ fun GoogleButton(
                     strokeWidth = 2.dp,
                     color = progressIndicatorColor
                 )
-            }else{
-
             }
         }
     }

@@ -11,12 +11,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-    class ProfileRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore):
+class ProfileRepositoryImpl @Inject constructor(
+    private val firestore: FirebaseFirestore
+):
         ProfileRepository {
-    val rf = firestore.collection("profile")
+    private val rf = firestore.collection("profile")
     val user = FirebaseAuth.getInstance().currentUser
     private lateinit var updateUser: RequestState<String>
-
 
     override fun getProfile(): Flow<UserData?> {
         return try {
@@ -25,7 +26,6 @@ import javax.inject.Inject
                 .map {
                     it.toObject<UserData>()
                 }
-
         }catch (e:Exception){
             flow {
                 UserData(
@@ -35,48 +35,42 @@ import javax.inject.Inject
         }
     }
 
-        override fun updateImageProfile(imageUrl: String): RequestState<String> {
-            if (this.user !=null){
-                return try {
-                    rf.document(this.user.uid)
-                        .update(
-                            mapOf(
-                                "profilePictureUrl" to imageUrl
-                            )
-                        ).addOnSuccessListener {
-                            updateUser = RequestState.Success("Sucesso")
-                        }
-
-                    updateUser
-                }catch (e:Exception){
-                    RequestState.Error(e)
-
-                }
+    override fun updateImageProfile(imageUrl: String): RequestState<String> {
+        if (this.user !=null){
+            return try {
+                rf.document(this.user.uid)
+                    .update(
+                        mapOf(
+                            "profilePictureUrl" to imageUrl
+                        )
+                    ).addOnSuccessListener {
+                        updateUser = RequestState.Success("Sucesso")
+                    }
+                updateUser
+            }catch (e:Exception){
+                RequestState.Error(e)
             }
-            return RequestState.Error(Exception("user not authenticated"))
         }
+        return RequestState.Error(Exception("user not authenticated"))
+    }
 
-        override fun updateUsername(username: String): RequestState<String> {
-            if (this.user !=null){
-                return try {
-                    rf.document(this.user.uid)
-                        .update(
-                            mapOf(
-                                "username" to username
-                            )
-                        ).addOnSuccessListener {
-                            updateUser = RequestState.Success("Sucesso")
-                        }
-
-                    updateUser
-                }catch (e:Exception){
-                    RequestState.Error(e)
-
-                }
+    override fun updateUsername(username: String): RequestState<String> {
+        if (this.user !=null){
+            return try {
+                rf.document(this.user.uid)
+                    .update(
+                        mapOf(
+                            "username" to username
+                        )
+                    ).addOnSuccessListener {
+                        updateUser = RequestState.Success("Sucesso")
+                    }
+                updateUser
+            }catch (e:Exception){
+                RequestState.Error(e)
             }
-            return RequestState.Error(Exception("user not authenticated"))
         }
-
-
+        return RequestState.Error(Exception("user not authenticated"))
+    }
 
 }

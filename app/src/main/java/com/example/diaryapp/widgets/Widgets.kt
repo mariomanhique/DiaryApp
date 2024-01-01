@@ -1,7 +1,6 @@
 package com.example.diaryapp.widgets
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,7 +54,6 @@ import java.time.ZonedDateTime
 fun DiaryAppBar(
     modifier: Modifier=Modifier,
     title: String,
-    navigationIcon: ImageVector,
     scrollBehavior: TopAppBarScrollBehavior,
     onSettingsClicked: ()->Unit,
     dateIsSelected: Boolean,
@@ -115,9 +112,7 @@ fun DiaryAppBar(
                         )
                     }
                 }
-            IconButton(onClick = {
-
-            }) {
+            IconButton(onClick = onSettingsClicked) {
                 Icon(
                     imageVector = Icons.Rounded.Settings,
                     contentDescription = "Settings"

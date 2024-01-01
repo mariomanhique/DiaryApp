@@ -43,9 +43,6 @@ fun WriteScreen(
     onBackPressed: () ->Unit,
     onImageSelect: (Uri) -> Unit,
     onImageDeleteClicked: (GalleryImage) -> Unit,
-    paddingValues: PaddingValues
-
-
     ){
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
