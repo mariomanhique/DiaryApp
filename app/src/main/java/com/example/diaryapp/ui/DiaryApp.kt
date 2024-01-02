@@ -14,10 +14,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -28,7 +26,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -46,7 +43,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,7 +50,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -66,22 +61,21 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.example.diaryapp.R
 import com.example.diaryapp.navigation.NavigationHost
+import com.google.firebase.auth.FirebaseAuth
 import com.mariomanhique.auth.authWithCredentials.AuthWithCredentialsViewModel
-import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
 import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
-import com.mariomanhique.home.DiariesViewModel
 import com.mariomanhique.home.DiaryAppBar
-import com.mariomanhique.home.navigation.diariesDestinationRoute
 import com.mariomanhique.ui.components.DisplayAlertDialog
 import com.mariomanhique.util.TopLevelDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.mariomanhique.home.navigation.home_destination_route
+
 
 @Composable
 fun DiaryApp(
@@ -102,20 +96,12 @@ fun DiaryContent(
     appState: DiaryAppState  = rememberDiaryAppState(
         windowSizeClass = windowSizeClass),
     authViewModel: AuthWithCredentialsViewModel = hiltViewModel(),
-    diariesViewModel: DiariesViewModel = hiltViewModel()
 ){
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val destination = appState.currentTopLevelDestination
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    val diaries = diariesViewModel.diaries.collectAsStateWithLifecycle().value
-    Log.d("Diary App", "DiaryContent: $diaries")
-
-
-
-    val user = authViewModel.user
-    val navController = appState.navController
     var signOutDialogState by remember { mutableStateOf(false) }
     var deleteAllDialogOpened by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -156,12 +142,12 @@ fun DiaryContent(
         bottomBar = {
             if (appState.shouldShowBottomBar) {
                 if (destination != null){
-                        DiaryBottomBar(
-                            destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination,
-                            modifier = Modifier.testTag("DiaryBottomBar"),
-                        )
+                    DiaryBottomBar(
+                        destinations = appState.topLevelDestinations,
+                        onNavigateToDestination = appState::navigateToTopLevelDestination,
+                        currentDestination = appState.currentDestination,
+                        modifier = Modifier.testTag("DiaryBottomBar"),
+                    )
                 }
             }
         },
@@ -196,15 +182,14 @@ fun DiaryContent(
                             if(destination == TopLevelDestination.HOME) R.string.home
                             else R.string.profile),
                         isProfileDestination = destination != TopLevelDestination.PROFILE,
-                        navigationIcon = Icons.Rounded.Menu,
                         scrollBehavior = scrollBehavior,
                         onMenuClicked = {},
-                        dateIsSelected = diariesViewModel.dateIsSelected,
+                        dateIsSelected = false,
                         onDateSelected = {
-                            diariesViewModel.getDiaries(it)
+//                            diariesViewModel.getDiaries(it)
                         },
                         onDateReset = {
-                            diariesViewModel.getDiaries()
+//                            diariesViewModel.getDiaries()
                         }
                     )
                 }
@@ -226,8 +211,7 @@ fun DiaryContent(
                     onLogoutClicked = {
                           signOutDialogState = it
                     },
-                    diaries = diaries,
-                    startDestination = if(user!=null)  diariesDestinationRoute else  signInNavigationRoute
+                    startDestination = if(FirebaseAuth.getInstance().currentUser!=null)  home_destination_route else  signInNavigationRoute
                 )
             }
         }
@@ -244,9 +228,9 @@ fun DiaryContent(
             signOutDialogState = false
         },
         onYesClicked = {
-            signOutDialogState      = false
+            signOutDialogState = false
             authViewModel.signOut()
-            navController.navigateToSignIn()
+            appState.navigateToSignIn()
         }
     )
 
@@ -261,27 +245,27 @@ fun DiaryContent(
             deleteAllDialogOpened = false
             scope.launch(Dispatchers.IO) {
                 withContext(Dispatchers.Main){
-                    diariesViewModel.deleteAllDiaries(
-                        onSuccess = {
-                            if(it){
-                                scope.launch {
-
-                                }
-                            }
-
-                        },
-                        onError = {error->
-
-                            scope.launch {
-                                if (error.message == "No internet connection."){
-                                    Toast.makeText(context,"You need internet connection " +
-                                            "to perform this action", Toast.LENGTH_SHORT).show()
-                                }else{
-                                    Toast.makeText(context,"${error.message}", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        }
-                    )
+//                    diariesViewModel.deleteAllDiaries(
+//                        onSuccess = {
+//                            if(it){
+//                                scope.launch {
+//
+//                                }
+//                            }
+//
+//                        },
+//                        onError = {error->
+//
+//                            scope.launch {
+//                                if (error.message == "No internet connection."){
+//                                    Toast.makeText(context,"You need internet connection " +
+//                                            "to perform this action", Toast.LENGTH_SHORT).show()
+//                                }else{
+//                                    Toast.makeText(context,"${error.message}", Toast.LENGTH_SHORT).show()
+//                                }
+//                            }
+//                        }
+//                    )
                 }
             }
         }
@@ -370,7 +354,6 @@ fun RowScope.DiaryNavigationBarItem(
         ),
     )
 }
-
 
 object DiaryNavigationDefaults {
     @Composable

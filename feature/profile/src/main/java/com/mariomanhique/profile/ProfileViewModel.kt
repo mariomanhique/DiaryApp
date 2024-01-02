@@ -3,6 +3,7 @@ package com.mariomanhique.profile
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -24,7 +25,7 @@ class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
 ): ViewModel() {
 
-    val user = authRepository.currentUser
+
     val galleryState = GalleryState()
 
     private var _userData: MutableStateFlow<UserData> =
@@ -52,7 +53,6 @@ class ProfileViewModel @Inject constructor(
                                )
                            )
                        },
-                       onReadyToDisplay = {},
                        onImageDownloadFailed = {}
                    )
                    _userData.value = it
@@ -66,6 +66,7 @@ class ProfileViewModel @Inject constructor(
         image: Uri,
         imageType:String,
     ){
+        val user = FirebaseAuth.getInstance().currentUser
         val remoteImagePath = "images/${user?.uid}/" +
                 "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
         if (remoteImagePath.isNullOrEmpty()){

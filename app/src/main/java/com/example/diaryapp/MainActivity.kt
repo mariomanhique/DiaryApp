@@ -45,6 +45,10 @@ class MainActivity : ComponentActivity() {
 
     val viewModel: MainActivityViewModel by viewModels()
 
+//    @Inject
+//    lateinit var analyticsHelper: AnalyticsHelper
+
+
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {

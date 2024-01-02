@@ -22,9 +22,6 @@ fun NavGraphBuilder.signInRoute(
     navigateToSignUp:()->Unit,
 ){
     composable(signInNavigationRoute){
-
-        val context = LocalContext.current
-
         SignInScreen(
             onShowSnackbar = onShowSnackbar,
             navigateToHome = navigateToHome,

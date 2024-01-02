@@ -12,16 +12,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.mariomanhique.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
-import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.navigateToSignUp
-import com.mariomanhique.auth.authWithCredentials.signUpWithCredentials.navigation.signUpNavigationRoute
-import com.mariomanhique.home.navigation.diariesDestinationRoute
+import com.mariomanhique.home.navigation.home_destination_route
 import com.mariomanhique.home.navigation.navigateToHome
 import com.mariomanhique.profile.navigation.navigateToProfile
 import com.mariomanhique.profile.navigation.profile_route
 import com.mariomanhique.util.TopLevelDestination
 import com.mariomanhique.util.TopLevelDestination.HOME
 import com.mariomanhique.util.TopLevelDestination.PROFILE
-import kotlinx.coroutines.flow.SharingStarted
 import navigateToWrite
 import write_navigation_route
 
@@ -52,7 +49,7 @@ class DiaryAppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            diariesDestinationRoute -> HOME
+            home_destination_route -> HOME
             profile_route -> PROFILE
             else -> null
         }
@@ -108,6 +105,19 @@ class DiaryAppState(
             restoreState = true
         }
         navController.navigateToWrite(navOptions)
+    }
+
+    fun navigateToSignIn(){
+
+        val navOptions = navOptions {
+            popUpTo(write_navigation_route){
+                inclusive = false
+            }
+            launchSingleTop = true
+
+            restoreState = true
+        }
+        navController.navigateToSignIn(navOptions)
     }
 
 }

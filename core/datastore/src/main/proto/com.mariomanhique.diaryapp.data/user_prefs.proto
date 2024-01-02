@@ -1,0 +1,20 @@
+
+syntax = "proto3";
+import "com.mariomanhique.diaryapp.data/theme_brand.proto";
+import "com.mariomanhique.diaryapp.data/dark_theme_config.proto";
+
+option java_package = "com.mariomanhique.diaryapp.core.datastore";
+option java_multiple_files = true;
+
+message UserPreferences {
+
+  // Each map is used to store a set of string IDs. The bool has no meaning, but proto3 doesn't
+  // have a Set type so this is the closest we can get to a Set.
+
+  ThemeBrandProto theme_brand = 16;
+  DarkThemeConfigProto dark_theme_config = 17;
+
+  bool use_dynamic_color = 19;
+
+  // NEXT AVAILABLE ID: 21
+}

@@ -43,7 +43,6 @@ fun fetchImageFromFirebase(
     remoteImagePath: String,
     onImageDownload: (Uri) -> Unit,
     onImageDownloadFailed:(Exception) -> Unit,
-    onReadyToDisplay: () -> Unit
 ){
     if(remoteImagePath.trim().isNotEmpty()){
         FirebaseStorage.getInstance().reference.child(remoteImagePath.trim()).downloadUrl

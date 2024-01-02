@@ -102,9 +102,6 @@ fun ProfileCardInfo(
     onImageUpdated: () -> Unit,
 ){
 
-    var user by remember {
-        mutableStateOf(username)
-    }
 
     val scrollState = rememberScrollState()
     Column(

@@ -54,7 +54,6 @@ fun DiaryAppBar(
     modifier: Modifier=Modifier,
     title: String,
     isProfileDestination: Boolean = true,
-    navigationIcon: ImageVector,
     scrollBehavior: TopAppBarScrollBehavior,
     onMenuClicked: ()->Unit,
     dateIsSelected: Boolean,

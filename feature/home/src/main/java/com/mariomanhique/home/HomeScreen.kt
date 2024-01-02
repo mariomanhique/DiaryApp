@@ -1,9 +1,7 @@
 package com.mariomanhique.home
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -19,16 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mariomanhique.util.model.RequestState
-import com.mariomanhique.firestore.repository.firebaseDB.Diaries
 
 @Composable
  fun HomeScreen(
-    diaries: Diaries,
+//    diaries: Diaries,
     navigateToWriteWithArgs: (String)-> Unit,
     paddingValues: PaddingValues,
     windowSizeClass: WindowSizeClass,
     viewModel: DiariesViewModel = hiltViewModel()
-
 ){
 
     val diariesList = viewModel.diaries.collectAsStateWithLifecycle().value

@@ -16,22 +16,21 @@ import javax.inject.Inject
 
 
 class AuthRepositoryImpl @Inject constructor(
-    private val firebaseAuth: FirebaseAuth,
     private val mongoAuth: App.Companion,
     private val firestore: FirebaseFirestore
 ): AuthRepository {
 
     private val ref = firestore.collection("profile")
+    val firebaseAuth = FirebaseAuth.getInstance()
 
-    override val currentUser: FirebaseUser?
-        get() = firebaseAuth.currentUser
+
     override val mongoCurrentUser: User?
         get() = mongoAuth.create(Constants.App_ID).currentUser
 
     override suspend fun signIn(email: String, password: String): FirebaseUser? {
       return try{
 
-          firebaseAuth.signInWithEmailAndPassword(email,password).await().user
+          FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).await().user
 
       }catch (e:FirebaseAuthException){
           e.printStackTrace()
@@ -43,7 +42,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun signUp(email: String, password: String,name: String): FirebaseUser? {
         return try {
 
-            val result = firebaseAuth.createUserWithEmailAndPassword(email,password).await().user
+            val result = FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password).await().user
             result?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())
 
             result?.uid?.let {userId->
@@ -84,7 +83,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun logout() {
-        firebaseAuth.signOut()
+        FirebaseAuth.getInstance().signOut()
     }
 
     override suspend fun logoutFromMongo() {

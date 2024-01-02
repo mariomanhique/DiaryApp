@@ -5,7 +5,6 @@ import io.realm.kotlin.mongodb.User
 
 interface AuthRepository {
 
-    val currentUser:FirebaseUser?
 
     val mongoCurrentUser: User?
 

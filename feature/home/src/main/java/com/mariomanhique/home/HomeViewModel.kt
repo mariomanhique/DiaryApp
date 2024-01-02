@@ -86,7 +86,7 @@ class DiariesViewModel @Inject constructor(
                 allFilteredDiariesJob.cancelAndJoin()
             }
             if(user != null){
-                firestoreRepository.getAllDiaries().distinctUntilChanged()
+                firestoreRepository.getDiaries().distinctUntilChanged()
                     .collect{
                     _diaries.value = it
                 }

@@ -26,7 +26,7 @@ class AuthWithCredentialsViewModel @Inject constructor(
 ):ViewModel() {
 
     private val _state = MutableStateFlow(SignInState())
-     val user = authRepository.currentUser
+
     var loadingState = mutableStateOf(false)
         private set
 
@@ -35,9 +35,6 @@ class AuthWithCredentialsViewModel @Inject constructor(
 
     fun setLoading(loading:Boolean){
         loadingState.value = loading
-    }
-    fun getMongoUser(): User {
-        return authRepository.mongoCurrentUser!!
     }
 
 
