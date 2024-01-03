@@ -29,7 +29,6 @@ class AuthWithCredentialsViewModel @Inject constructor(
     private var _network by mutableStateOf(Unavailable)
     val network = _network
     private val _state = MutableStateFlow(SignInState())
-    val user = authRepository.currentUser
     var loadingState = mutableStateOf(false)
         private set
 

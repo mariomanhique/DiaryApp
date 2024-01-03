@@ -13,6 +13,7 @@ import com.example.diaryapp.data.repository.firebaseDB.Diaries
 import com.example.diaryapp.data.repository.firebaseDB.FirestoreRepository
 import com.example.diaryapp.model.RequestState
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -34,9 +35,7 @@ class HomeViewModel @Inject constructor(
 
     private lateinit var allDiariesJob: Job
     private lateinit var allFilteredDiariesJob: Job
-
     private var network by mutableStateOf(ConnectivityObserver.Status.Unavailable)
-    private val user = FirebaseAuth.getInstance().currentUser
     private var _diaries: MutableStateFlow<Diaries> = MutableStateFlow(RequestState.Idle)
     val diaries = _diaries.asStateFlow()
 
@@ -75,15 +74,15 @@ class HomeViewModel @Inject constructor(
         }
     }
     private fun observeAllDiaries(){
+
         allDiariesJob = viewModelScope.launch {
             if(::allFilteredDiariesJob.isInitialized){
                 allFilteredDiariesJob.cancelAndJoin()
             }
-            if(user != null){
+
                 firestoreRepository.getDiaries().distinctUntilChanged().collect{
                     _diaries.value = it
                 }
-            }
 
         }
 
@@ -94,6 +93,7 @@ class HomeViewModel @Inject constructor(
         onError: (Exception) -> Unit
     ){
 
+         val user = FirebaseAuth.getInstance().currentUser
         if (network == ConnectivityObserver.Status.Available){
             val userId = user?.uid
             val imagesDirectory = "images/${userId}"

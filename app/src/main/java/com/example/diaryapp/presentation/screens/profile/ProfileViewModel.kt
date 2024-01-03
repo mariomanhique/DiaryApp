@@ -12,6 +12,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.example.diaryapp.data.repository.profileRepository.ProfileRepository
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,7 +25,6 @@ class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
 ): ViewModel() {
 
-    val user = authRepository.currentUser
     val galleryState = GalleryState()
 
     private var _userData: MutableStateFlow<UserData> =
@@ -65,6 +65,7 @@ class ProfileViewModel @Inject constructor(
         image: Uri,
         imageType:String,
     ){
+        val user = FirebaseAuth.getInstance().currentUser
         val remoteImagePath = "images/${user?.uid}/" +
                 "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
         if (remoteImagePath.isNullOrEmpty()){

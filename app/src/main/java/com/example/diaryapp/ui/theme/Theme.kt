@@ -229,27 +229,6 @@ val DarkAndroidBackgroundTheme = BackgroundTheme(color = Color.Black)
             content = content,
         )
     }
-    //This side effect makes the status bar and navigation bar transparent
-//    SideEffect {
-//        val window = (view.context as Activity).window
-//
-//        window.statusBarColor = Color.Transparent.toArgb()
-//        window.navigationBarColor = Color.Transparent.toArgb()
-//
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-//            window.isNavigationBarContrastEnforced = false
-//        }
-//
-//        val windowInsetsController = WindowCompat.getInsetsController(window,view)
-//         windowInsetsController.isAppearanceLightStatusBars = !darkTheme
-//        windowInsetsController.isAppearanceLightNavigationBars = !darkTheme
-//    }
-//
-//    MaterialTheme(
-//        colorScheme = colorScheme,
-//        typography = Typography,
-//        content = content
-//    )
 }
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)

@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.diaryapp.data.repository.authWithCredentials.AuthRepository
 import com.example.diaryapp.model.Diary
 import com.example.diaryapp.model.RequestState
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.snapshots
@@ -27,10 +28,10 @@ class FirestoreDB @Inject constructor(
 ): FirestoreRepository {
 
     private lateinit var updatedDiary: RequestState<String>
-    private val user = authRepository.currentUser
     private val ref = firestore.collection("diary")
 
     override fun getDiaries(): Flow<Diaries>{
+        val user = FirebaseAuth.getInstance().currentUser
        return if(user != null){
             try {
                ref.whereEqualTo(
@@ -63,6 +64,8 @@ class FirestoreDB @Inject constructor(
     }
 
     override fun getAllDiaries(): Flow<Diaries> {
+        val user = FirebaseAuth.getInstance().currentUser
+
         return callbackFlow {
             val query = ref
                 .whereEqualTo("ownerId", user?.uid)
@@ -103,6 +106,8 @@ class FirestoreDB @Inject constructor(
 
 
     override fun insertDiary(diary: Diary): RequestState<Flow<Diary?>> {
+        val user = FirebaseAuth.getInstance().currentUser
+
         if(user != null){
             try {
                 val result = ref.document(diary.id)
@@ -123,6 +128,8 @@ class FirestoreDB @Inject constructor(
     }
 
     override fun deleteDiary(diaryId: String): RequestState<String>? {
+        val user = FirebaseAuth.getInstance().currentUser
+
         var deleted: RequestState<String>? = null
         return if(user != null){
             try {
@@ -145,6 +152,8 @@ class FirestoreDB @Inject constructor(
 
 
     override suspend fun deleteAllDiary(): RequestState<Boolean>?{
+        val user = FirebaseAuth.getInstance().currentUser
+
         var result: RequestState<Boolean>?=null
 
          if (user != null){
@@ -184,6 +193,8 @@ class FirestoreDB @Inject constructor(
     }
 
     override fun getFilteredDiaries(zonedDateTime: ZonedDateTime): Flow<Diaries> {
+        val user = FirebaseAuth.getInstance().currentUser
+
         return callbackFlow {
             val query = ref
                 .whereEqualTo("ownerId", user?.uid)
@@ -223,6 +234,8 @@ class FirestoreDB @Inject constructor(
     }
 
     override suspend fun updateDiary(diary: Diary): RequestState<String>{
+        val user = FirebaseAuth.getInstance().currentUser
+
         if(user != null){
             try {
                 ref.document(diary.id)
@@ -247,6 +260,8 @@ class FirestoreDB @Inject constructor(
     }
 
     override fun getSelectedDiary(diaryId: String): Flow<RequestState<Diary?>> {
+        val user = FirebaseAuth.getInstance().currentUser
+
         return if (user != null){
 
             try {

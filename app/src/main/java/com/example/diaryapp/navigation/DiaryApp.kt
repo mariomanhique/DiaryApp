@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -76,6 +75,7 @@ import com.example.diaryapp.presentation.screens.home.navigation.homeRoute
 import com.example.diaryapp.presentation.screens.settingsDialog.SettingsDialog
 import com.example.diaryapp.ui.theme.GradientColors
 import com.example.diaryapp.ui.theme.LocalGradientColors
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -100,7 +100,6 @@ fun DiaryApp(
 fun DiaryContent(
     windowSizeClass: WindowSizeClass,
     connectivity: NetworkConnectivityObserver,
-
     appState: DiaryAppState = rememberDiaryAppState(
         windowSizeClass = windowSizeClass,
         connectivity = connectivity,
@@ -121,7 +120,6 @@ fun DiaryContent(
     }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    val user = authViewModel.user
     var signOutDialogState by remember { mutableStateOf(false) }
     var deleteAllDialogOpened by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -271,6 +269,8 @@ fun DiaryContent(
 //                        }
 //                    )
                        }
+
+                       val user = FirebaseAuth.getInstance().currentUser
                        NavigationHost(
                            onShowSnackbar = { message, action ->
                                snackbarHostState.showSnackbar(
@@ -377,14 +377,14 @@ fun DiaryBottomBar(
                     Icon(
                         imageVector = destination.unselectedIcon,
                         contentDescription = null,
-                        modifier = Modifier.size(35.dp)
+                        modifier = Modifier.size(25.dp)
                     )
                 },
                 selectedIcon = {
                     Icon(
                         imageVector = destination.selectedIcon,
                         contentDescription = null,
-                        modifier = Modifier.size(35.dp)
+                        modifier = Modifier.size(25.dp)
                     )
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
@@ -403,8 +403,7 @@ fun DiaryNavigationBar(
     content: @Composable RowScope.() -> Unit,
 ) {
     NavigationBar(
-       modifier = Modifier
-           .heightIn(max = 80.dp),
+       modifier = Modifier,
         contentColor = DiaryNavigationDefaults.navigationContentColor(),
         tonalElevation = 3.dp,
         content = content,
@@ -429,6 +428,8 @@ fun RowScope.DiaryNavigationBarItem(
         icon = if (selected) selectedIcon else icon,
         modifier = modifier,
         enabled = enabled,
+        label = label,
+        alwaysShowLabel = alwaysShowLabel,
         colors = NavigationBarItemDefaults.colors(
             selectedIconColor = DiaryNavigationDefaults.navigationSelectedItemColor(),
             unselectedIconColor = DiaryNavigationDefaults.navigationContentColor(),

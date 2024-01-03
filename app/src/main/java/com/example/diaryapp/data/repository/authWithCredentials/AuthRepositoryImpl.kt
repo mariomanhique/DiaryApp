@@ -12,14 +12,12 @@ import javax.inject.Inject
 
 
 class AuthRepositoryImpl @Inject constructor(
-    private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ): AuthRepository {
 
     val ref = firestore.collection("profile")
-    override val currentUser: FirebaseUser?
-        get() = firebaseAuth.currentUser
     override suspend fun signIn(email: String, password: String): FirebaseUser? {
+        val firebaseAuth = FirebaseAuth.getInstance()
       return try{
 
           firebaseAuth.signInWithEmailAndPassword(email,password).await().user
@@ -32,8 +30,8 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun signUp(email: String, password: String,name: String): FirebaseUser? {
+        val firebaseAuth = FirebaseAuth.getInstance()
         return try {
-
             val result = firebaseAuth.createUserWithEmailAndPassword(email,password).await().user
             result?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())
 
@@ -56,7 +54,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun logout() {
-        firebaseAuth.signOut()
+        FirebaseAuth.getInstance().signOut()
     }
 
 }

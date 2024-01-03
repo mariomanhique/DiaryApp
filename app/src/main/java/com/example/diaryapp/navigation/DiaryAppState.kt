@@ -58,7 +58,6 @@ class DiaryAppState(
     private val connectivity: NetworkConnectivityObserver,
     ) {
 
-    private var network by mutableStateOf(ConnectivityObserver.Status.Unavailable)
 
     val currentDestination: NavDestination?
         @Composable get() = navController

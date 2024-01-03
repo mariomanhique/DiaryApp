@@ -16,10 +16,10 @@ class ProfileRepositoryImpl @Inject constructor(
 ):
         ProfileRepository {
     private val rf = firestore.collection("profile")
-    val user = FirebaseAuth.getInstance().currentUser
     private lateinit var updateUser: RequestState<String>
 
     override fun getProfile(): Flow<UserData?> {
+        val user = FirebaseAuth.getInstance().currentUser
         return try {
           rf.document(user?.uid.toString())
                 .snapshots()
@@ -36,9 +36,11 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override fun updateImageProfile(imageUrl: String): RequestState<String> {
-        if (this.user !=null){
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user !=null){
             return try {
-                rf.document(this.user.uid)
+                rf.document(user.uid)
                     .update(
                         mapOf(
                             "profilePictureUrl" to imageUrl
@@ -55,9 +57,11 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override fun updateUsername(username: String): RequestState<String> {
-        if (this.user !=null){
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user !=null){
             return try {
-                rf.document(this.user.uid)
+                rf.document(user.uid)
                     .update(
                         mapOf(
                             "username" to username
