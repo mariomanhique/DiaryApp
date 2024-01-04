@@ -22,6 +22,7 @@ import com.example.diaryapp.presentation.screens.home.navigation.navigateToHome
 import com.example.diaryapp.presentation.screens.profile.navigation.navigateToProfile
 import com.example.diaryapp.presentation.screens.profile.navigation.profile_route
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.navigateToSignIn
+import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -133,9 +134,8 @@ class DiaryAppState(
     }
 
     fun navigateToSignIn(){
-
         val navOptions = navOptions {
-            popUpTo(write_navigation_route){
+            popUpTo(signInNavigationRoute){
                 inclusive = false
             }
             launchSingleTop = true
