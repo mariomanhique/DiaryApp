@@ -23,8 +23,6 @@ fun NavigationHost(
     isNetworkAvailable: Boolean,
     paddingValues: PaddingValues,
     shouldShowLandscape: Boolean,
-    onDeleteClicked: (Boolean) -> Unit,
-    onLogoutClicked: (Boolean) -> Unit,
 ){
     val navController = appState.navController
     val profileViewModel: ProfileViewModel = hiltViewModel()
@@ -36,10 +34,7 @@ fun NavigationHost(
     ){
 
         homeRoute(
-            navigateToAuth = {
-                navController.popBackStack()
-                navController.navigate(signInNavigationRoute)
-            },
+
             onDialogOpened = onDialogOpened,
             navigateToWriteWithArgs = {
                 navController.navigate(Screen.Write.passDiaryId(it))
@@ -73,8 +68,10 @@ fun NavigationHost(
         )
         profileRoute(
             profileViewModel =profileViewModel,
-            onDeleteClicked = onDeleteClicked,
-            onLogoutClicked = onLogoutClicked
+            navigateToAuth = {
+                navController.popBackStack()
+                navController.navigate(signInNavigationRoute)
+            },
         )
     }
 }

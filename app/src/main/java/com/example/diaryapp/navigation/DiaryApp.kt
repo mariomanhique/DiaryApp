@@ -68,7 +68,6 @@ import com.example.diaryapp.connectivity.ConnectivityObserver
 import com.example.diaryapp.connectivity.NetworkConnectivityObserver
 import com.example.diaryapp.presentation.components.DiaryBackground
 import com.example.diaryapp.presentation.components.DiaryGradientBackground
-import com.example.diaryapp.presentation.components.DisplayAlertDialog
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.AuthWithCredentialsViewModel
 import com.example.diaryapp.presentation.screens.auth.authWithCredentials.signInWithCredencials.navigation.signInNavigationRoute
 import com.example.diaryapp.presentation.screens.home.navigation.homeRoute
@@ -76,9 +75,6 @@ import com.example.diaryapp.presentation.screens.settingsDialog.SettingsDialog
 import com.example.diaryapp.ui.theme.GradientColors
 import com.example.diaryapp.ui.theme.LocalGradientColors
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun DiaryApp(
@@ -286,13 +282,6 @@ fun DiaryContent(
                            },
                            paddingValues = paddingValues,
                            shouldShowLandscape = appState.shouldShowNavRail,
-                           onDeleteClicked = {
-                               deleteAllDialogOpened = it
-                               Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
-                           },
-                           onLogoutClicked = {
-                               signOutDialogState = it
-                           },
                            startDestination = if (user != null) homeRoute else signInNavigationRoute
                        )
                    }
@@ -302,58 +291,6 @@ fun DiaryContent(
        }
     }
 
-
-
-    DisplayAlertDialog(
-        title = "Sign Out",
-        message = "Are you sure you want to sign out?",
-        dialogOpened = signOutDialogState,
-        onCloseDialog = {
-            signOutDialogState = false
-        },
-        onYesClicked = {
-            signOutDialogState = false
-            authViewModel.signOut()
-            appState.navigateToSignIn()
-        }
-    )
-
-    DisplayAlertDialog(
-        title = "Delete All Diaries",
-        message = "Are you sure you want to delete all diaries?",
-        dialogOpened = deleteAllDialogOpened,
-        onCloseDialog = {
-            deleteAllDialogOpened = false
-        },
-        onYesClicked = {
-            deleteAllDialogOpened = false
-            scope.launch(Dispatchers.IO) {
-                withContext(Dispatchers.Main){
-//                    homeViewModel.deleteAllDiaries(
-//                        onSuccess = {
-//                            if(it){
-//                                scope.launch {
-//
-//                                }
-//                            }
-//
-//                        },
-//                        onError = {error->
-//
-//                            scope.launch {
-//                                if (error.message == "No internet connection."){
-//                                    Toast.makeText(context,"You need internet connection " +
-//                                            "to perform this action", Toast.LENGTH_SHORT).show()
-//                                }else{
-//                                    Toast.makeText(context,"${error.message}", Toast.LENGTH_SHORT).show()
-//                                }
-//                            }
-//                        }
-//                    )
-                }
-            }
-        }
-    )
 }
 
 @Composable

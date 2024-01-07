@@ -45,8 +45,7 @@ internal fun SignUpWithCredentials(
     navigateToSignIn:()->Unit,
 ) {
 
-    val state = viewModel.state.collectAsStateWithLifecycle().value
-    val loadingState by viewModel.loadingState
+    val isAuthenticated by viewModel.isAuthenticated
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -135,28 +134,30 @@ internal fun SignUpWithCredentials(
 
         Spacer(modifier = Modifier.padding(10.dp))
 
-        LaunchedEffect(key1 = state.isSignInSuccessful) {
-            if (state.isSignInSuccessful) {
-                scope.launch {
-                    onShowSnackbar("Successful Signed Up",null)
-                }
-                navigateToHome()
-            }
-            viewModel.resetState()
-        }
+
         GoogleButton(
             primaryText = "Sign Up",
-            loadingState = loadingState
+            loadingState = isAuthenticated
         ) {
             if (emailValue.isNotEmpty() && passwordValue.isNotEmpty() && nameValue.isNotEmpty()) {
                 viewModel.signUp(
                     name = nameValue,
                     email = emailValue,
-                    password = passwordValue
+                    password = passwordValue,
+                    onSuccess = {
+                        scope.launch {
+                            onShowSnackbar("Successful Signed Up",null)
+                        }
+                        navigateToHome()
+                        viewModel.resetAuthState()
+                    },
+                    onFailure = {
+                        scope.launch {
+                            onShowSnackbar("$it",null)
+                        }
+                    }
                 )
                 textFieldEnabled = false
-                viewModel.setLoading(true)
-                viewModel.resetState()
             } else{
                 Toast.makeText(context,"Fields can't be blank", Toast.LENGTH_SHORT).show()
             }

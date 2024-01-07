@@ -163,4 +163,34 @@ dependencies {
     implementation("io.grpc:grpc-kotlin-stub:1.3.0")
     implementation("com.google.protobuf:protoc:3.24.4")
 
+    // TestImplementations
+    implementation ("androidx.test:core:1.5.0")
+    testImplementation ("junit:junit:4.13.2")
+    testImplementation ("org.hamcrest:hamcrest-all:1.3")
+    testImplementation ("androidx.arch.core:core-testing:2.2.0")
+    testImplementation ("org.robolectric:robolectric:4.10.3")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation ("com.google.truth:truth:1.1.3")
+    testImplementation ("org.mockito:mockito-core:4.8.0")
+
+    // Android Test Implementations
+    androidTestImplementation ("junit:junit:4.13.2")
+    //androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:2.12.1"
+    androidTestImplementation ("org.mockito:mockito-android:4.7.0")
+    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    androidTestImplementation ("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation ("com.google.truth:truth:1.1.3")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("org.mockito:mockito-core:4.8.0")
+    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.48.1")
+    kspAndroidTest ("com.google.dagger:hilt-android-compiler:2.48.1")
+    debugImplementation ("androidx.fragment:fragment-testing:1.7.0-alpha07")
+    //debugImplementation "androidx.fragment:fragment-testing:1.3.0-alpha08"
+
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
+
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1") {
+        exclude(group = "org.checkerframework", module = "checker")
+    }
+
 }

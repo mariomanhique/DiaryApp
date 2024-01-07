@@ -46,7 +46,7 @@ fun SignInScreen(
     viewModel: AuthWithCredentialsViewModel = hiltViewModel(),
 ) {
 
-    val loadingState by viewModel.loadingState
+    val isAuthenticated by viewModel.isAuthenticated
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -116,10 +116,7 @@ fun SignInScreen(
 
         Spacer(modifier = Modifier.padding(10.dp))
 
-        GoogleButton(loadingState = loadingState) {
-//            if(!isNetworkAvailable){
-//                Toast.makeText(context, "Check your internet connection", Toast.LENGTH_SHORT).show()
-//            }
+        GoogleButton(loadingState = isAuthenticated) {
 
             if(emailValue.isNotEmpty() && passwordValue.isNotEmpty()){
                 viewModel.signIn(
@@ -129,17 +126,15 @@ fun SignInScreen(
                         scope.launch {
                             onShowSnackbar("Logged In Successfully",null)
                             navigateToHome()
-                            viewModel.setLoading(false)
+                            viewModel.resetAuthState()
                         }
                     },
-                    onError = {
+                    onFailure = {
                         scope.launch {
                             onShowSnackbar(it.message.toString(),null)
                         }
-                        viewModel.setLoading(false)
                     }
                 )
-                viewModel.setLoading(true)
             }else{
                 Toast.makeText(context,"Fields can't be blank", Toast.LENGTH_SHORT).show()
             }
